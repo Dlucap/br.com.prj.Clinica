@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
-import jdk.internal.instrumentation.Logger;
 
 public class ConexaoBd {
 

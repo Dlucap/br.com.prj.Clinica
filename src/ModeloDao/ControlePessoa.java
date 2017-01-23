@@ -1,7 +1,7 @@
 
 package ModeloDao;
 
-import ModeloDao.ControleMedico;
+import ModeloDao.DaoMedico;
 import ModeloConection.ConexaoBd;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -44,7 +44,7 @@ public class ControlePessoa {
             
            // JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!!!");
         } catch (SQLException ex) {
-            Logger.getLogger(ControleMedico.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DaoMedico.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Não foi possível realizar a inserção dos dados. \n" + ex.getMessage());
 
         }

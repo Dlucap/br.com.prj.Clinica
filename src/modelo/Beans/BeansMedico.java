@@ -17,7 +17,7 @@ public class BeansMedico {
     private int  Mnumero;
     private String Mcep;
     private String Mcompl;
-    //private String Mespecialidade;
+   private String MSespecialidade;
     private Integer Mespecialidade;
     private String  Mcrm;
     private String pesquisa;
@@ -213,6 +213,20 @@ public class BeansMedico {
      */
     public void setPesquisa(String pesquisa) {
         this.pesquisa = pesquisa;
+    }
+
+    /**
+     * @return the MSespecialidade
+     */
+    public String getMSespecialidade() {
+        return MSespecialidade;
+    }
+
+    /**
+     * @param MSespecialidade the MSespecialidade to set
+     */
+    public void setMSespecialidade(String MSespecialidade) {
+        this.MSespecialidade = MSespecialidade;
     }
 
 }
