@@ -94,10 +94,7 @@ public class DaoMedico {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao atualizar os dados! \nErro: " + ex.getMessage());
-             JOptionPane.showMessageDialog(null, "Erro ao atualizar os dados! \nErro: " + ex.getSQLState());
-              JOptionPane.showMessageDialog(null, "Erro ao atualizar os dados! \nErro: " + ex.getCause());
-               JOptionPane.showMessageDialog(null, "Erro ao atualizar os dados! \nErro: " + ex.getErrorCode());
-                JOptionPane.showMessageDialog(null, "Erro ao atualizar os dados! \nErro: " + ex.getStackTrace());
+             
         }
 
         conex.DesconectarBd();
