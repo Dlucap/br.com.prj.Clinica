@@ -1,7 +1,7 @@
 //https://www.youtube.com/watch?v=OfsCClnnY6U&list=PLyQ9CRKOzOWqVZ5nDspGFVgybs3zRGPUL video 13
-/** 
+/**
  *    ANDAMENTO DO PROJETO
- * 
+ *
  * ferramentas / tela de bemvindos ok
  * tela Cadastro medio ok
  * Acesso ao banco de dados ok
@@ -10,21 +10,27 @@
  * Pesquisa
  * Relatório]
  *
- **/
-package br.com.prj.clinica;
+ *
+ */
+package visao;
 
+import ModeloConection.ConexaoBd;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
  * @author Daniel Lucas
  */
-public class visao extends javax.swing.JFrame {
+public class TelaLogin extends javax.swing.JFrame {
+
+    ConexaoBd con = new ConexaoBd();
 
     /**
      * Creates new form visão
      */
-    public visao() {
+    public TelaLogin() {
         initComponents();
+        con.conectarBd();
     }
 
     /**
@@ -45,7 +51,8 @@ public class visao extends javax.swing.JFrame {
         jLabelLogo = new javax.swing.JLabel();
         JLTelaLogin = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Clinica Medica");
         getContentPane().setLayout(null);
 
         BtnAcessar.setText("Acessar");
@@ -101,14 +108,22 @@ public class visao extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAcessarActionPerformed
-        if (jTextFieldUsuário.getText().equalsIgnoreCase("admin")/*.equals("adm")*/ && jPasswordField1.getText().equals("12345")) {
+        
+        try {
+            con.executaSql("SELECT * FROM USUARIO WHERE NOME ='"+jTextFieldUsuário.getText()+"'");
+            con.rs.first();
+            if (con.rs.getString("SENHA").equals(jPasswordField1.getText())) {
+                TelaPrincipal tela = new TelaPrincipal(jTextFieldUsuário.getText());
+                tela.setVisible(true);
+                dispose();
+            }else{
+                JOptionPane.showMessageDialog(rootPane,"Usuário/Senha inválido ou não cadastrado no sistema!");
+            }
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(rootPane,"Usuário/Senha inválido ou não cadastrado no sistema!\nErro:");
 
-            TelaPrincipal tela = new TelaPrincipal();
-            tela.setVisible(true);
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Senha ou usuário inválido");
         }
+con.DesconectarBd();//NA VIDEO AULA O PERRONE NÃO FECHOU A CONEXÃO AO BANCO
     }//GEN-LAST:event_BtnAcessarActionPerformed
 
     private void BtnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSairActionPerformed
@@ -138,21 +153,23 @@ public class visao extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(visao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(visao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(visao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(visao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new visao().setVisible(true);
+                new TelaLogin().setVisible(true);
             }
         });
     }

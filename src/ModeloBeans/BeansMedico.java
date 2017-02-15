@@ -1,4 +1,4 @@
-package modelo.Beans;
+package ModeloBeans;
 
 /**
  *
@@ -14,14 +14,17 @@ public class BeansMedico {
     private String Mtelcelular;
     private String Mlogradouro;
     private String Mbairro;
-    private int  Mnumero;
+    private int Mnumero;
     private String Mcep;
     private String Mcompl;
-   private String MSespecialidade;
-    private Integer Mespecialidade;
-    private String  Mcrm;
-    private String pesquisa;
-   
+    private String MSespecialidade;
+   private Integer Mespecialidade;
+    private String MSUf;
+    private String MSCidade;
+    private String Mcrm;
+    private String MPesquisa;
+    private String MEmail;
+
     public int getMcod() {
         return Mcod;
     }
@@ -33,7 +36,7 @@ public class BeansMedico {
         this.Mcod = Mcod;
     }
 
-    /**
+     /**
      * @return the Mespecialidade
      */
     public Integer getMespecialidade() {
@@ -42,7 +45,7 @@ public class BeansMedico {
 
     /**
      * @param Mespecialidade the Mespecialidade to set
-     */
+    */
     public void setMespecialidade(Integer Mespecialidade) {
         this.Mespecialidade = Mespecialidade;
     }
@@ -202,17 +205,17 @@ public class BeansMedico {
     }
 
     /**
-     * @return the pesquisa
+     * @return the MPesquisa
      */
-    public String getPesquisa() {
-        return pesquisa;
+    public String getMPesquisa() {
+        return MPesquisa;
     }
 
     /**
-     * @param pesquisa the pesquisa to set
+     * @param MPesquisa the MPesquisa to set
      */
-    public void setPesquisa(String pesquisa) {
-        this.pesquisa = pesquisa;
+    public void setMPesquisa(String MPesquisa) {
+        this.MPesquisa = MPesquisa;
     }
 
     /**
@@ -227,6 +230,48 @@ public class BeansMedico {
      */
     public void setMSespecialidade(String MSespecialidade) {
         this.MSespecialidade = MSespecialidade;
+    }
+
+    /**
+     * @return the MSUf
+     */
+    public String getMSUf() {
+        return MSUf;
+    }
+
+    /**
+     * @param MSUf the MSUf to set
+     */
+    public void setMSUf(String MSUf) {
+        this.MSUf = MSUf;
+    }
+
+    /**
+     * @return the MSCidade
+     */
+    public String getMSCidade() {
+        return MSCidade;
+    }
+
+    /**
+     * @param MSCidade the MSCidade to set
+     */
+    public void setMSCidade(String MSCidade) {
+        this.MSCidade = MSCidade;
+    }
+
+    /**
+     * @return the MEmail
+     */
+    public String getMEmail() {
+        return MEmail;
+    }
+
+    /**
+     * @param MEmail the MEmail to set
+     */
+    public void setMEmail(String MEmail) {
+        this.MEmail = MEmail;
     }
 
 }

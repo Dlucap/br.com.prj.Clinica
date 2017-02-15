@@ -13,7 +13,7 @@ public class ConexaoBd {
     public Statement stm;
     public ResultSet rs;
     private String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    private String caminho = "jdbc:sqlserver://localhost:1433;databaseName=ClinicaMedica;";
+    private String caminho = "jdbc:sqlserver://localhost:1433;databaseName=ClinicaMedica";
     private String usuario = "Admin";
     private String senha = "12345";
     public Connection con;
@@ -21,7 +21,7 @@ public class ConexaoBd {
     public void conectarBd() {
 
         try {
-            // Class.forName("com.mysql.jdbc.Driver");
+            // Class.forName("com.mysql.jdbc.Driver");http://ftp.unicamp.br/pub/apoio/treinamentos/linguagens/curso_java_III.pdf
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver()); //Essa linha foi a diferença
             System.setProperty("jdbc.Drivers", driver);
             con = DriverManager.getConnection(caminho, usuario, senha);
@@ -48,8 +48,7 @@ public class ConexaoBd {
             stm = con.createStatement(rs.TYPE_SCROLL_INSENSITIVE,rs.CONCUR_READ_ONLY);
             rs = stm.executeQuery(sql);
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(ConexaoBd.class.getName()).log(Level.SEVERE, null, ex);
-       JOptionPane.showMessageDialog(null, "Erro ao executar a sentença em sql\n" + ex.getMessage());
+                  JOptionPane.showMessageDialog(null, "Erro ao executar a sentença em sql\n" + ex.getMessage());
         }
     }
 }

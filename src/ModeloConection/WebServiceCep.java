@@ -246,7 +246,7 @@ public final class WebServiceCep {
 		} catch (DocumentException ex) {
 			if (ex.getNestedException() != null && ex.getNestedException() 
 					instanceof java.net.UnknownHostException) {
-				loadCep.setResultText("Site n�o encontrado.");
+				loadCep.setResultText("Site não encontrado.");
 				loadCep.setResulCode(-14);
 			} else {
 				loadCep.setResultText("N�o foi possivel ler o documento xml.");
@@ -255,7 +255,7 @@ public final class WebServiceCep {
 			loadCep.setExceptio(ex);
 		} catch (MalformedURLException ex) {
 			loadCep.setExceptio(ex);
-			loadCep.setResultText("Erro na forma��o da url.");
+			loadCep.setResultText("Erro na formação da url.");
 			loadCep.setResulCode(-16);
 		} catch (Exception ex) {
 			loadCep.setExceptio(ex);
@@ -268,7 +268,7 @@ public final class WebServiceCep {
 /* Campos internos de resultado da busca */
 	
 	private int resulCode = -1;
-	private String resultText = "busca n�o realizada.";
+	private String resultText = "busca não realizada.";
 	private String cep = null;
 	private String bairro = null;
 	private String cidade = null;

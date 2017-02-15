@@ -1,10 +1,10 @@
 /*
- * 
- * buscar dados do correios CEP
+*uscar dados do correios CEP
+*https://sqlfromhell.wordpress.com/2009/11/28/valores-numericos-cpf-e-cnpj/
  *http://respostas.guj.com.br/6592-api-java-para-buscar-cep-correios
  *https://viacep.com.br/
  */
-package br.com.prj.clinica;
+package visao;
 
 import ModeloConection.ConexaoBd;
 import ModeloConection.WebServiceCep;
@@ -13,14 +13,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import javax.swing.JOptionPane;
-//import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-//import javax.xml.ws.WebServiceException;
+import ModeloBeans.BeansMedico;
+import ModeloBeans.ModeloTabela;
 
-import modelo.Beans.BeansMedico;
-import modelo.Beans.ModeloTabelaMedico;
 
 /**
  *
@@ -29,11 +26,9 @@ import modelo.Beans.ModeloTabelaMedico;
 public class FormMedico extends javax.swing.JFrame {
 
     ConexaoBd conBd = new ConexaoBd();
-
     BeansMedico mod = new BeansMedico();
-    // ModeloPessoa modP = new ModeloPessoa();
     DaoMedico controlM = new DaoMedico();
-    // ControlePessoa controlP = new ControlePessoa();
+
     ResultSet rs = null;
     PreparedStatement pstM;
     int flag = 0;
@@ -43,7 +38,8 @@ public class FormMedico extends javax.swing.JFrame {
      */
     public FormMedico() {
         initComponents();
-        preencherTabelaMedico("SELECT * FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOME");
+        preencherTabelaMedico("SELECT IDMEDICO,NOME,ESPEC, CRM FROM MEDICO "
+                + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOME");
     }
 
     /**
@@ -86,16 +82,18 @@ public class FormMedico extends javax.swing.JFrame {
         jLabelMBairro = new javax.swing.JLabel();
         JlabelMCep = new javax.swing.JLabel();
         jLabelMComplemento = new javax.swing.JLabel();
-        jFormattedTextFieldCep = new javax.swing.JFormattedTextField();
         jTextFieldCompl = new javax.swing.JTextField();
         jButtonBuscarCep = new javax.swing.JButton();
         jLabelMUf = new javax.swing.JLabel();
-        jComboBoxUf = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jTextFieldIDMedico = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jTextFieldBairro = new javax.swing.JTextField();
-        jComboBoxCidade = new javax.swing.JComboBox<>();
+        jTextFieldUF = new javax.swing.JTextField();
+        jTextFieldCidade = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jTextFieldEmail = new javax.swing.JTextField();
+        jFormattedTextFieldCEP = new javax.swing.JFormattedTextField();
         jLabelCadMedicos = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -105,26 +103,34 @@ public class FormMedico extends javax.swing.JFrame {
 
         jLabelMNome.setText("Nome: ");
 
-        jLabelMCrm.setText("CRM");
+        jLabelMCrm.setText("CRM:");
 
-        jLabelMCpf.setText("Cpf");
+        jLabelMCpf.setText("CPF:");
 
-        jLabelMTelCel.setText("Tel. Cel");
+        jLabelMTelCel.setText("TEL.CEL");
 
         jLabelMEndereco.setText("Endereço");
 
-        jLabelMTelRes.setText("Tel.Res");
+        jLabelMTelRes.setText("TEL.RES");
 
-        jLabelMNumero.setText("Número");
+        jLabelMNumero.setText("Nº");
 
-        jLabelMRg.setText("RG");
+        jLabelMRg.setText("RG:");
 
-        jLabelMEspecialidade.setText("Especialização");
+        jLabelMEspecialidade.setText("Especialização:");
 
-        jFormattedTextFieldCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat(""))));
+        try {
+            jFormattedTextFieldCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         jFormattedTextFieldCpf.setEnabled(false);
 
-        jFormattedTextFieldRg.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat(""))));
+        try {
+            jFormattedTextFieldRg.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         jFormattedTextFieldRg.setEnabled(false);
         jFormattedTextFieldRg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,10 +153,18 @@ public class FormMedico extends javax.swing.JFrame {
             }
         });
 
-        jFormattedTextFieldTelCel.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat(""))));
+        try {
+            jFormattedTextFieldTelCel.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(###)#####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         jFormattedTextFieldTelCel.setEnabled(false);
 
-        jFormattedTextFieldTelRes.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat(""))));
+        try {
+            jFormattedTextFieldTelRes.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(###)####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         jFormattedTextFieldTelRes.setEnabled(false);
         jFormattedTextFieldTelRes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -214,6 +228,7 @@ public class FormMedico extends javax.swing.JFrame {
             }
         });
 
+        jTableMedicos.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jTableMedicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -239,24 +254,17 @@ public class FormMedico extends javax.swing.JFrame {
                 jButtonPesquisaActionPerformed(evt);
             }
         });
+        jButtonPesquisa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButtonPesquisaKeyPressed(evt);
+            }
+        });
 
         jLabelMBairro.setText("Bairro:");
 
         JlabelMCep.setText("CEP :");
 
         jLabelMComplemento.setText("Complemento:");
-
-        try {
-            jFormattedTextFieldCep.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("########")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-        jFormattedTextFieldCep.setEnabled(false);
-        jFormattedTextFieldCep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextFieldCepActionPerformed(evt);
-            }
-        });
 
         jTextFieldCompl.setEnabled(false);
 
@@ -268,15 +276,7 @@ public class FormMedico extends javax.swing.JFrame {
             }
         });
 
-        jLabelMUf.setText("UF");
-
-        jComboBoxUf.setEditable(true);
-        jComboBoxUf.setEnabled(false);
-        jComboBoxUf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxUfActionPerformed(evt);
-            }
-        });
+        jLabelMUf.setText("UF:");
 
         jLabel1.setText("ID Medico: ");
 
@@ -285,105 +285,142 @@ public class FormMedico extends javax.swing.JFrame {
         jLabel2.setText("Cidade:");
 
         jTextFieldBairro.setEnabled(false);
+        jTextFieldBairro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldBairroActionPerformed(evt);
+            }
+        });
 
-        jComboBoxCidade.setEditable(true);
-        jComboBoxCidade.setEnabled(false);
+        jTextFieldUF.setEnabled(false);
+
+        jTextFieldCidade.setEnabled(false);
+
+        jLabel3.setText("E-mail:");
+
+        jTextFieldEmail.setEnabled(false);
+        jTextFieldEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldEmailActionPerformed(evt);
+            }
+        });
+
+        try {
+            jFormattedTextFieldCEP.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#####-###")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jFormattedTextFieldCEP.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldCompl, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelMComplemento)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabelMCrm)
-                                    .addComponent(jLabelMEspecialidade))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBoxEspecializacao, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jFormattedTextFieldCrm, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(33, 33, 33)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabelMEndereco)
-                            .addComponent(jLabelMBairro)
-                            .addComponent(jLabelMNumero)
-                            .addComponent(jLabelMUf, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jComboBoxUf, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jComboBoxCidade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(jTextFieldBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jTextFieldNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(JlabelMCep)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jFormattedTextFieldCep, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButtonBuscarCep)))
-                                .addGap(118, 118, 118))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextFieldEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabelMRg)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addComponent(jFormattedTextFieldRg, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabelMNome)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldNomeMed, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(40, 40, 40)
-                                .addComponent(jLabelMCpf)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedTextFieldCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(391, 391, 391)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabelMTelRes)
-                                    .addComponent(jLabelMTelCel))
+                                    .addComponent(jLabelMEndereco)
+                                    .addComponent(jLabelMBairro)
+                                    .addComponent(jLabelMNome))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jFormattedTextFieldTelCel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jFormattedTextFieldTelRes, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jTextFieldEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabelMNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jTextFieldNomeMed, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelMCpf, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelMRg, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jFormattedTextFieldCpf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jFormattedTextFieldRg, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(8, 8, 8))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addComponent(JlabelMCep)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jFormattedTextFieldCEP, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonBuscarCep)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButtonIncluir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonEditar)
-                        .addGap(12, 12, 12)
-                        .addComponent(jButtonSalvar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonExcluir)
-                        .addGap(12, 12, 12)
-                        .addComponent(jButtonCancelar))
+                        .addGap(65, 65, 65)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jTextFieldBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabelMUf, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldUF, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabelMTelRes)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jFormattedTextFieldTelRes, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabelMTelCel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jFormattedTextFieldTelCel)))))
+                .addGap(465, 465, 465))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabelMComplemento)
+                                .addComponent(jTextFieldCompl, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap())
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jComboBoxEspecializacao, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jLabelMCrm)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jFormattedTextFieldCrm, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabelMEspecialidade))
+                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jTextFieldEmail)
+                            .addGap(653, 653, 653))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addGap(0, 0, Short.MAX_VALUE)
+                            .addComponent(jTextFieldPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButtonPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(197, 197, 197)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldIDMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextFieldPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                        .addComponent(jTextFieldIDMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jButtonIncluir)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonEditar)
+                .addGap(12, 12, 12)
+                .addComponent(jButtonSalvar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonExcluir)
+                .addGap(12, 12, 12)
+                .addComponent(jButtonCancelar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -394,74 +431,82 @@ public class FormMedico extends javax.swing.JFrame {
                     .addComponent(jButtonSalvar)
                     .addComponent(jButtonExcluir)
                     .addComponent(jButtonCancelar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTextFieldIDMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelMCpf, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jTextFieldNomeMed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabelMNome)
-                                .addComponent(jFormattedTextFieldCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldNomeMed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelMNome))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextFieldEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabelMEndereco)
-                            .addComponent(jLabelMRg)
-                            .addComponent(jFormattedTextFieldRg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabelMNumero)
+                            .addComponent(jTextFieldNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jFormattedTextFieldCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelMCpf))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextFieldBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelMBairro)
-                            .addComponent(jLabelMTelCel)
-                            .addComponent(jFormattedTextFieldTelCel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jFormattedTextFieldRg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelMRg))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jFormattedTextFieldTelRes, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextFieldBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabelMBairro)
+                        .addComponent(jLabelMTelRes)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jFormattedTextFieldTelCel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelMTelCel)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelMUf)
+                            .addComponent(jLabel2)
+                            .addComponent(jTextFieldUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelMTelRes)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jTextFieldNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabelMNumero)
-                                .addComponent(JlabelMCep)
-                                .addComponent(jFormattedTextFieldCep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButtonBuscarCep)
-                                .addComponent(jFormattedTextFieldTelRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jComboBoxCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel2))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jComboBoxUf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabelMUf)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jFormattedTextFieldCEP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonBuscarCep)
+                            .addComponent(JlabelMCep))))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabelMComplemento)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldCompl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelMEspecialidade, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBoxEspecializacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabelMEspecialidade, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBoxEspecializacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jFormattedTextFieldCrm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelMCrm))
-                        .addContainerGap(102, Short.MAX_VALUE))
+                            .addComponent(jLabelMCrm)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextFieldPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonPesquisa))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabelCadMedicos.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        jLabelCadMedicos.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelCadMedicos.setText("Cadastro de Médicos");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -469,9 +514,9 @@ public class FormMedico extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(401, 401, 401)
+                .addGap(440, 440, 440)
                 .addComponent(jLabelCadMedicos, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 512, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -480,49 +525,50 @@ public class FormMedico extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addContainerGap()
                 .addComponent(jLabelCadMedicos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(17, 17, 17))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        setSize(new java.awt.Dimension(1126, 590));
+        setSize(new java.awt.Dimension(1118, 589));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBoxUfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxUfActionPerformed
+    private void jTextFieldBairroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldBairroActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBoxUfActionPerformed
+    }//GEN-LAST:event_jTextFieldBairroActionPerformed
 
     private void jButtonBuscarCepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarCepActionPerformed
-               // TODO add your handling code here:
-        WebServiceCep wsc = WebServiceCep.searchCep(jFormattedTextFieldCep.getText());
-   
+        // TODO add your handling code here:
+        WebServiceCep wsc = WebServiceCep.searchCep(jFormattedTextFieldCEP.getText());
+
         jTextFieldEndereco.setText(wsc.getLogradouro());
         jTextFieldBairro.setText(wsc.getBairro());
-        jComboBoxCidade.setSelectedItem(wsc.getCidade());
-        jComboBoxUf.setSelectedItem(wsc.getUf());
-          
-          // https://viacep.com.br/ webservices correios  
-           // http://www.devmedia.com.br/atualizacao-devmedia-apis-do-cep-inclusao-do-codigo-ibge-e-o-campo-logradouro-curto-nos-retornos/30172
-           
+
+        jTextFieldCidade.setText(wsc.getCidade());
+        jTextFieldUF.setText(wsc.getUf());
+
+        // https://viacep.com.br/ webservices correios
+        // http://www.devmedia.com.br/atualizacao-devmedia-apis-do-cep-inclusao-do-codigo-ibge-e-o-campo-logradouro-curto-nos-retornos/30172
     }//GEN-LAST:event_jButtonBuscarCepActionPerformed
 
-    private void jFormattedTextFieldCepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextFieldCepActionPerformed
+    private void jButtonPesquisaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButtonPesquisaKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextFieldCepActionPerformed
+
+    }//GEN-LAST:event_jButtonPesquisaKeyPressed
 
     private void jButtonPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPesquisaActionPerformed
         // TODO add your handling code here:
 
-        mod.setPesquisa(jTextFieldPesquisa.getText());
+        mod.setMPesquisa(jTextFieldPesquisa.getText());
         BeansMedico model = controlM.buscaMedico(mod);
 
         jButtonIncluir.setEnabled(false);
-        jButtonEditar.setEnabled(true);
-        jButtonCancelar.setEnabled(true);
         jButtonSalvar.setEnabled(false);
+        jButtonCancelar.setEnabled(true);
+        jButtonEditar.setEnabled(true);
         jButtonExcluir.setEnabled(true);
 
         jTextFieldIDMedico.setText(String.valueOf(model.getMcod()));
@@ -530,17 +576,70 @@ public class FormMedico extends javax.swing.JFrame {
         jTextFieldEndereco.setText(model.getMlogradouro());
         jTextFieldNumero.setText(String.valueOf(model.getMnumero()));
         jTextFieldBairro.setText(model.getMbairro());
+        jTextFieldCidade.setText(model.getMSCidade());
+        jTextFieldUF.setText(model.getMSUf());
+        jTextFieldEmail.setText(model.getMEmail());
         jFormattedTextFieldCpf.setText(model.getMcpf());
         jFormattedTextFieldRg.setText(model.getMrg());
         jFormattedTextFieldTelRes.setText(model.getMtelresidencial());
         jFormattedTextFieldTelCel.setText(model.getMtelcelular());
         jFormattedTextFieldCrm.setText(model.getMcrm());
-        jFormattedTextFieldCep.setText(model.getMcep());
+        jFormattedTextFieldCEP.setText(model.getMcep());
         jTextFieldCompl.setText(model.getMcompl());
         jComboBoxEspecializacao.setSelectedItem(model.getMSespecialidade());
-        jTextFieldPesquisa.setText("");
+        preencherTabelaMedico("select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE "
+                + "where medico.nome like '%" + mod.getMPesquisa() + "%'");
 
+        /*
+        jButtonEditar.setEnabled(false);
+        jButtonExcluir.setEnabled(false);
+        jButtonIncluir.setEnabled(true);
+        jButtonCancelar.setEnabled(true);
+        jButtonSalvar.setEnabled(false);
+
+        // LimparCampos();
+        //jTextFieldPesquisa.setText("");
+         */
     }//GEN-LAST:event_jButtonPesquisaActionPerformed
+
+    private void jTableMedicosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMedicosMouseClicked
+
+        // TODO add your handling code here:
+        String Nome = "" + jTableMedicos.getValueAt(jTableMedicos.getSelectedRow(), 1);
+        conBd.conectarBd();
+        try {
+            String sql = "select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE where nome = '" + Nome + "'";
+            conBd.executaSql(sql);
+            conBd.rs.first();
+            LimparCampos();
+            DesabilitarCampos();
+            jTextFieldIDMedico.setText(String.valueOf(conBd.rs.getInt("IDMEDICO")));
+            jTextFieldNomeMed.setText(conBd.rs.getString("NOME"));
+            jTextFieldEndereco.setText(conBd.rs.getString("LOGRADOURO"));
+            jTextFieldNumero.setText(String.valueOf(conBd.rs.getInt("NUMERO")));
+            jTextFieldBairro.setText(conBd.rs.getString("BAIRRO"));
+            jFormattedTextFieldCpf.setText(conBd.rs.getString("CPF"));
+            jFormattedTextFieldRg.setText(conBd.rs.getString("RG"));
+            jFormattedTextFieldTelRes.setText(conBd.rs.getString("TELRESIDENCIAL"));
+            jFormattedTextFieldTelCel.setText(conBd.rs.getString("TELCELULAR"));
+            jFormattedTextFieldCrm.setText(conBd.rs.getString("CRM"));
+            jFormattedTextFieldCEP.setText(conBd.rs.getString("CEP"));
+            jTextFieldCompl.setText(conBd.rs.getString("COMPL"));
+            jComboBoxEspecializacao.setSelectedItem(conBd.rs.getString("ESPEC"));
+            jTextFieldCidade.setText(conBd.rs.getString("CIDADE"));
+            jTextFieldUF.setText(conBd.rs.getString("ESTADO"));
+            jTextFieldEmail.setText(conBd.rs.getString("EMAIL"));
+            jTextFieldPesquisa.setText("");
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "erro ao selecionar os dados" + ex.getMessage());
+        }
+        jButtonIncluir.setEnabled(false);
+        jButtonEditar.setEnabled(true);
+        jButtonExcluir.setEnabled(true);
+        jButtonCancelar.setEnabled(true);
+        conBd.DesconectarBd();
+    }//GEN-LAST:event_jTableMedicosMouseClicked
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         // TODO add your handling code here:
@@ -549,22 +648,7 @@ public class FormMedico extends javax.swing.JFrame {
         LimparCampos();
 
         //Habilitar ou Desabilitar Campos
-        jButtonSalvar.setEnabled(!true);
-        jTextFieldBairro.setEnabled(!true);
-        jTextFieldEndereco.setEnabled(!true);
-        jTextFieldNomeMed.setEnabled(!true);
-        jTextFieldNumero.setEnabled(!true);
-        jComboBoxCidade.setEnabled(!true);
-        jComboBoxUf.setEnabled(!true);
-        jComboBoxEspecializacao.setEnabled(!true);
-        jComboBoxUf.setEnabled(!true);
-        jFormattedTextFieldCpf.setEnabled(!true);
-        jFormattedTextFieldCrm.setEnabled(!true);
-        jFormattedTextFieldRg.setEnabled(!true);
-        jFormattedTextFieldTelCel.setEnabled(!true);
-        jFormattedTextFieldTelRes.setEnabled(!true);
-        jFormattedTextFieldCep.setEnabled(!true);
-        jTextFieldCompl.setEnabled(!true);
+        DesabilitarCampos();
         jButtonBuscarCep.setEnabled(!true);
         jTextFieldPesquisa.setEnabled(true);
         jButtonCancelar.setEnabled(!true);
@@ -572,10 +656,39 @@ public class FormMedico extends javax.swing.JFrame {
         jButtonEditar.setEnabled(false);
         jButtonExcluir.setEnabled(false);
         jButtonPesquisa.setEnabled(true);
-        jComboBoxCidade.setEnabled(false);
+        jButtonSalvar.setEnabled(false);
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
+    private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
+        // TODO add your handling code here:
+        int resposta = 0;
+        resposta = JOptionPane.showConfirmDialog(rootPane, "Deseja realmente excluir? ");
+        if (resposta == JOptionPane.YES_OPTION) {
+            mod.setMcod(Integer.parseInt(jTextFieldIDMedico.getText()));
+            controlM.Excluir(mod);
+            preencherTabelaMedico("SELECT IDMEDICO,NOME,ESPEC, CRM FROM MEDICO "
+                    + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOME");
+
+            jButtonSalvar.setEnabled(false);
+            jButtonBuscarCep.setEnabled(true);
+            jButtonCancelar.setEnabled(false);
+            jButtonIncluir.setEnabled(true);
+            jButtonExcluir.setEnabled(false);
+            jButtonEditar.setEnabled(false);
+
+            LimparCampos();
+        }
+    }//GEN-LAST:event_jButtonExcluirActionPerformed
+
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
+
+        if (jTextFieldNomeMed.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Preencha o NOME para continuar.");
+            jTextFieldNomeMed.requestFocus();
+        } else if (jFormattedTextFieldCrm.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Preencha o CRM para continuar.");
+            jFormattedTextFieldCrm.requestFocus();
+        }
 
         if (flag == 1) {
             //Ler campos da tela de cadastro do medico
@@ -588,39 +701,23 @@ public class FormMedico extends javax.swing.JFrame {
             mod.setMbairro(jTextFieldBairro.getText());
             mod.setMnumero(Integer.parseInt(jTextFieldNumero.getText()));
             mod.setMcrm((jFormattedTextFieldCrm.getText()));
-            mod.setMcep(jFormattedTextFieldCep.getText());
+            mod.setMcep(jFormattedTextFieldCEP.getText());
+            mod.setMSCidade(jTextFieldCidade.getText());
+            mod.setMSUf(jTextFieldUF.getText());
             mod.setMcompl(jTextFieldCompl.getText());
             mod.setMespecialidade(jComboBoxEspecializacao.getSelectedIndex());// teste index pega inteiros
+            mod.setMEmail(jTextFieldEmail.getText());
             controlM.salvar(mod);
 
+            preencherTabelaMedico("SELECT IDMEDICO,NOME,ESPEC, CRM FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOME");
             //Limpar os campos
             LimparCampos();
+            DesabilitarCampos();
 
-            //jTextFieldPesquisa.setEnabled(false);
-            // bloqueio dos campos
-            jButtonSalvar.setEnabled(false);
-            jTextFieldBairro.setEnabled(false);
-            jTextFieldEndereco.setEnabled(false);
-            jTextFieldNomeMed.setEnabled(false);
-            jTextFieldNumero.setEnabled(false);
-            jComboBoxEspecializacao.setEnabled(false);
-            jComboBoxUf.setEditable(false);
-            jFormattedTextFieldCpf.setEnabled(false);
-            jFormattedTextFieldCrm.setEnabled(false);
-            jFormattedTextFieldRg.setEnabled(false);
-            jFormattedTextFieldTelCel.setEnabled(false);
-            jFormattedTextFieldTelRes.setEnabled(false);
-            jFormattedTextFieldCep.setEnabled(false);
-            jTextFieldCompl.setEnabled(false);
-            jButtonBuscarCep.setEnabled(false);
-            jComboBoxUf.setEnabled(false);
-            jComboBoxCidade.setEnabled(false);
-            jComboBoxUf.setEnabled(false);
-            //jTextFieldCidade.setEnabled(false);
-            //jTextFieldPesquisa.setEnabled(false);
         } else {
+            flag = 2;
 
-            // mod.setMcod((Integer.parseInt(jTextFieldIDMedico.getText())));
+            mod.setMcod((Integer.parseInt(jTextFieldIDMedico.getText())));
             mod.setMnome(jTextFieldNomeMed.getText());
             mod.setMcpf(jFormattedTextFieldCpf.getText());
             mod.setMrg(jFormattedTextFieldRg.getText());
@@ -630,29 +727,20 @@ public class FormMedico extends javax.swing.JFrame {
             mod.setMbairro(jTextFieldBairro.getText());
             mod.setMnumero(Integer.parseInt(jTextFieldNumero.getText()));
             mod.setMcrm((jFormattedTextFieldCrm.getText()));
-            mod.setMcep(jFormattedTextFieldCep.getText());
+            mod.setMcep(jFormattedTextFieldCEP.getText());
+            mod.setMSCidade(jTextFieldCidade.getText());
+            mod.setMSUf(jTextFieldUF.getText());
             mod.setMcompl(jTextFieldCompl.getText());
             mod.setMespecialidade(jComboBoxEspecializacao.getSelectedIndex());// teste index pega inteiros
+            mod.setMEmail(jTextFieldEmail.getText());
             controlM.Editar(mod);
 
-            //Habilitar ou não
-            jButtonSalvar.setEnabled(false);
-            jTextFieldBairro.setEnabled(false);
-            jTextFieldEndereco.setEnabled(false);
-            jTextFieldNomeMed.setEnabled(false);
-            jTextFieldNumero.setEnabled(false);
-            jComboBoxEspecializacao.setEnabled(false);
-            jComboBoxUf.setEditable(false);
-            jFormattedTextFieldCpf.setEnabled(false);
-            jFormattedTextFieldCrm.setEnabled(false);
-            jFormattedTextFieldRg.setEnabled(false);
-            jFormattedTextFieldTelCel.setEnabled(false);
-            jFormattedTextFieldTelRes.setEnabled(false);
-            jFormattedTextFieldCep.setEnabled(false);
-            jTextFieldCompl.setEnabled(false);
-            jButtonBuscarCep.setEnabled(false);
-            jComboBoxCidade.setEnabled(true);
+            preencherTabelaMedico("SELECT IDMEDICO,NOME,ESPEC, CRM FROM MEDICO "
+                    + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOME");
 
+            //Desaabilitar Campos tela cadastro Medico
+            DesabilitarCampos();
+            //LimparCampos();
         }
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
@@ -661,54 +749,28 @@ public class FormMedico extends javax.swing.JFrame {
         flag = 1;
         //Limpar os campos
         LimparCampos();
-
+        //metodo para preencher Jcombox Especialidade
         this.preencherEspecialidade();
-       // this.preencherUnidadeFederal();
-        jButtonSalvar.setEnabled(true);
-        jTextFieldBairro.setEnabled(true);
-        jTextFieldEndereco.setEnabled(true);
-        jTextFieldNomeMed.setEnabled(true);
-        jTextFieldNumero.setEnabled(true);
-        jComboBoxEspecializacao.setEnabled(true);
-        jComboBoxUf.setEnabled(true);
-        jFormattedTextFieldCpf.setEnabled(true);
-        jFormattedTextFieldCrm.setEnabled(true);
-        jFormattedTextFieldRg.setEnabled(true);
-        jFormattedTextFieldTelCel.setEnabled(true);
-        jFormattedTextFieldTelRes.setEnabled(true);
-        jFormattedTextFieldCep.setEnabled(true);
-        jTextFieldCompl.setEnabled(true);
+
+        HabilitarCampos();
         jButtonBuscarCep.setEnabled(true);
         jTextFieldPesquisa.setEnabled(true);
         jButtonCancelar.setEnabled(true);
-        jComboBoxCidade.setEnabled(true);
+        jButtonSalvar.setEnabled(true);
+
     }//GEN-LAST:event_jButtonIncluirActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
         // TODO add your handling code here:
 
-        flag = 2;
+        int flag = 2;
+
         this.preencherEspecialidade();
+        HabilitarCampos();
         jTextFieldPesquisa.setText("");
         jButtonSalvar.setEnabled(true);
-        jTextFieldBairro.setEnabled(true);
-        jTextFieldEndereco.setEnabled(true);
-        jTextFieldNomeMed.setEnabled(true);
-        jTextFieldNumero.setEnabled(true);
-        jComboBoxEspecializacao.setEnabled(true);
-        jComboBoxUf.setEnabled(true);
-        jFormattedTextFieldCpf.setEnabled(true);
-        jFormattedTextFieldCrm.setEnabled(true);
-        jFormattedTextFieldRg.setEnabled(true);
-        jFormattedTextFieldTelCel.setEnabled(true);
-        jFormattedTextFieldTelRes.setEnabled(true);
-        jFormattedTextFieldCep.setEnabled(true);
-        jTextFieldCompl.setEnabled(true);
         jButtonBuscarCep.setEnabled(true);
-        jTextFieldPesquisa.setEnabled(true);
         jButtonCancelar.setEnabled(true);
-        jComboBoxCidade.setEnabled(true);
-
 
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
@@ -719,6 +781,10 @@ public class FormMedico extends javax.swing.JFrame {
     private void jTextFieldNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNumeroActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNumeroActionPerformed
+
+    private void jFormattedTextFieldTelResActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextFieldTelResActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFormattedTextFieldTelResActionPerformed
 
     private void jTextFieldNomeMedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNomeMedActionPerformed
         // TODO add your handling code here:
@@ -732,80 +798,9 @@ public class FormMedico extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jFormattedTextFieldRgActionPerformed
 
-    private void jFormattedTextFieldTelResActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextFieldTelResActionPerformed
+    private void jTextFieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextFieldTelResActionPerformed
-
-    private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
-        // TODO add your handling code here:
-        int resposta = 0;
-        resposta = JOptionPane.showConfirmDialog(rootPane, "Deseja realmente excluir? ");
-        if (resposta == JOptionPane.YES_OPTION) {
-            mod.setMcod(Integer.parseInt(jTextFieldIDMedico.getText()));
-            controlM.Excluir(mod);
-            LimparCampos();
-        }
-
-    }//GEN-LAST:event_jButtonExcluirActionPerformed
-
-    private void jTableMedicosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMedicosMouseClicked
-
-        // TODO add your handling code here:
-        String Nome = "" + jTableMedicos.getValueAt(jTableMedicos.getSelectedRow(), 1);
-        conBd.conectarBd();
-        try {
-            String sql = "select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE where nome = '" + Nome + "'";
-            conBd.executaSql(sql);
-            conBd.rs.first();
-
-            jTextFieldIDMedico.setText(String.valueOf(conBd.rs.getInt("IDMEDICO")));
-            jTextFieldNomeMed.setText(conBd.rs.getString("NOME"));
-            jTextFieldEndereco.setText(conBd.rs.getString("LOGRADOURO"));
-            jTextFieldNumero.setText(String.valueOf(conBd.rs.getInt("NUMERO")));
-            jTextFieldBairro.setText(conBd.rs.getString("BAIRRO"));
-            jFormattedTextFieldCpf.setText(conBd.rs.getString("CPF"));
-            jFormattedTextFieldRg.setText(conBd.rs.getString("RG"));
-            jFormattedTextFieldTelRes.setText(conBd.rs.getString("TELRESIDENCIAL"));
-            jFormattedTextFieldTelCel.setText(conBd.rs.getString("TELCELULAR"));
-            jFormattedTextFieldCrm.setText(conBd.rs.getString("CRM"));
-            jFormattedTextFieldCep.setText(conBd.rs.getString("CEP"));
-            jTextFieldCompl.setText(conBd.rs.getString("COMPL"));
-            jComboBoxEspecializacao.setSelectedItem(conBd.rs.getString("ESPEC"));
-            jTextFieldPesquisa.setText("");
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "erro ao selecionar os dados" + ex.getMessage());
-        }
-        jButtonIncluir.setEnabled(false);
-        jButtonEditar.setEnabled(true);
-        jButtonExcluir.setEnabled(true);
-        conBd.DesconectarBd();
-    }//GEN-LAST:event_jTableMedicosMouseClicked
-
-    public void preencherUnidadeFederal() {
-        conBd.conectarBd();
-
-        try {
-
-            jComboBoxEspecializacao.addItem("Selecione");
-            String sql = "SELECT ESPEC FROM UNIDADEFEDERATIVA";
-
-            pstM = conBd.con.prepareStatement(sql);
-            rs = pstM.executeQuery();
-
-            while (rs.next()) {
-                jComboBoxEspecializacao.addItem(rs.getString("UNIFED"));
-            }
-
-        } catch (SQLException ex) {
-            // Logger.getLogger(FormMedico.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados da especialidade" + ex);
-        } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados da especialidade" + ex.getMessage());
-        }
-
-        conBd.DesconectarBd();
-    }
+    }//GEN-LAST:event_jTextFieldEmailActionPerformed
 
     public void preencherEspecialidade() {
         conBd.conectarBd();
@@ -832,6 +827,46 @@ public class FormMedico extends javax.swing.JFrame {
         conBd.DesconectarBd();
     }
 
+    public void HabilitarCampos() {
+        jButtonSalvar.setEnabled(!false);
+        jTextFieldBairro.setEnabled(!false);
+        jTextFieldEndereco.setEnabled(!false);
+        jTextFieldNomeMed.setEnabled(!false);
+        jTextFieldNumero.setEnabled(!false);
+        jComboBoxEspecializacao.setEnabled(!false);
+        jTextFieldUF.setEnabled(!false);
+        jFormattedTextFieldCpf.setEnabled(!false);
+        jFormattedTextFieldCrm.setEnabled(!false);
+        jFormattedTextFieldRg.setEnabled(!false);
+        jFormattedTextFieldTelCel.setEnabled(!false);
+        jFormattedTextFieldTelRes.setEnabled(!false);
+        jFormattedTextFieldCEP.setEnabled(!false);
+        jTextFieldCompl.setEnabled(!false);
+        jButtonBuscarCep.setEnabled(!false);
+        jTextFieldCidade.setEnabled(!false);
+        jTextFieldEmail.setEnabled(!false);
+    }
+
+    public void DesabilitarCampos() {
+        jButtonSalvar.setEnabled(false);
+        jTextFieldBairro.setEnabled(false);
+        jTextFieldEndereco.setEnabled(false);
+        jTextFieldNomeMed.setEnabled(false);
+        jTextFieldNumero.setEnabled(false);
+        jComboBoxEspecializacao.setEnabled(false);
+        jTextFieldUF.setEnabled(false);
+        jFormattedTextFieldCpf.setEnabled(false);
+        jFormattedTextFieldCrm.setEnabled(false);
+        jFormattedTextFieldRg.setEnabled(false);
+        jFormattedTextFieldTelCel.setEnabled(false);
+        jFormattedTextFieldTelRes.setEnabled(false);
+        jFormattedTextFieldCEP.setEnabled(false);
+        jTextFieldCompl.setEnabled(false);
+        jButtonBuscarCep.setEnabled(false);
+        jTextFieldCidade.setEnabled(false);
+        jTextFieldEmail.setEnabled(false);
+    }
+
     public void LimparCampos() {
 
         jTextFieldPesquisa.setText("");
@@ -840,24 +875,27 @@ public class FormMedico extends javax.swing.JFrame {
         jTextFieldNomeMed.setText("");
         jTextFieldNumero.setText("");
         jComboBoxEspecializacao.setSelectedItem("Selecione");
-        jComboBoxUf.setSelectedItem(null);
         jFormattedTextFieldCpf.setText("");
         jFormattedTextFieldCrm.setText("");
         jFormattedTextFieldRg.setText("");
         jFormattedTextFieldTelCel.setText("");
         jFormattedTextFieldTelRes.setText("");
-        jFormattedTextFieldCep.setText("");
+        jFormattedTextFieldCEP.setText("");
         jTextFieldCompl.setText("");
         jTextFieldIDMedico.setText("");
-        jComboBoxCidade.setSelectedItem("Selecione");
+        jTextFieldCidade.setText("");
+        jTextFieldUF.setText("");
+        jTextFieldEmail.setText("");
 
     }
 
     @SuppressWarnings("unchecked")
-    public void preencherTabelaMedico(String sql) {
+    public final void preencherTabelaMedico(String sql) {
+
         ArrayList dados = new ArrayList();
         String[] colunas = new String[]{"ID", "NOME", "ESPECIALIDADE", "CRM"};
         conBd.conectarBd();
+
         conBd.executaSql(sql);
 
         try {
@@ -868,28 +906,28 @@ public class FormMedico extends javax.swing.JFrame {
             } while (conBd.rs.next());
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao preencher ArrayList! erro: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Busque por outro medico para preencher tabela.");
         }
+        ModeloTabela modelo = new ModeloTabela(dados, colunas);
+        jTableMedicos.setModel(modelo);
+     
 
-        ModeloTabelaMedico mod = new ModeloTabelaMedico(dados, colunas);
-        jTableMedicos.setModel(mod);
-        
-        jTableMedicos.getColumnModel().getColumn(0).setPreferredWidth(30);//Tamanho da tabela
+        jTableMedicos.getColumnModel().getColumn(0).setPreferredWidth(38);//Tamanho da tabela
         jTableMedicos.getColumnModel().getColumn(0).setResizable(false);
-       
-        jTableMedicos.getColumnModel().getColumn(1).setPreferredWidth(220);
+
+        jTableMedicos.getColumnModel().getColumn(1).setPreferredWidth(237);
         jTableMedicos.getColumnModel().getColumn(1).setResizable(false);
-        
-        jTableMedicos.getColumnModel().getColumn(2).setPreferredWidth(120);
+
+        jTableMedicos.getColumnModel().getColumn(2).setPreferredWidth(110);
         jTableMedicos.getColumnModel().getColumn(2).setResizable(false);
-        
-        jTableMedicos.getColumnModel().getColumn(3).setPreferredWidth(80);
+
+        jTableMedicos.getColumnModel().getColumn(3).setPreferredWidth(65);
         jTableMedicos.getColumnModel().getColumn(3).setResizable(false);
 
         jTableMedicos.getTableHeader().setReorderingAllowed(false);//reorganizar o cabeçalho
         jTableMedicos.setAutoResizeMode(jTableMedicos.AUTO_RESIZE_OFF); //NÃO VAI PODER REDIMENCIONAR A TABELA
         jTableMedicos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//selecionar um por vez 
-
+        //total do tamanho dos campos = 38 + 237 + 110 + 65 = 450
         conBd.DesconectarBd();
     }
 
@@ -934,10 +972,8 @@ public class FormMedico extends javax.swing.JFrame {
     private javax.swing.JButton jButtonIncluir;
     private javax.swing.JButton jButtonPesquisa;
     private javax.swing.JButton jButtonSalvar;
-    private javax.swing.JComboBox<String> jComboBoxCidade;
     private javax.swing.JComboBox<String> jComboBoxEspecializacao;
-    private javax.swing.JComboBox<String> jComboBoxUf;
-    private javax.swing.JFormattedTextField jFormattedTextFieldCep;
+    private javax.swing.JFormattedTextField jFormattedTextFieldCEP;
     private javax.swing.JFormattedTextField jFormattedTextFieldCpf;
     private javax.swing.JFormattedTextField jFormattedTextFieldCrm;
     private javax.swing.JFormattedTextField jFormattedTextFieldRg;
@@ -945,6 +981,7 @@ public class FormMedico extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField jFormattedTextFieldTelRes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelCadMedicos;
     private javax.swing.JLabel jLabelMBairro;
     private javax.swing.JLabel jLabelMComplemento;
@@ -962,12 +999,17 @@ public class FormMedico extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableMedicos;
     private javax.swing.JTextField jTextFieldBairro;
+    private javax.swing.JTextField jTextFieldCidade;
     private javax.swing.JTextField jTextFieldCompl;
+    private javax.swing.JTextField jTextFieldEmail;
     private javax.swing.JTextField jTextFieldEndereco;
     private javax.swing.JTextField jTextFieldIDMedico;
     private javax.swing.JTextField jTextFieldNomeMed;
     private javax.swing.JTextField jTextFieldNumero;
     private javax.swing.JTextField jTextFieldPesquisa;
+    private javax.swing.JTextField jTextFieldUF;
     // End of variables declaration//GEN-END:variables
+
+    
 
 }
