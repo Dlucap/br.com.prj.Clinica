@@ -21,6 +21,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     FormEnfermeiro enf = new FormEnfermeiro();
     FormPaciente telapac = new FormPaciente();
     FormAgendamento telaAgenda = new FormAgendamento();
+    FormAgenda telaagen = new FormAgenda();
+    FormAgendaMedico telaAgenMedico = new FormAgendaMedico();
             
 
     /**
@@ -72,6 +74,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenuFerramenta = new javax.swing.JMenu();
         jMenuTelaBemVindo = new javax.swing.JMenuItem();
         jMenuItemConfEnvioEmail = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenuAjuda = new javax.swing.JMenu();
         jMenuItemAjuda = new javax.swing.JMenuItem();
         jMenuSair = new javax.swing.JMenu();
@@ -238,6 +243,26 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenuFerramenta.add(jMenuItemConfEnvioEmail);
 
         jMenuBar1.add(jMenuFerramenta);
+
+        jMenu1.setText("Agenda");
+
+        jMenuItem3.setText("Agenda do Dia");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
+
+        jMenuItem4.setText("Agenda do Medico");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
+        jMenuBar1.add(jMenu1);
 
         jMenuAjuda.setText("Ajuda");
 
@@ -457,12 +482,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
-        TelaLogin login = new TelaLogin();
-        login.setVisible(true);
-        
         TelaPrincipal principal = new TelaPrincipal();
         principal.setVisible(false);
-                
+        
+        TelaLogin login = new TelaLogin();
+        login.setVisible(true);
         
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
@@ -489,6 +513,17 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     + "Gentileza entre em contato com o administrador do sistema." + ex);
         }
     }//GEN-LAST:event_BtnAgendaActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        telaagen.setVisible(true);
+        
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        telaAgenMedico.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -540,6 +575,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelPainelFundo1;
     private javax.swing.JLabel jLabelPainelfundo11;
     private javax.swing.JLabel jLabelUsuario;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenuAjuda;
     private javax.swing.JMenuBar jMenuBar1;
@@ -552,6 +588,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuISairb;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItemAjuda;
     private javax.swing.JMenuItem jMenuItemConfEnvioEmail;
     private javax.swing.JMenu jMenuSair;

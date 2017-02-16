@@ -180,6 +180,11 @@ public class FormEnvioEmail extends javax.swing.JFrame {
         jButtonSalvarUsu.setText("Salvar");
 
         jButtonTesteEnvEmailUsu.setText("Testar envio de email");
+        jButtonTesteEnvEmailUsu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTesteEnvEmailUsuActionPerformed(evt);
+            }
+        });
 
         jButtonCancelarUsu.setText("Cancelar");
 
@@ -406,6 +411,26 @@ public class FormEnvioEmail extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonTesteEnvEmailUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTesteEnvEmailUsuActionPerformed
+        // TODO add your handling code here:
+                 configuracao();
+
+      enviarEmail(jTextFieldEmailUsu.getText(),"Teste de envio de email!","Mensagem automática\n Teste de envio automático, gentileza não responder.",jTextFieldEmailUsu.getText());
+    }//GEN-LAST:event_jButtonTesteEnvEmailUsuActionPerformed
+/**
+ *       email.setHostName("smtp.gmail.com");//servidor de email
+ *       email.setSmtpPort(465); //porta de conexão pode deixar comentado
+ *       email.setAuthenticator(new DefaultAuthenticator("username", "password")); //usuário e senha 
+ *       email.setAuthentication("climedjaadm@gmail.com", "clinicamedicajava12345");
+ * 
+ * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE 
+ * WHERE especialidade.IDESPECIALIDADE = (select idespecialidade from especialidade where IDESPECIALIDADE= 4)
+ * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE 
+ * WHERE especialidade.IDESPECIALIDADE = (select idespecialidade from especialidade where IDESPECIALIDADE= 3)
+ * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE 
+ * WHERE especialidade.IDESPECIALIDADE = (select idespecialidade from especialidade where IDESPECIALIDADE= 5)
+ *
+ */
       private void configuracao() {
  
         email.setHostName(jTextFieldSeverEmailUsu.getText());//servidor de email

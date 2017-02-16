@@ -49,6 +49,11 @@ public class ConexaoBd {
             rs = stm.executeQuery(sql);
         } catch (SQLException ex) {
                   JOptionPane.showMessageDialog(null, "Erro ao executar a sentença em sql\n" + ex.getMessage());
+                  JOptionPane.showMessageDialog(null, "Erro ao executar a sentença em sql\n" + ex.getSQLState());
+                  JOptionPane.showMessageDialog(null, "Erro ao executar a sentença em sql\n" + ex);
+                  JOptionPane.showMessageDialog(null, "Erro ao executar a sentença em sql\n" + ex.getCause());
+                  JOptionPane.showMessageDialog(null, "Erro ao executar a sentença em sql\n" + ex.getErrorCode());
+                 
         }
     }
 }

@@ -304,6 +304,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Testar envio de email"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonTesteEnvEmailUsuActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButtonCancelarUsu">
           <Properties>

@@ -11,7 +11,7 @@ package visao;
 import ModeloBeans.BeansAgendamento;
 import ModeloBeans.ModeloTabela;
 import ModeloConection.ConexaoBd;
-import ModeloDao.DaoAgenda;
+import ModeloDao.DaoAgendamento;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,14 +30,16 @@ public class FormAgendamento extends javax.swing.JFrame {
     
     ResultSet rs = null;
     PreparedStatement pstA;
-    public int teste;
+    
+    public String teste;
     /**
      * Creates new form FormAgenda
      */
     public FormAgendamento() {
         initComponents();
        
-        
+        preencherEspecMedica();
+        preencherMedico();
         jComboBoxTurno.setSelectedItem("selecione");
         preencherTabelaAgendamento("SELECT IDPACIENTE,NOME,TELRESIDENCIAL, TELCELULAR,CENOME,CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOME like '%" + jTextFieldPaciente.getText() + "%'");
     }
@@ -53,7 +55,7 @@ public class FormAgendamento extends javax.swing.JFrame {
 
         try {
 
-           jComboBoxEspecMedica.addItem(" ");
+           jComboBoxEspecMedica.addItem("Selecione");
             String sql = "SELECT * FROM ESPECIALIDADE";
 
             pstA = conBd.con.prepareStatement(sql);
@@ -72,19 +74,26 @@ public class FormAgendamento extends javax.swing.JFrame {
         
         conBd.DesconectarBd();
     }
-       
+       /**
+        * Em versões futuras implementar a validação de um combobox no outro:
+        * por Exemplo: 
+        * Ao selecionar a especialidade desejada, no combobox do medico será apresentado apenas os medicos que possuem
+        * a especialidade selecionada.
+        */
+     
+    
     public void preencherMedico() {
         conBd.conectarBd(); 
         
         try {
 
-           // jComboBoxMedico.addItem("Selecione");
-//            String sql = "SELECT NOME FROM MEDICO " +
-//                        "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE " +
-//                        "WHERE ESPECIALIDADE.IDESPECIALIDADE ="+5;             //+jComboBoxEspecMedica.getSelectedIndex()+"'";
+            jComboBoxMedico.addItem("Selecione");
+            String sql = "SELECT NOME FROM MEDICO ";
+                        //"INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE " +
+                     //   "WHERE ESPECIALIDADE.IDESPECIALIDADE =(select idespecialidade from especialidade where ESPEC = '"+jComboBoxEspecMedica.getSelectedIndex()+"')";
 
            jComboBoxMedico.addItem("Selecione");
-            String sql = "SELECT NOME FROM MEDICO";
+            //String sql = "SELECT NOME FROM MEDICO";
 
             pstA = conBd.con.prepareStatement(sql);
             rs = pstA.executeQuery();
@@ -230,11 +239,6 @@ public class FormAgendamento extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(12, 12, 12)
@@ -262,7 +266,7 @@ public class FormAgendamento extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 913, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -271,7 +275,12 @@ public class FormAgendamento extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jComboBoxMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBoxEspecMedica, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jComboBoxEspecMedica, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -295,11 +304,11 @@ public class FormAgendamento extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
                     .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel7)
-                        .addComponent(jComboBoxEspecMedica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jComboBoxEspecMedica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -362,7 +371,7 @@ public class FormAgendamento extends javax.swing.JFrame {
            // DesabilitarCampos();
             jTextFieldPaciente.setText(conBd.rs.getString("NOME"));
             
-          //  jTextFieldPPesquisar.setText("");
+       //jTextFieldPPesquisar.set
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "erro ao selecionar os dados" + ex.getMessage());
@@ -384,7 +393,7 @@ public class FormAgendamento extends javax.swing.JFrame {
         agenda.setData(jDateChooser1.getDate());
         agenda.setAEspecialidade(jComboBoxEspecMedica.getSelectedIndex()); 
         agenda.setStatus("Aberto");
-        DaoAgenda dao = new DaoAgenda();
+        DaoAgendamento dao = new DaoAgendamento();
                 
         dao.Salvar(agenda);
         
@@ -407,9 +416,8 @@ public class FormAgendamento extends javax.swing.JFrame {
 
     private void jComboBoxEspecMedicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxEspecMedicaActionPerformed
         // TODO add your handling code here:
-          teste = jComboBoxEspecMedica.getSelectedIndex();
-                System.out.println(teste);
-
+         
+      
     }//GEN-LAST:event_jComboBoxEspecMedicaActionPerformed
 
     private void jComboBoxMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxMedicoActionPerformed
@@ -418,7 +426,17 @@ public class FormAgendamento extends javax.swing.JFrame {
 
     private void jComboBoxEspecMedicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBoxEspecMedicaMouseClicked
         // TODO add your handling code here:
-         preencherEspecMedica();
+       //  preencherEspecMedica();
+//        jComboBoxMedico.addItemListener(new ItemListener() {
+//
+//                @Override
+//                public void itemStateChanged(ItemEvent e) {
+//                    if (e.getStateChange() == ItemEvent.SELECTED) // para evitar duplicações
+//                    {
+//                        System.out.println("Você escolheu a opção " + e.getItem());
+//                    }
+//                }
+//            });
     }//GEN-LAST:event_jComboBoxEspecMedicaMouseClicked
 
        

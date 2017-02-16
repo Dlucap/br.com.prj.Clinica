@@ -3,6 +3,7 @@ package visao;
 import ModeloBeans.BeansAgendamento;
 import ModeloBeans.ModeloTabela;
 import ModeloConection.ConexaoBd;
+import ModeloDao.DaoAgendamento;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,48 +20,54 @@ public class FormAgenda extends javax.swing.JFrame {
 
     ConexaoBd conBd = new ConexaoBd();
     BeansAgendamento agenda = new BeansAgendamento();
+    BeansAgendamento agen = new BeansAgendamento();
+    DaoAgendamento daoagenda = new DaoAgendamento();
 
-    public FormAgenda() {
-        initComponents();
-        
-        Calendar data = Calendar.getInstance();
+    String dtHoje;
+    String status;
+
+   public void DataHoje(){
+      Calendar data = Calendar.getInstance();
         Date d = data.getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.format(d);
-
-        String dtHoje;
         dtHoje = dateFormat.format(d);
-     
-        String status = "Aberto";
-   System.out.println("visao.FormAgenda.<init>()"+dtHoje+"Status= "+status);
-       
-   preencherTabelaAgenda("SELECT IDAGENDAMENTO, STATUS, PACIENTE.NOME, TURNO, DTAGENDAMENTO, MEDICO.NOME, ESPECIALIDADE.ESPEC FROM AGENDAMENTO "
-                        +"INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE "
-                        +"INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO "
-                        +"INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE "
-                                + "WHERE DTAGENDAMENTO ='"+dtHoje+"' AND STATUS = '"+status +"' ORDER BY TURNO");
+        status = "Aberto"; 
+   }
+    
+    public FormAgenda() {
+        initComponents();
+
+        DataHoje();
+
+        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUS, PACIENTE.NOME, AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOME, ESPECIALIDADE.ESPEC FROM AGENDAMENTO"
+                + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
+                + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
+                + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE"
+                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUS = '" + status + "' ORDER BY TURNO");
     }
 
     public final void preencherTabelaAgenda(String sql) {
 
         ArrayList dados = new ArrayList();
-        String[] colunas = new String[]{"ID","STATUS","NOME PACIENTE", "TURNO", "DATA", "NOME MEDICO","ESPECIALIDADE"};
+        String[] colunas = new String[]{"ID", "STATUS", "NOME PACIENTE", "TURNO", "DATA", "NOME MEDICO", "ESPECIALIDADE"};
         conBd.conectarBd();
 
         conBd.executaSql(sql);
 
         try {
             conBd.rs.first();
+
             do {
-                dados.add(new Object[]{conBd.rs.getInt("IDAGENDAMENTO"),conBd.rs.getString("STATUS"), conBd.rs.getString("PACIENTE.NOME"), 
-                    conBd.rs.getString("TURNO"), conBd.rs.getString("DTAGENDAMENTO"), conBd.rs.getString("MEDICO.NOME"),conBd.rs.getString("ESPECIALIDADE.ESPEC")});
+                dados.add(new Object[]{conBd.rs.getInt("IDAGENDAMENTO"), conBd.rs.getString("STATUS"), conBd.rs.getString("NOME"),
+                    conBd.rs.getString("TURNO"), conBd.rs.getString("DTAGENDAMENTO"), conBd.rs.getString("NOME"), conBd.rs.getString("ESPEC")});
 
             } while (conBd.rs.next());
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Nenhuma consulta localizada para hoje.");
         }
-        
+
         ModeloTabela modelo = new ModeloTabela(dados, colunas);
         jTableAgenda.setModel(modelo);
 
@@ -81,8 +88,8 @@ public class FormAgenda extends javax.swing.JFrame {
 
         jTableAgenda.getColumnModel().getColumn(5).setPreferredWidth(237);
         jTableAgenda.getColumnModel().getColumn(5).setResizable(false);
-        
-          jTableAgenda.getColumnModel().getColumn(6).setPreferredWidth(109);
+
+        jTableAgenda.getColumnModel().getColumn(6).setPreferredWidth(109);
         jTableAgenda.getColumnModel().getColumn(6).setResizable(false);
 
         jTableAgenda.getTableHeader().setReorderingAllowed(false);//reorganizar o cabeçalho
@@ -106,8 +113,6 @@ public class FormAgenda extends javax.swing.JFrame {
         jTableAgenda = new javax.swing.JTable();
         jLabelAgenHj = new javax.swing.JLabel();
         jButtonIniConusulta = new javax.swing.JButton();
-        jButtonFinConsulta = new javax.swing.JButton();
-        jButtonAtestadoMedico = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -126,15 +131,21 @@ public class FormAgenda extends javax.swing.JFrame {
             }
         ));
         jTableAgenda.setToolTipText("");
+        jTableAgenda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableAgendaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableAgenda);
 
         jLabelAgenHj.setText("Agendamento do dia");
 
         jButtonIniConusulta.setText("Iniciar Consulta");
-
-        jButtonFinConsulta.setText("Finalizar Consulta");
-
-        jButtonAtestadoMedico.setText("Atestado Medico");
+        jButtonIniConusulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonIniConusultaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -147,14 +158,10 @@ public class FormAgenda extends javax.swing.JFrame {
                         .addComponent(jLabelAgenHj))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButtonIniConusulta)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonFinConsulta)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButtonAtestadoMedico))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 848, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 848, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(312, 312, 312)
+                        .addComponent(jButtonIniConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -163,13 +170,10 @@ public class FormAgenda extends javax.swing.JFrame {
                 .addContainerGap(13, Short.MAX_VALUE)
                 .addComponent(jLabelAgenHj)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonIniConusulta)
-                    .addComponent(jButtonFinConsulta)
-                    .addComponent(jButtonAtestadoMedico))
-                .addGap(68, 68, 68))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonIniConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -185,7 +189,7 @@ public class FormAgenda extends javax.swing.JFrame {
                         .addGap(44, 44, 44)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(324, 324, 324)
+                        .addGap(440, 440, 440)
                         .addComponent(jLabel1)))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
@@ -202,6 +206,39 @@ public class FormAgenda extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(996, 553));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTableAgendaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAgendaMouseClicked
+        // TODO add your handling code here:
+        String Agenda = "" + jTableAgenda.getValueAt(jTableAgenda.getSelectedRow(), 0); //pega o primeira coluna da tabela
+        conBd.conectarBd();
+
+        String sql = "select STATUS,IDPACIENTE, IDMEDICO, IDESPECIALIDADE, TURNO,DTAGENDAMENTO,IDAGENDAMENTO from agendamento where IDAGENDAMENTO = '" + Agenda + "'";
+        conBd.executaSql(sql);
+
+        try {
+            conBd.rs.first();
+            agen.setStatus("Em Atendimento");
+            agen.setAIdPaciente(conBd.rs.getInt("IDPACIENTE"));
+            agen.setAIdMedico(conBd.rs.getInt("IDMEDICO"));
+            agen.setAEspecialidade(conBd.rs.getInt("IDESPECIALIDADE"));
+            agen.setTurno(conBd.rs.getString("TURNO"));
+            agen.setData(conBd.rs.getDate("DTAGENDAMENTO"));
+            agen.setAgendaCod(conBd.rs.getInt("IDAGENDAMENTO"));
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao selecionar os dados" + ex.getMessage());
+        }
+    }//GEN-LAST:event_jTableAgendaMouseClicked
+
+    private void jButtonIniConusultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniConusultaActionPerformed
+        // TODO add your handling code here:
+        daoagenda.Alterar(agen);
+        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUS, PACIENTE.NOME, AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOME, ESPECIALIDADE.ESPEC FROM AGENDAMENTO"
+                + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
+                + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
+                + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE"
+                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUS = '" + status + "' ORDER BY TURNO");
+    }//GEN-LAST:event_jButtonIniConusultaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -239,8 +276,6 @@ public class FormAgenda extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonAtestadoMedico;
-    private javax.swing.JButton jButtonFinConsulta;
     private javax.swing.JButton jButtonIniConusulta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelAgenHj;
