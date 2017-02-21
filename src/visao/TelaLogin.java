@@ -1,17 +1,4 @@
-//https://www.youtube.com/watch?v=OfsCClnnY6U&list=PLyQ9CRKOzOWqVZ5nDspGFVgybs3zRGPUL video 13
-/**
- *    ANDAMENTO DO PROJETO
- *
- * ferramentas / tela de bemvindos ok
- * tela Cadastro medio ok
- * Acesso ao banco de dados ok
- * Cadastro enfermeira
- * cadastro paciete
- * Pesquisa
- * Relatório]
- *
- *
- */
+
 package visao;
 
 import ModeloConection.ConexaoBd;
@@ -123,7 +110,7 @@ public class TelaLogin extends javax.swing.JFrame {
              JOptionPane.showMessageDialog(rootPane,"Usuário/Senha inválido ou não cadastrado no sistema!\nErro:");
 
         }
-con.DesconectarBd();//NA VIDEO AULA O PERRONE NÃO FECHOU A CONEXÃO AO BANCO
+con.DesconectarBd();
     }//GEN-LAST:event_BtnAcessarActionPerformed
 
     private void BtnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSairActionPerformed
