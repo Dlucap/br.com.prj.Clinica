@@ -5,16 +5,16 @@
  */
 package visao;
 
-import ModeloDao.DaoCripSenhaUser;
 import ModeloConection.ConexaoBd;
-import org.apache.commons.codec.binary.Base64;
+//import ModeloDao.DaoTabelas;
 import ModeloDao.DaoUsuario;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import ModeloBeans.BeansUsuario;
-import ModeloBeans.BeansModeloTabela;
+import ModeloBeans.ModeloTabela;
+
 
 /**
  *
@@ -25,9 +25,7 @@ public class FormUsuario extends javax.swing.JFrame {
     ConexaoBd conBd = new ConexaoBd();
     BeansUsuario mod = new BeansUsuario();
     DaoUsuario dao = new DaoUsuario();
-    DaoCripSenhaUser crip = new DaoCripSenhaUser();
-    FormEnvioEmail email = new FormEnvioEmail();
-
+    // DaoTabelas daoTabelas =  new DaoTabelas();
     int flag;
 
     /**
@@ -69,7 +67,6 @@ public class FormUsuario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableUsuario = new javax.swing.JTable();
         jComboBoxTipoUsuario = new javax.swing.JComboBox<>();
-        jButtonEmail = new javax.swing.JButton();
         jLabelCadUsuario = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -166,14 +163,6 @@ public class FormUsuario extends javax.swing.JFrame {
         jComboBoxTipoUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecionar", "Medico", "Secretaria", "Enfermeira", "Administrador" }));
         jComboBoxTipoUsuario.setEnabled(false);
 
-        jButtonEmail.setText("Email");
-        jButtonEmail.setEnabled(false);
-        jButtonEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEmailActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -191,36 +180,30 @@ public class FormUsuario extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelUser)
+                    .addComponent(jLabelIdUser)
+                    .addComponent(jLabelSenha)
+                    .addComponent(jLabelEmail)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabelUser)
-                            .addComponent(jLabelIdUser)
-                            .addComponent(jLabelSenha)
-                            .addComponent(jLabelEmail)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldIDusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextFieldIDusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabelConfirmarSenha)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jPasswordFieldConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jTextFieldUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 426, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBoxTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabelConfirmarSenha)
+                                .addGap(18, 18, 18)
+                                .addComponent(jPasswordFieldConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextFieldUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 426, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jButtonEmail)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBoxTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -264,15 +247,9 @@ public class FormUsuario extends javax.swing.JFrame {
                     .addComponent(jComboBoxTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldPesquisaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonPesquisar))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonEmail)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jLabelCadUsuario.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -312,15 +289,12 @@ public class FormUsuario extends javax.swing.JFrame {
         //Habilitar campos
         habilitaCampos();
         limparCampos();
-        preencherIDUuarioIncluir();
         jButtonCancelar.setEnabled(true);
         jButtonSalvar.setEnabled(true);
         jButtonPesquisar.setEnabled(false);
         jButtonIncluir.setEnabled(!true);
         jButtonExcluir.setEnabled(false);
         jButtonEditar.setEnabled(false);
-        jButtonEmail.setEnabled(true);
-        jButtonEmail.setEnabled(false);
 
 
     }//GEN-LAST:event_jButtonIncluirActionPerformed
@@ -340,7 +314,7 @@ public class FormUsuario extends javax.swing.JFrame {
             if (flag == 1) {
                 //Ler campos da tela de cadastro do medico
                 mod.setUNomeUser(jTextFieldUsuario.getText());
-                mod.setUSenhaUser(crip.codificaBase64Encoder(jPasswordFieldSenha.getText()));
+                mod.setUSenhaUser(jPasswordFieldSenha.getText());
                 mod.setUEmaiUser(jTextFieldEmail.getText());
                 mod.setUTipo((String) jComboBoxTipoUsuario.getSelectedItem());
                 dao.Salvar(mod);
@@ -354,14 +328,13 @@ public class FormUsuario extends javax.swing.JFrame {
 //
                 jButtonEditar.setEnabled(!true);
                 jButtonCancelar.setEnabled(false);
-                jButtonExcluir.setEnabled(false);
                 preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO FROM USUARIO ORDER BY NOME");
 
             } else {
                 flag = 2;
                 mod.setUCodUser(Integer.parseInt(jTextFieldIDusuario.getText()));
                 mod.setUNomeUser(jTextFieldUsuario.getText());
-                mod.setUSenhaUser(crip.codificaBase64Encoder(jPasswordFieldSenha.getText()));
+                mod.setUSenhaUser(jPasswordFieldSenha.getText());
                 mod.setUEmaiUser(jTextFieldEmail.getText());
                 mod.setUTipo((String) jComboBoxTipoUsuario.getSelectedItem());
                 dao.Editar(mod);
@@ -373,16 +346,12 @@ public class FormUsuario extends javax.swing.JFrame {
                 jTextFieldUsuario.setEnabled(false);
                 jTextFieldEmail.setEnabled(false);
                 jPasswordFieldSenha.setEnabled(false);
-
                 jPasswordFieldConfirmarSenha.setEnabled(false);
                 jTextFieldEmail.setEnabled(false);
                 jComboBoxTipoUsuario.setEnabled(false);
 
-                jButtonExcluir.setEnabled(false);
                 jButtonEditar.setEnabled(!true);
                 jButtonCancelar.setEnabled(false);
-                jButtonIncluir.setEnabled(true);
-                jButtonSalvar.setEnabled(false);
                 preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO FROM USUARIO ORDER BY NOME");
             }
 
@@ -390,20 +359,9 @@ public class FormUsuario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "As senhas não correspondem!\n"
                     + "Verifique as senhas informadas.");
         }
+
     }//GEN-LAST:event_jButtonSalvarActionPerformed
-///**
-//     * Codifica string na base 64 (Encoder)
-//     */
-//    public static String codificaBase64Encoder(String msg) {
-//        return new Base64().encodeToString(msg.getBytes());
-//    }
-//
-//    /**
-//     * Decodifica string na base 64 (Decoder)
-//     */
-////      public static String decodificaBase64Decoder(String msg) {
-////          return new String(new Base64().decode(msg));
-////      }
+
     private void jButtonPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPesquisarActionPerformed
         // TODO add your handling code here:
 
@@ -435,9 +393,8 @@ public class FormUsuario extends javax.swing.JFrame {
         //  jButtonNovo.setEnabled(false);
         jButtonSalvar.setEnabled(true);
         jButtonCancelar.setEnabled(true);
-        jButtonEmail.setEnabled(true);
         //  jButtonEditar.setEnabled(!true);
-        jButtonExcluir.setEnabled(false);
+        jButtonExcluir.setEnabled(true);
         jTextFieldPesquisaUsuario.setText("");
 
     }//GEN-LAST:event_jButtonEditarActionPerformed
@@ -457,7 +414,6 @@ public class FormUsuario extends javax.swing.JFrame {
             jButtonIncluir.setEnabled(true);
             jButtonExcluir.setEnabled(false);
             jButtonEditar.setEnabled(false);
-            jButtonEmail.setEnabled(false);
 
             limparCampos();
 //        jButtonEditar.setEnabled(false);
@@ -468,30 +424,10 @@ public class FormUsuario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
-    public void preencherIDUuarioIncluir() {
-        conBd.conectarBd();
-        try {
-            String sql = "SELECT MAX(IDUSUARIO+1) AS PROXID FROM USUARIO";
-
-            conBd.executaSql(sql);
-
-            conBd.rs.first();
-
-            jTextFieldIDusuario.setText(String.valueOf(conBd.rs.getInt("PROXID")));
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID do usuário");
-        }
-        conBd.DesconectarBd();
-    }
-
-
     private void jTableUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableUsuarioMouseClicked
         // TODO add your handling code here:
         String NomeUsuario = "" + jTableUsuario.getValueAt(jTableUsuario.getSelectedRow(), 1);
         conBd.conectarBd();
-        limparCampos();
-        DesabilitaCampso();
         try {
             String sql = "SELECT * FROM USUARIO WHERE NOME = '" + NomeUsuario + "'";//String 
             conBd.executaSql(sql);
@@ -500,8 +436,8 @@ public class FormUsuario extends javax.swing.JFrame {
             jTextFieldIDusuario.setText(String.valueOf(conBd.rs.getInt("IDUSUARIO")));
             jTextFieldUsuario.setText(conBd.rs.getString("NOME"));
             jTextFieldEmail.setText(conBd.rs.getString("EMAIL"));
-            jPasswordFieldSenha.setText(crip.decodificaBase64Decoder(conBd.rs.getString("SENHA")));
-            jPasswordFieldConfirmarSenha.setText(crip.decodificaBase64Decoder(conBd.rs.getString("SENHA")));
+            jPasswordFieldSenha.setText(conBd.rs.getString("SENHA"));
+            jPasswordFieldConfirmarSenha.setText(conBd.rs.getString("SENHA"));
             jComboBoxTipoUsuario.setSelectedItem(conBd.rs.getString("TIPO"));
             jTextFieldPesquisaUsuario.setText("");
 
@@ -534,19 +470,11 @@ public class FormUsuario extends javax.swing.JFrame {
         jButtonIncluir.setEnabled(true);
         jButtonExcluir.setEnabled(false);
         jButtonEditar.setEnabled(false);
-        jButtonEmail.setEnabled(false);
 
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
-    private void jButtonEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEmailActionPerformed
-        // TODO add your handling code here:
-
-        email.setVisible(true);
-    }//GEN-LAST:event_jButtonEmailActionPerformed
-
     public void limparCampos() {
 
-        jTextFieldIDusuario.setText("");
         jTextFieldUsuario.setText("");
         jTextFieldEmail.setText("");
         jPasswordFieldSenha.setText("");
@@ -596,8 +524,9 @@ public class FormUsuario extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Busque por outro usuário para preencher tabela.");
         }
-        BeansModeloTabela modelo = new BeansModeloTabela(dados, colunas);
+        ModeloTabela modelo = new ModeloTabela(dados, colunas);
         jTableUsuario.setModel(modelo);
+        
 
         jTableUsuario.getColumnModel().getColumn(0).setPreferredWidth(36);//Tamanho da tabela
         jTableUsuario.getColumnModel().getColumn(0).setResizable(false);
@@ -653,7 +582,6 @@ public class FormUsuario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonEditar;
-    private javax.swing.JButton jButtonEmail;
     private javax.swing.JButton jButtonExcluir;
     protected javax.swing.JButton jButtonIncluir;
     private javax.swing.JButton jButtonPesquisar;

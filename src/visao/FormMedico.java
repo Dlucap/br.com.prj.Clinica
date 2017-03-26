@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import ModeloBeans.BeansMedico;
-import ModeloBeans.BeansModeloTabela;
+import ModeloBeans.ModeloTabela;
+
 
 /**
  *
@@ -37,8 +38,8 @@ public class FormMedico extends javax.swing.JFrame {
      */
     public FormMedico() {
         initComponents();
-        preencherTabelaMedico("SELECT IDMEDICO,NOMEMEDICO,ESPEC, CRM FROM MEDICO "
-                + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
+        preencherTabelaMedico("SELECT IDMEDICO,NOME,ESPEC, CRM FROM MEDICO "
+                + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOME");
     }
 
     /**
@@ -413,9 +414,9 @@ public class FormMedico extends javax.swing.JFrame {
                 .addComponent(jButtonIncluir)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonEditar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButtonSalvar)
                 .addGap(12, 12, 12)
+                .addComponent(jButtonSalvar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonExcluir)
                 .addGap(12, 12, 12)
                 .addComponent(jButtonCancelar)
@@ -586,9 +587,8 @@ public class FormMedico extends javax.swing.JFrame {
         jFormattedTextFieldCEP.setText(model.getMcep());
         jTextFieldCompl.setText(model.getMcompl());
         jComboBoxEspecializacao.setSelectedItem(model.getMSespecialidade());
-        preencherTabelaMedico("SELECT IDMEDICO,NOMEMEDICO,ESPEC,CRM  FROM MEDICO INNER JOIN ESPECIALIDADE "
-                + "ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE "
-                + "WHERE MEDICO.NOMEMEDICO LIKE '%" + mod.getMPesquisa() + "%'");
+        preencherTabelaMedico("select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE "
+                + "where medico.nome like '%" + mod.getMPesquisa() + "%'");
 
         /*
         jButtonEditar.setEnabled(false);
@@ -608,16 +608,13 @@ public class FormMedico extends javax.swing.JFrame {
         String Nome = "" + jTableMedicos.getValueAt(jTableMedicos.getSelectedRow(), 1);
         conBd.conectarBd();
         try {
-            String sql = "SELECT IDMEDICO,NOMEMEDICO,LOGRADOURO,NUMERO,BAIRRO,CPF,RG,TELRESIDENCIAL,TELCELULAR,CRM,CEP,COMPL,ESPEC,CIDADE,ESTADO,EMAIL "
-                    + "FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE "
-                    + "WHERE NOMEMEDICO  = '" + Nome + "'";
-
+            String sql = "select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE where nome = '" + Nome + "'";
             conBd.executaSql(sql);
             conBd.rs.first();
             LimparCampos();
             DesabilitarCampos();
             jTextFieldIDMedico.setText(String.valueOf(conBd.rs.getInt("IDMEDICO")));
-            jTextFieldNomeMed.setText(conBd.rs.getString("NOMEMEDICO"));
+            jTextFieldNomeMed.setText(conBd.rs.getString("NOME"));
             jTextFieldEndereco.setText(conBd.rs.getString("LOGRADOURO"));
             jTextFieldNumero.setText(String.valueOf(conBd.rs.getInt("NUMERO")));
             jTextFieldBairro.setText(conBd.rs.getString("BAIRRO"));
@@ -635,7 +632,7 @@ public class FormMedico extends javax.swing.JFrame {
             jTextFieldPesquisa.setText("");
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao selecionar os dados" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "erro ao selecionar os dados" + ex.getMessage());
         }
         jButtonIncluir.setEnabled(false);
         jButtonEditar.setEnabled(true);
@@ -669,8 +666,8 @@ public class FormMedico extends javax.swing.JFrame {
         if (resposta == JOptionPane.YES_OPTION) {
             mod.setMcod(Integer.parseInt(jTextFieldIDMedico.getText()));
             controlM.Excluir(mod);
-            preencherTabelaMedico("SELECT IDMEDICO,NOMEMEDICO,ESPEC, CRM FROM MEDICO "
-                    + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
+            preencherTabelaMedico("SELECT IDMEDICO,NOME,ESPEC, CRM FROM MEDICO "
+                    + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOME");
 
             jButtonSalvar.setEnabled(false);
             jButtonBuscarCep.setEnabled(true);
@@ -712,10 +709,8 @@ public class FormMedico extends javax.swing.JFrame {
             mod.setMEmail(jTextFieldEmail.getText());
             controlM.salvar(mod);
 
-            preencherTabelaMedico("SELECT IDMEDICO,NOMEMEDICO,ESPEC, CRM FROM MEDICO "
-                    + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
-
-//Limpar os campos
+            preencherTabelaMedico("SELECT IDMEDICO,NOME,ESPEC, CRM FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOME");
+            //Limpar os campos
             LimparCampos();
             DesabilitarCampos();
 
@@ -740,8 +735,8 @@ public class FormMedico extends javax.swing.JFrame {
             mod.setMEmail(jTextFieldEmail.getText());
             controlM.Editar(mod);
 
-            preencherTabelaMedico("SELECT IDMEDICO,NOMEMEDICO,ESPEC, CRM FROM MEDICO "
-                    + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
+            preencherTabelaMedico("SELECT IDMEDICO,NOME,ESPEC, CRM FROM MEDICO "
+                    + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOME");
 
             //Desaabilitar Campos tela cadastro Medico
             DesabilitarCampos();
@@ -756,7 +751,7 @@ public class FormMedico extends javax.swing.JFrame {
         LimparCampos();
         //metodo para preencher Jcombox Especialidade
         this.preencherEspecialidade();
-        preencherIDMedicoIncluir();
+
         HabilitarCampos();
         jButtonBuscarCep.setEnabled(true);
         jTextFieldPesquisa.setEnabled(true);
@@ -768,7 +763,7 @@ public class FormMedico extends javax.swing.JFrame {
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
         // TODO add your handling code here:
 
-       flag = 2;
+        int flag = 2;
 
         this.preencherEspecialidade();
         HabilitarCampos();
@@ -807,23 +802,6 @@ public class FormMedico extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldEmailActionPerformed
 
-    public void preencherIDMedicoIncluir() {
-        conBd.conectarBd();
-        try {
-            String sql = "SELECT MAX(IDMEDICO+1) AS PROXID FROM MEDICO";
-
-            conBd.executaSql(sql);
-
-            conBd.rs.first();
-
-            jTextFieldIDMedico.setText(String.valueOf(conBd.rs.getInt("PROXID")));
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID do médico");
-        }
-        conBd.DesconectarBd();
-    }
-
     public void preencherEspecialidade() {
         conBd.conectarBd();
 
@@ -840,7 +818,8 @@ public class FormMedico extends javax.swing.JFrame {
             }
 
         } catch (SQLException ex) {
-             JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados da especialidade" + ex);
+            // Logger.getLogger(FormMedico.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados da especialidade" + ex);
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados da especialidade" + ex.getMessage());
         }
@@ -914,7 +893,7 @@ public class FormMedico extends javax.swing.JFrame {
     public final void preencherTabelaMedico(String sql) {
 
         ArrayList dados = new ArrayList();
-        String[] colunas = new String[]{"ID", "NOME DO MÉDICO", "ESPECIALIDADE", "CRM"};
+        String[] colunas = new String[]{"ID", "NOME", "ESPECIALIDADE", "CRM"};
         conBd.conectarBd();
 
         conBd.executaSql(sql);
@@ -922,15 +901,16 @@ public class FormMedico extends javax.swing.JFrame {
         try {
             conBd.rs.first();
             do {
-                dados.add(new Object[]{conBd.rs.getInt("IDMEDICO"), conBd.rs.getString("NOMEMEDICO"), conBd.rs.getString("ESPEC"), conBd.rs.getInt("CRM")});
+                dados.add(new Object[]{conBd.rs.getInt("IDMEDICO"), conBd.rs.getString("NOME"), conBd.rs.getString("ESPEC"), conBd.rs.getInt("CRM")});
 
             } while (conBd.rs.next());
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Busque por outro medico para preencher tabela.");
         }
-        BeansModeloTabela modelo = new BeansModeloTabela(dados, colunas);
+        ModeloTabela modelo = new ModeloTabela(dados, colunas);
         jTableMedicos.setModel(modelo);
+     
 
         jTableMedicos.getColumnModel().getColumn(0).setPreferredWidth(38);//Tamanho da tabela
         jTableMedicos.getColumnModel().getColumn(0).setResizable(false);
@@ -1029,5 +1009,7 @@ public class FormMedico extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldPesquisa;
     private javax.swing.JTextField jTextFieldUF;
     // End of variables declaration//GEN-END:variables
+
+    
 
 }

@@ -19,7 +19,7 @@ public class DaoMedico {
 
     public void salvar(BeansMedico mod) {
         conex.conectarBd();
-        String sql = "INSERT INTO MEDICO (NOMEMEDICO ,CPF ,RG ,TELRESIDENCIAL ,TELCELULAR ,LOGRADOURO ,BAIRRO ,"
+        String sql = "INSERT INTO MEDICO (NOME ,CPF ,RG ,TELRESIDENCIAL ,TELCELULAR ,LOGRADOURO ,BAIRRO ,"
                 + "NUMERO ,CEP ,COMPL ,CRM ,IDESPECIALIDADE ,CIDADE ,ESTADO,EMAIL) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             pstM = conex.con.prepareStatement(sql);
@@ -45,7 +45,7 @@ public class DaoMedico {
             JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!!!");
         } catch (SQLException ex) {
            // med.HabilitarCampos();
-            JOptionPane.showMessageDialog(null, "Não foi possível realizar a inserção dos dados. \n\n" + ex.getMessage() + "\n");
+            JOptionPane.showMessageDialog(null, "\n Não foi possível realizar a inserção dos dados. \n\n" + ex.getMessage() + "\n");
          }
         conex.DesconectarBd();
     }
@@ -53,7 +53,7 @@ public class DaoMedico {
     public void Editar(BeansMedico mod) {
         conex.conectarBd();
 
-        String sql = "UPDATE MEDICO SET NOMEMEDICO = ?,CPF = ?, RG = ?, TELRESIDENCIAL = ?,TELCELULAR = ?,LOGRADOURO = ?, BAIRRO = ?,"
+        String sql = "UPDATE MEDICO SET NOME = ?,CPF = ?, RG = ?, TELRESIDENCIAL = ?,TELCELULAR = ?,LOGRADOURO = ?, BAIRRO = ?,"
                 + "NUMERO = ?,CEP = ?,COMPL = ?,CRM = ?,IDESPECIALIDADE = ?,ESTADO = ?,CIDADE = ? ,EMAIL=? WHERE IDMEDICO = ?";
 
         try {
@@ -92,16 +92,15 @@ public class DaoMedico {
 
         conex.conectarBd();
 
-        String sql1 = "SELECT IDMEDICO,NOMEMEDICO,LOGRADOURO,NUMERO,BAIRRO,CPF,RG,TELRESIDENCIAL,TELCELULAR,CRM,CEP,COMPL,CIDADE,ESTADO,ESPEC,EMAIL " +
-                      "FROM MEDICO inner join especialidade on medico.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE " +
-                      "WHERE MEDICO.NOMEMEDICO LIKE '%" + mod.getMPesquisa() + "%'";
+        String sql1 = "select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE "
+                + "where medico.nome like '%" + mod.getMPesquisa() + "%'";
 
         conex.executaSql(sql1);
 
         try {
             conex.rs.first();
             mod.setMcod(conex.rs.getInt("IDMEDICO"));
-            mod.setMnome(conex.rs.getString("NOMEMEDICO"));
+            mod.setMnome(conex.rs.getString("Nome"));
             mod.setMlogradouro(conex.rs.getString("LOGRADOURO"));
             mod.setMnumero(conex.rs.getInt("NUMERO"));
             mod.setMbairro(conex.rs.getString("BAIRRO"));

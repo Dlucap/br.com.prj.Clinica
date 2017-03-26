@@ -1,7 +1,7 @@
 package visao;
 
 import ModeloBeans.BeansAgendamento;
-import ModeloBeans.BeansModeloTabela;
+import ModeloBeans.ModeloTabela;
 import ModeloConection.ConexaoBd;
 import ModeloDao.DaoAgendamento;
 import java.sql.SQLException;
@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
 /**
- * 
+ *
  * @author Daniel Lucas
  */
 public class FormAgenda extends javax.swing.JFrame {
@@ -26,29 +26,27 @@ public class FormAgenda extends javax.swing.JFrame {
     String dtHoje;
     String status;
 
+   public void DataHoje(){
+      Calendar data = Calendar.getInstance();
+        Date d = data.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.format(d);
+        dtHoje = dateFormat.format(d);
+        status = "Aberto"; 
+   }
+    
     public FormAgenda() {
         initComponents();
 
         DataHoje();
 
-        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE, "
-                + "AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC "
-                + "FROM AGENDAMENTO INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
+        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUS, PACIENTE.NOME, AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOME, ESPECIALIDADE.ESPEC FROM AGENDAMENTO"
+                + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
                 + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
                 + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE"
-                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY TURNO");
+                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUS = '" + status + "' ORDER BY TURNO");
     }
-   public void DataHoje(){
-      Calendar data = Calendar.getInstance();
-        Date d = data.getTime();
-       
-       //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        dateFormat.format(d);
-        
-        dtHoje = dateFormat.format(d);
-        status = "Aberto"; 
-   }
+
     public final void preencherTabelaAgenda(String sql) {
 
         ArrayList dados = new ArrayList();
@@ -61,8 +59,8 @@ public class FormAgenda extends javax.swing.JFrame {
             conBd.rs.first();
 
             do {
-                dados.add(new Object[]{conBd.rs.getInt("IDAGENDAMENTO"), conBd.rs.getString("STATUSCONSULTA"), conBd.rs.getString("NOMEPACIENTE"),
-                    conBd.rs.getString("TURNO"), conBd.rs.getString("DTAGENDAMENTO"), conBd.rs.getString("NOMEMEDICO"), conBd.rs.getString("ESPEC")});
+                dados.add(new Object[]{conBd.rs.getInt("IDAGENDAMENTO"), conBd.rs.getString("STATUS"), conBd.rs.getString("NOME"),
+                    conBd.rs.getString("TURNO"), conBd.rs.getString("DTAGENDAMENTO"), conBd.rs.getString("NOME"), conBd.rs.getString("ESPEC")});
 
             } while (conBd.rs.next());
 
@@ -70,7 +68,7 @@ public class FormAgenda extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Nenhuma consulta localizada para hoje.");
         }
 
-        BeansModeloTabela modelo = new BeansModeloTabela(dados, colunas);
+        ModeloTabela modelo = new ModeloTabela(dados, colunas);
         jTableAgenda.setModel(modelo);
 
         jTableAgenda.getColumnModel().getColumn(0).setPreferredWidth(38);//Tamanho da tabela
@@ -115,7 +113,6 @@ public class FormAgenda extends javax.swing.JFrame {
         jTableAgenda = new javax.swing.JTable();
         jLabelAgenHj = new javax.swing.JLabel();
         jButtonIniConusulta = new javax.swing.JButton();
-        jButtonAtualizarTela = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -138,25 +135,15 @@ public class FormAgenda extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableAgendaMouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jTableAgendaMouseEntered(evt);
-            }
         });
         jScrollPane1.setViewportView(jTableAgenda);
 
         jLabelAgenHj.setText("Agendamento do dia");
 
-        jButtonIniConusulta.setText("Atender Agendamento");
+        jButtonIniConusulta.setText("Iniciar Consulta");
         jButtonIniConusulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonIniConusultaActionPerformed(evt);
-            }
-        });
-
-        jButtonAtualizarTela.setText("Atualizar");
-        jButtonAtualizarTela.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAtualizarTelaActionPerformed(evt);
             }
         });
 
@@ -165,29 +152,27 @@ public class FormAgenda extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelAgenHj)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 848, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jLabelAgenHj))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 848, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(312, 312, 312)
+                        .addComponent(jButtonIniConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(23, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(312, 312, 312)
-                .addComponent(jButtonIniConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonAtualizarTela)
-                .addGap(44, 44, 44))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(13, Short.MAX_VALUE)
                 .addComponent(jLabelAgenHj)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonIniConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonAtualizarTela))
+                .addComponent(jButtonIniConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
         );
 
@@ -227,18 +212,17 @@ public class FormAgenda extends javax.swing.JFrame {
         String Agenda = "" + jTableAgenda.getValueAt(jTableAgenda.getSelectedRow(), 0); //pega o primeira coluna da tabela
         conBd.conectarBd();
 
-        String sql = "SELECT STATUSCONSULTA,IDPACIENTE, IDMEDICO, IDESPECIALIDADE,TURNO,DTAGENDAMENTO,IDAGENDAMENTO " +
-                     " FROM AGENDAMENTO WHERE IDAGENDAMENTO ='" + Agenda + "'";
+        String sql = "select STATUS,IDPACIENTE, IDMEDICO, IDESPECIALIDADE, TURNO,DTAGENDAMENTO,IDAGENDAMENTO from agendamento where IDAGENDAMENTO = '" + Agenda + "'";
         conBd.executaSql(sql);
 
         try {
             conBd.rs.first();
-            agen.setAStatus("Em Atendimento");
+            agen.setStatus("Em Atendimento");
             agen.setAIdPaciente(conBd.rs.getInt("IDPACIENTE"));
             agen.setAIdMedico(conBd.rs.getInt("IDMEDICO"));
             agen.setAEspecialidade(conBd.rs.getInt("IDESPECIALIDADE"));
-            agen.setATurno(conBd.rs.getString("TURNO"));
-            agen.setAData(conBd.rs.getDate("DTAGENDAMENTO"));
+            agen.setTurno(conBd.rs.getString("TURNO"));
+            agen.setData(conBd.rs.getDate("DTAGENDAMENTO"));
             agen.setAgendaCod(conBd.rs.getInt("IDAGENDAMENTO"));
 
         } catch (SQLException ex) {
@@ -247,33 +231,14 @@ public class FormAgenda extends javax.swing.JFrame {
     }//GEN-LAST:event_jTableAgendaMouseClicked
 
     private void jButtonIniConusultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniConusultaActionPerformed
-//         TODO add your handling code here:
-       FormConsulta consulta = new FormConsulta("IDAGENDAMENTO");
-       consulta.setVisible(true);
+        // TODO add your handling code here:
         daoagenda.Alterar(agen);
-        DataHoje();
-        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE, "
-                + "AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC "
-                + "FROM AGENDAMENTO INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
+        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUS, PACIENTE.NOME, AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOME, ESPECIALIDADE.ESPEC FROM AGENDAMENTO"
+                + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
                 + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
                 + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE"
-                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY TURNO");
+                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUS = '" + status + "' ORDER BY TURNO");
     }//GEN-LAST:event_jButtonIniConusultaActionPerformed
-
-    private void jTableAgendaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAgendaMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTableAgendaMouseEntered
-
-    private void jButtonAtualizarTelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarTelaActionPerformed
-        // TODO add your handling code here:
-        DataHoje();
-        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE, "
-                + "AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC "
-                + "FROM AGENDAMENTO INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
-                + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
-                + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE"
-                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY TURNO");
-    }//GEN-LAST:event_jButtonAtualizarTelaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -311,7 +276,6 @@ public class FormAgenda extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonAtualizarTela;
     private javax.swing.JButton jButtonIniConusulta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelAgenHj;

@@ -249,7 +249,7 @@ public final class WebServiceCep {
 				loadCep.setResultText("Site não encontrado.");
 				loadCep.setResulCode(-14);
 			} else {
-				loadCep.setResultText("Não foi possível ler o documento xml.");
+				loadCep.setResultText("N�o foi possivel ler o documento xml.");
 				loadCep.setResulCode(-15);
 			}
 			loadCep.setExceptio(ex);
@@ -268,7 +268,7 @@ public final class WebServiceCep {
 /* Campos internos de resultado da busca */
 	
 	private int resulCode = -1;
-	private String resultText = "Busca não realizada.";
+	private String resultText = "busca não realizada.";
 	private String cep = null;
 	private String bairro = null;
 	private String cidade = null;
