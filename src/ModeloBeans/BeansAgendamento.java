@@ -9,13 +9,31 @@ public class BeansAgendamento {
     private int agendaCod;
     private String nomeMedico;
     private String nomePaciente;
-    private String Turno;
-    private Date data;
-    private String status;
-    private String motivo;
+
+    public String getAPacenteNasc() {
+        return APacenteNasc;
+    }
+
+    public void setAPacenteNasc(String APacenteNasc) {
+        this.APacenteNasc = APacenteNasc;
+    }
+    private String ATurno;
+    private Date AData;
+    private String AStatus;
+    private String AMotivo;
     private Integer AEspecialidade;
     private Integer AIdPaciente;
     private Integer AIdMedico;
+    private String ARetorno;
+    private String APacenteNasc;
+
+    public String getARetorno() {
+        return ARetorno;
+    }
+
+    public void setARetorno(String ARetorno) {
+        this.ARetorno = ARetorno;
+    }
 
           
     public void setAIdPaciente(Integer AIdPaciente) {
@@ -59,36 +77,36 @@ public class BeansAgendamento {
         this.nomePaciente = nomePaciente;
     }
 
-    public String getTurno() {
-        return Turno;
+    public String getATurno() {
+        return ATurno;
     }
 
-    public void setTurno(String Turno) {
-        this.Turno = Turno;
+    public void setATurno(String ATurno) {
+        this.ATurno = ATurno;
     }
 
-    public Date getData() {
-        return data;
+    public Date getAData() {
+        return AData;
     }
 
-    public void setData(Date data) {
-        this.data = data;
+    public void setAData(Date AData) {
+        this.AData = AData;
     }
 
-    public String getStatus() {
-        return status;
+    public String getAStatus() {
+        return AStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setAStatus(String AStatus) {
+        this.AStatus = AStatus;
     }
 
-    public String getMotivo() {
-        return motivo;
+    public String getAMotivo() {
+        return AMotivo;
     }
 
-    public void setMotivo(String motivo) {
-        this.motivo = motivo;
+    public void setAMotivo(String AMotivo) {
+        this.AMotivo = AMotivo;
     }
 
     /**

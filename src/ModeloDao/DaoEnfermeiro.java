@@ -20,7 +20,7 @@ public class DaoEnfermeiro {
 
     public void salvar(BeansEnfermeiro mod) {
         conex.conectarBd();
-        String sql = "INSERT INTO ENFERMEIRO (NOME ,CPF ,RG ,TELRESIDENCIAL ,TELCELULAR ,LOGRADOURO ,BAIRRO,"
+        String sql = "INSERT INTO ENFERMEIRO (NOMEENFERMEIRO ,CPF ,RG ,TELRESIDENCIAL ,TELCELULAR ,LOGRADOURO ,BAIRRO,"
                 + "NUMERO ,CEP ,COMPL ,EMAIL ,COREN ,ESTADO ,CIDADE) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
        
         try {
@@ -55,7 +55,7 @@ public class DaoEnfermeiro {
     public void Editar(BeansEnfermeiro mod) {
         conex.conectarBd();
 
-        String sql = "UPDATE ENFERMEIRO SET NOME = ?,CPF = ?, RG = ?,TELRESIDENCIAL = ?,TELCELULAR = ?,LOGRADOURO = ?,BAIRRO = ?,"
+        String sql = "UPDATE ENFERMEIRO SET NOMEENFERMEIRO = ?,CPF = ?, RG = ?,TELRESIDENCIAL = ?,TELCELULAR = ?,LOGRADOURO = ?,BAIRRO = ?,"
                 + "NUMERO = ?,CEP = ?,COMPL = ?,COREN = ?,ESTADO = ?,CIDADE =?,EMAIL=? WHERE IDENFERMEIRO = ?";
 
         try {
@@ -92,15 +92,15 @@ public class DaoEnfermeiro {
 
         conex.conectarBd();
 
-        String sql1 = "select IDENFERMEIRO,NOME,LOGRADOURO,NUMERO,BAIRRO,CPF,RG,TELRESIDENCIAL,TELCELULAR,"
-                + "COREN,CEP,COMPL,CIDADE,ESTADO,EMAIL from ENFERMEIRO where NOME like '%" + mod.getEPesquisa() + "%'";
+        String sql1 = "SELECT IDENFERMEIRO,NOMEENFERMEIRO,LOGRADOURO,NUMERO,BAIRRO,CPF,RG,TELRESIDENCIAL,TELCELULAR,"
+                + "COREN,CEP,COMPL,CIDADE,ESTADO,EMAIL FROM ENFERMEIRO WHERE NOMEENFERMEIRO LIKE '%" + mod.getEPesquisa() + "%'";
 
         conex.executaSql(sql1);
 
         try {
             conex.rs.first();
             mod.setECod(conex.rs.getInt("IDENFERMEIRO"));
-            mod.setENome(conex.rs.getString("NOME"));
+            mod.setENome(conex.rs.getString("NOMEENFERMEIRO"));
             mod.setELogradouro(conex.rs.getString("LOGRADOURO"));
             mod.setENumero(conex.rs.getInt("NUMERO"));
             mod.setEBairro(conex.rs.getString("BAIRRO"));

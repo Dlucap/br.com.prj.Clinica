@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * and open the template in the editor. 
  */
 package visao;
 
@@ -20,6 +20,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     FormUsuario user = new FormUsuario();
     FormEnfermeiro enf = new FormEnfermeiro();
     FormPaciente telapac = new FormPaciente();
+    TelaLogin tl = new TelaLogin();
     FormAgendamento telaAgenda = new FormAgendamento();
     FormAgenda telaagen = new FormAgenda();
     FormAgendaMedico telaAgenMedico = new FormAgendaMedico();
@@ -30,13 +31,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
      */
     public TelaPrincipal(String usuario) {
         initComponents();
+       //conecta.conectarBd();
         jLabelUsuario.setText(usuario);
         conecta.conectarBd();
-
     }
 
     private TelaPrincipal() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  
     }
 
     /**
@@ -60,7 +62,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jLabelPainelfundo11 = new javax.swing.JLabel();
         jLabelPainelFundo1 = new javax.swing.JLabel();
         BtnFechaInternalFrame = new javax.swing.JButton();
-        jCalendar2 = new com.toedter.calendar.JCalendar();
         jLabel1 = new javax.swing.JLabel();
         jLabelUsuario = new javax.swing.JLabel();
         jLabelFundoPrincipal = new javax.swing.JLabel();
@@ -70,18 +71,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenuCadPaciente = new javax.swing.JMenuItem();
         jMenuCadEnfermeiro = new javax.swing.JMenuItem();
         jMenuCadUsuario = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuRelatorio = new javax.swing.JMenu();
         jMenuFerramenta = new javax.swing.JMenu();
         jMenuTelaBemVindo = new javax.swing.JMenuItem();
         jMenuItemConfEnvioEmail = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        jMenuAgenda = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItemAgendaMedico = new javax.swing.JMenuItem();
         jMenuAjuda = new javax.swing.JMenu();
         jMenuItemAjuda = new javax.swing.JMenuItem();
         jMenuSair = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuISairb = new javax.swing.JMenuItem();
+        jMenuItemLogout = new javax.swing.JMenuItem();
+        jMenuISair = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -171,15 +172,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         getContentPane().add(TelaBemVindo);
         TelaBemVindo.setBounds(0, 260, 1240, 390);
 
-        jCalendar2.setBackground(new java.awt.Color(202, 211, 229));
-        getContentPane().add(jCalendar2);
-        jCalendar2.setBounds(830, 10, 400, 230);
-
         jLabel1.setText("Usuário:");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 660, 50, 20);
+        jLabel1.setBounds(0, 650, 50, 30);
         getContentPane().add(jLabelUsuario);
-        jLabelUsuario.setBounds(50, 660, 190, 20);
+        jLabelUsuario.setBounds(50, 650, 190, 30);
 
         jLabelFundoPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/fundo_telaprincipal.jpg"))); // NOI18N
         getContentPane().add(jLabelFundoPrincipal);
@@ -221,8 +218,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenuCadastro);
 
-        jMenu2.setText("Relatórios");
-        jMenuBar1.add(jMenu2);
+        jMenuRelatorio.setText("Relatórios");
+        jMenuBar1.add(jMenuRelatorio);
 
         jMenuFerramenta.setText("Ferramentas");
 
@@ -244,25 +241,30 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenuFerramenta);
 
-        jMenu1.setText("Agenda");
+        jMenuAgenda.setText("Agenda");
 
         jMenuItem3.setText("Agenda do Dia");
+        jMenuItem3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuItem3MouseClicked(evt);
+            }
+        });
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
+        jMenuAgenda.add(jMenuItem3);
 
-        jMenuItem4.setText("Agenda do Medico");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemAgendaMedico.setText("Agenda do Medico");
+        jMenuItemAgendaMedico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                jMenuItemAgendaMedicoActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem4);
+        jMenuAgenda.add(jMenuItemAgendaMedico);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(jMenuAgenda);
 
         jMenuAjuda.setText("Ajuda");
 
@@ -278,21 +280,21 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jMenuItem2.setText("Logout");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemLogout.setText("Logout");
+        jMenuItemLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                jMenuItemLogoutActionPerformed(evt);
             }
         });
-        jMenuSair.add(jMenuItem2);
+        jMenuSair.add(jMenuItemLogout);
 
-        jMenuISairb.setText("Sair");
-        jMenuISairb.addActionListener(new java.awt.event.ActionListener() {
+        jMenuISair.setText("Sair");
+        jMenuISair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuISairbActionPerformed(evt);
+                jMenuISairActionPerformed(evt);
             }
         });
-        jMenuSair.add(jMenuISairb);
+        jMenuSair.add(jMenuISair);
 
         jMenuBar1.add(jMenuSair);
 
@@ -328,18 +330,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void BtnFechaInternalFrameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnFechaInternalFrameActionPerformed
         TelaBemVindo.dispose();
-
     }//GEN-LAST:event_BtnFechaInternalFrameActionPerformed
 
     private void jMenuTelaBemVindoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuTelaBemVindoActionPerformed
         TelaBemVindo.setVisible(true);
-
     }//GEN-LAST:event_jMenuTelaBemVindoActionPerformed
 
-    private void jMenuISairbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuISairbActionPerformed
+    private void jMenuISairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuISairActionPerformed
         conecta.DesconectarBd();
         System.exit(0);
-    }//GEN-LAST:event_jMenuISairbActionPerformed
+    }//GEN-LAST:event_jMenuISairActionPerformed
 
     private void jMenuCadMedicosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadMedicosActionPerformed
         try {
@@ -368,6 +368,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void BtnCadMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCadMedicoActionPerformed
         try {
+            System.out.println(""+jLabelUsuario.getText());
             conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
             conecta.rs.first();
             if (conecta.rs.getString("TIPO").equalsIgnoreCase("Administrador")) {
@@ -391,14 +392,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnCadMedicoActionPerformed
 
     private void jMenuSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSairMouseClicked
-        System.exit(0);
+//        System.exit(0);
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuSairMouseClicked
 
     private void BtnEnfermeiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEnfermeiraActionPerformed
         // TODO add your handling code here:
         try {
-            conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
+            System.out.println(""+jLabelUsuario.getText());
+            conecta.executaSql("SELECT TIPO FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
             conecta.rs.first();
             if (conecta.rs.getString("TIPO").equalsIgnoreCase("ADMINISTRADOR")) {
                 if (user == null) {
@@ -429,6 +431,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void BtnPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPacienteActionPerformed
         // TODO add your handling code here:
              try {
+                 System.out.println(""+jLabelUsuario.getText());
             conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
             conecta.rs.first();
             if (conecta.rs.getString("TIPO").equalsIgnoreCase("ADMINISTRADOR")) {
@@ -480,16 +483,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
         email.setVisible(true);
     }//GEN-LAST:event_jMenuItemConfEnvioEmailActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void jMenuItemLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLogoutActionPerformed
         // TODO add your handling code here:
-        TelaPrincipal principal = new TelaPrincipal();
-        principal.setVisible(false);
-        
-        TelaLogin login = new TelaLogin();
-        login.setVisible(true);
-        
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+  tl.setVisible(true);
+  dispose();
+    }//GEN-LAST:event_jMenuItemLogoutActionPerformed
 
+    
     private void BtnAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgendaActionPerformed
         // TODO add your handling code here:
        try {
@@ -516,15 +516,40 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
-        telaagen.setVisible(true);
+        try {
+            conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
+            conecta.rs.first();
+            if (conecta.rs.getString("TIPO").equalsIgnoreCase("ADMINISTRADOR")) {
+                if (telaagen == null) {
+                    telaagen = new FormAgenda();
+                     telaagen.setVisible(true);
+         telaagen.setResizable(false);
+                } else {
+                    telaagen.setVisible(true);
+                    telaagen.setResizable(false);
+                }
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
+                        + "Gentileza entre em contato com o administrador do sistema.");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
+                    + "Gentileza entre em contato com o administrador do sistema." + ex);
+        }
+        
+       
         
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+    private void jMenuItemAgendaMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAgendaMedicoActionPerformed
         // TODO add your handling code here:
         telaAgenMedico.setVisible(true);
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+         telaAgenMedico.setResizable(false);
+    }//GEN-LAST:event_jMenuItemAgendaMedicoActionPerformed
 
+    private void jMenuItem3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem3MouseClicked
     /**
      * @param args the command line arguments
      */
@@ -567,7 +592,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton BtnFechaInternalFrame;
     private javax.swing.JButton BtnPaciente;
     private javax.swing.JInternalFrame TelaBemVindo;
-    private com.toedter.calendar.JCalendar jCalendar2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelAgenda;
@@ -575,8 +599,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelPainelFundo1;
     private javax.swing.JLabel jLabelPainelfundo11;
     private javax.swing.JLabel jLabelUsuario;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenuAgenda;
     private javax.swing.JMenu jMenuAjuda;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuCadEnfermeiro;
@@ -585,13 +608,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuCadUsuario;
     private javax.swing.JMenu jMenuCadastro;
     private javax.swing.JMenu jMenuFerramenta;
-    private javax.swing.JMenuItem jMenuISairb;
+    private javax.swing.JMenuItem jMenuISair;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItemAgendaMedico;
     private javax.swing.JMenuItem jMenuItemAjuda;
     private javax.swing.JMenuItem jMenuItemConfEnvioEmail;
+    private javax.swing.JMenuItem jMenuItemLogout;
+    private javax.swing.JMenu jMenuRelatorio;
     private javax.swing.JMenu jMenuSair;
     private javax.swing.JMenuItem jMenuTelaBemVindo;
     private javax.swing.JPanel jPanelTelaSejaBemVindo;

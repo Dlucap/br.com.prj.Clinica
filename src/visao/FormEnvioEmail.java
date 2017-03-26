@@ -5,8 +5,6 @@
  *http://www.vipan.com/htdocs/javamail.html
  *
  */
-
-
 package visao;
 
 import org.apache.commons.mail.EmailException;
@@ -19,13 +17,13 @@ import org.apache.commons.mail.SimpleEmail;
 public class FormEnvioEmail extends javax.swing.JFrame {
 
     org.apache.commons.mail.Email email;
-    
+
     /**
      * Creates new form FormEnvioEmail
      */
     public FormEnvioEmail() {
-       initComponents();
-          email = new SimpleEmail();
+        initComponents();
+        email = new SimpleEmail();
         //email = new MultiPartEmail();
         configuracao();
     }
@@ -58,24 +56,6 @@ public class FormEnvioEmail extends javax.swing.JFrame {
         jButtonTesteEnvEmailUsu = new javax.swing.JButton();
         jButtonCancelarUsu = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabelParamsEnvEmailClinica = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jTextFieldEmailCli = new javax.swing.JTextField();
-        jPasswordFieldSenhaCli = new javax.swing.JPasswordField();
-        jLabel3 = new javax.swing.JLabel();
-        jLabelSenha1 = new javax.swing.JLabel();
-        jTextFieldServerEmailCli = new javax.swing.JTextField();
-        jLabelSeverEmail1 = new javax.swing.JLabel();
-        jButtonSalvarCli = new javax.swing.JButton();
-        jButtonTesteEnvEmailCli = new javax.swing.JButton();
-        jButtonCancelarCli = new javax.swing.JButton();
-        jPanelAutenticacaoCli = new javax.swing.JPanel();
-        jCheckBoxAutenticacaoUsu1 = new javax.swing.JCheckBox();
-        jLabelSMTP1 = new javax.swing.JLabel();
-        jTextFieldSmtpCli = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -86,8 +66,6 @@ public class FormEnvioEmail extends javax.swing.JFrame {
         jLabel2.setText("Endereço de  E-mail :");
 
         jLabelSenha.setText("Senha :");
-
-        jPasswordFieldSenhaUsu.setText("jPasswordField1");
 
         jLabelSeverEmail.setText("Servidor de saída de Email (SMTP) : ");
 
@@ -132,9 +110,15 @@ public class FormEnvioEmail extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Segurança e autenticação", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
+        jCheckBoxAutenticacaoUsu.setSelected(true);
         jCheckBoxAutenticacaoUsu.setText("O servidor requer autenticação");
         jCheckBoxAutenticacaoUsu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jCheckBoxAutenticacaoUsu.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jCheckBoxAutenticacaoUsu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCheckBoxAutenticacaoUsuMouseClicked(evt);
+            }
+        });
 
         jLabelSMTP.setText("Servidor de sáida (Smtp) :");
 
@@ -187,6 +171,11 @@ public class FormEnvioEmail extends javax.swing.JFrame {
         });
 
         jButtonCancelarUsu.setText("Cancelar");
+        jButtonCancelarUsu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarUsuActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -232,154 +221,6 @@ public class FormEnvioEmail extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Configuração de envio de e-mail");
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jLabelParamsEnvEmailClinica.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        jLabelParamsEnvEmailClinica.setText("Parametrização de envio de email da clinica:");
-
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuração", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
-
-        jPasswordFieldSenhaCli.setText("jPasswordField1");
-
-        jLabel3.setText("Endereço de E-mail :");
-
-        jLabelSenha1.setText("Senha :");
-
-        jLabelSeverEmail1.setText("Servidor de saída de Email (SMTP) : ");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldEmailCli, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelSenha1)
-                            .addComponent(jPasswordFieldSenhaCli, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelSeverEmail1)
-                            .addComponent(jTextFieldServerEmailCli, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabelSenha1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldEmailCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPasswordFieldSenhaCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabelSeverEmail1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldServerEmailCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8))
-        );
-
-        jButtonSalvarCli.setText("Salvar");
-
-        jButtonTesteEnvEmailCli.setText("Testar envio de email");
-
-        jButtonCancelarCli.setText("Cancelar");
-
-        jPanelAutenticacaoCli.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Segurança e autenticação", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
-
-        jCheckBoxAutenticacaoUsu1.setText("O servidor requer autenticação");
-
-        jLabelSMTP1.setText("Servidor de sáida (Smtp) :");
-
-        jLabel5.setText("Usar o seguinte tipo de conexão criptografada:");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nenhum", "SSL", "TSL", "Automático" }));
-
-        javax.swing.GroupLayout jPanelAutenticacaoCliLayout = new javax.swing.GroupLayout(jPanelAutenticacaoCli);
-        jPanelAutenticacaoCli.setLayout(jPanelAutenticacaoCliLayout);
-        jPanelAutenticacaoCliLayout.setHorizontalGroup(
-            jPanelAutenticacaoCliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelAutenticacaoCliLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelAutenticacaoCliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jCheckBoxAutenticacaoUsu1)
-                    .addGroup(jPanelAutenticacaoCliLayout.createSequentialGroup()
-                        .addComponent(jLabelSMTP1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jTextFieldSmtpCli, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelAutenticacaoCliLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addContainerGap())
-            .addGroup(jPanelAutenticacaoCliLayout.createSequentialGroup()
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanelAutenticacaoCliLayout.setVerticalGroup(
-            jPanelAutenticacaoCliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelAutenticacaoCliLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jCheckBoxAutenticacaoUsu1)
-                .addGap(18, 18, 18)
-                .addGroup(jPanelAutenticacaoCliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelSMTP1)
-                    .addComponent(jTextFieldSmtpCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonSalvarCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonTesteEnvEmailCli, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonCancelarCli)
-                .addGap(146, 146, 146))
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelParamsEnvEmailClinica, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
-                        .addComponent(jPanelAutenticacaoCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelParamsEnvEmailClinica)
-                .addGap(8, 8, 8)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanelAutenticacaoCli, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonTesteEnvEmailCli)
-                    .addComponent(jButtonSalvarCli)
-                    .addComponent(jButtonCancelarCli))
-                .addContainerGap())
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -390,9 +231,7 @@ public class FormEnvioEmail extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(31, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -402,44 +241,77 @@ public class FormEnvioEmail extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
-        setSize(new java.awt.Dimension(845, 621));
+        setSize(new java.awt.Dimension(845, 350));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonTesteEnvEmailUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTesteEnvEmailUsuActionPerformed
         // TODO add your handling code here:
-                 configuracao();
+        configuracao();
 
-      enviarEmail(jTextFieldEmailUsu.getText(),"Teste de envio de email!","Mensagem automática\n Teste de envio automático, gentileza não responder.",jTextFieldEmailUsu.getText());
+        enviarEmail(jTextFieldEmailUsu.getText(), "Teste de envio de email!", "Mensagem automática\n Teste de envio automático, gentileza não responder.", jTextFieldEmailUsu.getText());
     }//GEN-LAST:event_jButtonTesteEnvEmailUsuActionPerformed
-/**
- *       email.setHostName("smtp.gmail.com");//servidor de email
- *       email.setSmtpPort(465); //porta de conexão pode deixar comentado
- *       email.setAuthenticator(new DefaultAuthenticator("username", "password")); //usuário e senha 
- *       email.setAuthentication("climedjaadm@gmail.com", "clinicamedicajava12345");
- * 
- * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE 
- * WHERE especialidade.IDESPECIALIDADE = (select idespecialidade from especialidade where IDESPECIALIDADE= 4)
- * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE 
- * WHERE especialidade.IDESPECIALIDADE = (select idespecialidade from especialidade where IDESPECIALIDADE= 3)
- * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE 
- * WHERE especialidade.IDESPECIALIDADE = (select idespecialidade from especialidade where IDESPECIALIDADE= 5)
- *
- */
-      private void configuracao() {
- 
+
+    private void jCheckBoxAutenticacaoUsuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxAutenticacaoUsuMouseClicked
+        // TODO add your handling code here:
+        if(jCheckBoxAutenticacaoUsu.isSelected()){
+            System.err.println("Selecionado");
+            System.out.println(""+jCheckBoxAutenticacaoUsu.isSelected());
+            jTextFieldEmailUsu.setEnabled(true);
+            jPasswordFieldSenhaUsu.setEnabled(true);
+        }else{
+             System.err.println("Não Selecionado");
+             System.out.println(""+jCheckBoxAutenticacaoUsu.isSelected());
+             jTextFieldEmailUsu.setEnabled(false);
+            jPasswordFieldSenhaUsu.setEnabled(false);
+        }
+            
+    }//GEN-LAST:event_jCheckBoxAutenticacaoUsuMouseClicked
+
+    private void jButtonCancelarUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarUsuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonCancelarUsuActionPerformed
+    /**
+     * email.setHostName("smtp.gmail.com");//servidor de email
+     * email.setSmtpPort(465); //porta de conexão pode deixar comentado
+     * email.setAuthenticator(new DefaultAuthenticator("username", "password"));
+     * //usuário e senha email.setAuthentication("climedjaadm@gmail.com",
+     * "clinicamedicajava12345");
+     *
+     * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON
+     * MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE WHERE
+     * especialidade.IDESPECIALIDADE = (select idespecialidade from
+     * especialidade where IDESPECIALIDADE= 4) SELECT NOME FROM MEDICO INNER
+     * JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE =
+     * ESPECIALIDADE.IDESPECIALIDADE WHERE especialidade.IDESPECIALIDADE =
+     * (select idespecialidade from especialidade where IDESPECIALIDADE= 3)
+     * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON
+     * MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE WHERE
+     * especialidade.IDESPECIALIDADE = (select idespecialidade from
+     * especialidade where IDESPECIALIDADE= 5)
+     *
+     */
+    private void configuracao() {
+
         email.setHostName(jTextFieldSeverEmailUsu.getText());//servidor de email
         email.setSmtpPort(465); //porta de conexão pode deixar comentado
         email.setSSL(true);
         email.setTLS(true);
         email.setDebug(true);
-        //email.setAuthenticator(new DefaultAuthenticator("username", "password")); //usuário e senha 
-        email.setAuthentication(jTextFieldEmailUsu.getText(),jPasswordFieldSenhaUsu.getText()); //usuário e senha 
+        if (jCheckBoxAutenticacaoUsu.isSelected()) {
+             jTextFieldEmailUsu.setEnabled(true);
+          jPasswordFieldSenhaUsu.setEnabled(true);
+            email.setAuthentication(jTextFieldEmailUsu.getText(), jPasswordFieldSenhaUsu.getText()); //usuário e senha 
+//email.setAuthenticator(new DefaultAuthenticator("username", "password")); //usuário e senha 
+        } else {
+            System.out.println("visao.FormEnvioEmail.configuracao()");
+            jTextFieldEmailUsu.setEnabled(false);
+          jPasswordFieldSenhaUsu.setEnabled(false);
+        }
+
         email.setSSLOnConnect(true);// ssl conexão segura
 
     }
@@ -457,7 +329,7 @@ public class FormEnvioEmail extends javax.swing.JFrame {
 
         }
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -494,42 +366,24 @@ public class FormEnvioEmail extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonCancelarCli;
     private javax.swing.JButton jButtonCancelarUsu;
-    private javax.swing.JButton jButtonSalvarCli;
     private javax.swing.JButton jButtonSalvarUsu;
-    private javax.swing.JButton jButtonTesteEnvEmailCli;
     private javax.swing.JButton jButtonTesteEnvEmailUsu;
     private javax.swing.JCheckBox jCheckBoxAutenticacaoUsu;
-    private javax.swing.JCheckBox jCheckBoxAutenticacaoUsu1;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabelParamsEnvEmailClinica;
     private javax.swing.JLabel jLabelParamsEnvEmailUsuario;
     private javax.swing.JLabel jLabelSMTP;
-    private javax.swing.JLabel jLabelSMTP1;
     private javax.swing.JLabel jLabelSenha;
-    private javax.swing.JLabel jLabelSenha1;
     private javax.swing.JLabel jLabelSeverEmail;
-    private javax.swing.JLabel jLabelSeverEmail1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanelAutenticacaoCli;
-    private javax.swing.JPasswordField jPasswordFieldSenhaCli;
     private javax.swing.JPasswordField jPasswordFieldSenhaUsu;
-    private javax.swing.JTextField jTextFieldEmailCli;
     private javax.swing.JTextField jTextFieldEmailUsu;
-    private javax.swing.JTextField jTextFieldServerEmailCli;
     private javax.swing.JTextField jTextFieldSeverEmailUsu;
-    private javax.swing.JTextField jTextFieldSmtpCli;
     private javax.swing.JTextField jTextFieldSmtpUsu;
     // End of variables declaration//GEN-END:variables
 }

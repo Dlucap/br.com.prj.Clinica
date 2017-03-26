@@ -1,19 +1,6 @@
-//https://www.youtube.com/watch?v=OfsCClnnY6U&list=PLyQ9CRKOzOWqVZ5nDspGFVgybs3zRGPUL video 13
-/**
- *    ANDAMENTO DO PROJETO
- *
- * ferramentas / tela de bemvindos ok
- * tela Cadastro medio ok
- * Acesso ao banco de dados ok
- * Cadastro enfermeira
- * cadastro paciete
- * Pesquisa
- * Relatório]
- *
- *
- */
 package visao;
 
+import ModeloDao.DaoCripSenhaUser;
 import ModeloConection.ConexaoBd;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -24,6 +11,7 @@ import javax.swing.JOptionPane;
 public class TelaLogin extends javax.swing.JFrame {
 
     ConexaoBd con = new ConexaoBd();
+    DaoCripSenhaUser crip = new DaoCripSenhaUser();
 
     /**
      * Creates new form visão
@@ -76,14 +64,14 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabelSenha.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
         jLabelSenha.setText("Senha");
         getContentPane().add(jLabelSenha);
-        jLabelSenha.setBounds(270, 160, 50, 30);
+        jLabelSenha.setBounds(270, 140, 50, 30);
 
         jLabelUsuário.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
         jLabelUsuário.setText("Usuário");
         getContentPane().add(jLabelUsuário);
-        jLabelUsuário.setBounds(270, 140, 54, 21);
+        jLabelUsuário.setBounds(260, 120, 54, 21);
         getContentPane().add(jTextFieldUsuário);
-        jTextFieldUsuário.setBounds(330, 130, 140, 28);
+        jTextFieldUsuário.setBounds(330, 108, 140, 30);
 
         jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,7 +79,7 @@ public class TelaLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jPasswordField1);
-        jPasswordField1.setBounds(330, 160, 140, 28);
+        jPasswordField1.setBounds(330, 140, 140, 30);
 
         jLabelLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/linguagens-de-programacao_21083330.jpg"))); // NOI18N
         jLabelLogo.setText("jLabel1");
@@ -108,22 +96,21 @@ public class TelaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAcessarActionPerformed
-        
+
         try {
-            con.executaSql("SELECT * FROM USUARIO WHERE NOME ='"+jTextFieldUsuário.getText()+"'");
+            con.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jTextFieldUsuário.getText() + "'");
             con.rs.first();
-            if (con.rs.getString("SENHA").equals(jPasswordField1.getText())) {
+            if (con.rs.getString("SENHA").equals(crip.codificaBase64Encoder(jPasswordField1.getText()))) {
                 TelaPrincipal tela = new TelaPrincipal(jTextFieldUsuário.getText());
                 tela.setVisible(true);
                 dispose();
-            }else{
-                JOptionPane.showMessageDialog(rootPane,"Usuário/Senha inválido ou não cadastrado no sistema!");
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!");
             }
         } catch (SQLException ex) {
-             JOptionPane.showMessageDialog(rootPane,"Usuário/Senha inválido ou não cadastrado no sistema!\nErro:");
-
+            JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!\nErro:" + ex);
         }
-con.DesconectarBd();//NA VIDEO AULA O PERRONE NÃO FECHOU A CONEXÃO AO BANCO
+        con.DesconectarBd();
     }//GEN-LAST:event_BtnAcessarActionPerformed
 
     private void BtnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSairActionPerformed
@@ -132,7 +119,6 @@ con.DesconectarBd();//NA VIDEO AULA O PERRONE NÃO FECHOU A CONEXÃO AO BANCO
     }//GEN-LAST:event_BtnSairActionPerformed
 
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
-
 
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
@@ -165,7 +151,6 @@ con.DesconectarBd();//NA VIDEO AULA O PERRONE NÃO FECHOU A CONEXÃO AO BANCO
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -173,7 +158,6 @@ con.DesconectarBd();//NA VIDEO AULA O PERRONE NÃO FECHOU A CONEXÃO AO BANCO
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAcessar;
     private javax.swing.JButton BtnSair;

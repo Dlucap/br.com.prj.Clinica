@@ -6,7 +6,7 @@
 package visao;
 
 import ModeloBeans.BeansPaciente;
-import ModeloBeans.ModeloTabela;
+import ModeloBeans.BeansModeloTabela;
 import ModeloConection.ConexaoBd;
 import ModeloConection.WebServiceCep;
 import java.sql.PreparedStatement;
@@ -26,6 +26,7 @@ public class FormPaciente extends javax.swing.JFrame {
     ConexaoBd conBd = new ConexaoBd();
     BeansPaciente pac = new BeansPaciente();
     DaoPaciente controlP = new DaoPaciente();
+    FormAgendamento telaAgenda = new FormAgendamento();
 
     ResultSet rs = null;
     PreparedStatement pstP;
@@ -37,9 +38,7 @@ public class FormPaciente extends javax.swing.JFrame {
      */
     public FormPaciente() {
         initComponents();
-        // preencherTabelaPaciente("SELECT IDPACIENTE,NOME,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOME");
-        preencherTabelaPaciente("SELECT * FROM PACIENTE");
-        //preencherTabelaPaciente("SELECT * FROM PACIENTE ");
+        preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE ORDER BY NOMEPACIENTE");
     }
 
     /**
@@ -100,6 +99,7 @@ public class FormPaciente extends javax.swing.JFrame {
         jButtonSalvar = new javax.swing.JButton();
         jButtonExcluir = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
+        jButtonAgendarConsulta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -361,6 +361,14 @@ public class FormPaciente extends javax.swing.JFrame {
             }
         });
 
+        jButtonAgendarConsulta.setText("Agendar Consulta");
+        jButtonAgendarConsulta.setEnabled(false);
+        jButtonAgendarConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAgendarConsultaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -398,16 +406,6 @@ public class FormPaciente extends javax.swing.JFrame {
                                     .addComponent(jLabel5)
                                     .addComponent(jFormattedTextFieldPCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButtonIncluir)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonEditar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonSalvar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonExcluir)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonCancelar))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel12)
                                     .addComponent(jTextFieldPendereco, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -426,31 +424,41 @@ public class FormPaciente extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
-                                    .addComponent(jFormattedTextFieldPDtNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jFormattedTextFieldPDtNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel17)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jFormattedTextFieldPCep, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jButtonBuscarCep, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel19)
-                                    .addComponent(jTextFieldPEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextFieldPComplemento, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel18))
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                                .addComponent(jFormattedTextFieldPCep, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonBuscarCep, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel19)
+                            .addComponent(jTextFieldPEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldPComplemento, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel18))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextFieldPPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonPPesquisar))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(14, 14, 14))))
+                                .addGap(45, 45, 45)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(140, 140, 140)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jTextFieldPPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButtonPPesquisar))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButtonIncluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonSalvar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonCancelar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonAgendarConsulta)))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -461,67 +469,77 @@ public class FormPaciente extends javax.swing.JFrame {
                     .addComponent(jButtonEditar)
                     .addComponent(jButtonSalvar)
                     .addComponent(jButtonExcluir)
-                    .addComponent(jButtonCancelar))
-                .addGap(18, 39, Short.MAX_VALUE)
+                    .addComponent(jButtonCancelar)
+                    .addComponent(jButtonAgendarConsulta))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(jTextFieldPIdPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldPPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonPPesquisar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldPNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jFormattedTextFieldPRg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jFormattedTextFieldPCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldPNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jFormattedTextFieldPTelRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jFormattedTextFieldPTelCel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
+                                .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedTextFieldPRg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jFormattedTextFieldPDtNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedTextFieldPCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jTextFieldPendereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel14)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldPNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jFormattedTextFieldPTelRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jFormattedTextFieldPTelCel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jFormattedTextFieldPDtNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(5, 5, 5)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldPendereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldPNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel13))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextFieldPUf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldPBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(22, 22, 22)
-                            .addComponent(jTextFieldPCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jLabel16)))
-                .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel15)
+                                    .addComponent(jLabel13))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jTextFieldPUf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldPBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(22, 22, 22)
+                                    .addComponent(jTextFieldPCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel16)))
+                        .addGap(12, 12, 12)
                         .addComponent(jLabel17)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jFormattedTextFieldPCep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -533,16 +551,8 @@ public class FormPaciente extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel18)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldPEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextFieldPPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonPPesquisar))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(16, 16, 16))
+                        .addComponent(jTextFieldPEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -582,7 +592,7 @@ public class FormPaciente extends javax.swing.JFrame {
 
         jButtonCancelar.setEnabled(!true);
         jButtonSalvar.setEnabled(false);
-        jButtonIncluir.setEnabled(!true);
+        jButtonIncluir.setEnabled(true);
         jButtonEditar.setEnabled(false);
         jButtonExcluir.setEnabled(false);
 
@@ -596,7 +606,7 @@ public class FormPaciente extends javax.swing.JFrame {
         if (resposta == JOptionPane.YES_OPTION) {
             pac.setPCod(Integer.parseInt(jTextFieldPIdPaciente.getText()));
             controlP.Excluir(pac);
-            preencherTabelaPaciente("SELECT IDPACIENTE,NOME,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOME ");
+            preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE ORDER BY NOMEPACIENTE");
 
             jButtonSalvar.setEnabled(false);
             jButtonBuscarCep.setEnabled(!true);
@@ -618,74 +628,83 @@ public class FormPaciente extends javax.swing.JFrame {
         } else if (jFormattedTextFieldPTelCel.getText().equals("(   )     -    ")) {
             JOptionPane.showMessageDialog(null, "Preencha o Telefone celular do paciente para continuar.");
             jFormattedTextFieldPTelCel.requestFocus();
-            //   }
-
-            if (flag == 1) {
-                //Ler campos da tela de cadastro do medico
-
-                pac.setPNome(jTextFieldPNome.getText());
-                pac.setPRg(jFormattedTextFieldPRg.getText());
-                pac.setPCpf(jFormattedTextFieldPCpf.getText());
-                pac.setPBairro(jTextFieldPBairro.getText());
-                pac.setPUf(jTextFieldPUf.getText());
-                pac.setPCidade(jTextFieldPCidade.getText());
-                pac.setPLogradouro(jTextFieldPendereco.getText());
-                pac.setPNumero(Integer.parseInt(jTextFieldPNumero.getText()));
-                pac.setPCompl(jTextFieldPComplemento.getText());
-                pac.setPCep(jFormattedTextFieldPCep.getText());
-                pac.setPDtNascimento(jFormattedTextFieldPDtNascimento.getText());
-                pac.setPTelCelular(jFormattedTextFieldPTelCel.getText());
-                pac.setPTelResidencial(jFormattedTextFieldPTelRes.getText());
-                pac.setPEmail(jTextFieldPEmail.getText());
-                pac.setPEmerNome(jTextFieldPEmerNome.getText());
-                pac.setPEmerTelCelular(jFormattedTextFieldPEmerTelCel1.getText());
-                pac.setPEmerTelResidencial(jFormattedTextFieldPEmerTelRes1.getText());
-
-                controlP.salvar(pac);
-
-                preencherTabelaPaciente("SELECT IDPACIENTE,NOME,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOME");
-                //Limpar os campos
-                LimparCampos();
-
-                DesabilitarCampos();
-
-                jButtonBuscarCep.setEnabled(!true);
-                jTextFieldPPesquisar.setEnabled(true);
-
-                jButtonCancelar.setEnabled(!true);
-                jButtonSalvar.setEnabled(!true);
-                jButtonIncluir.setEnabled(!false);
-                jButtonEditar.setEnabled(false);
-                jButtonExcluir.setEnabled(false);
-            } else {
-                flag = 2;
-
-                pac.setPNome(jTextFieldPNome.getText());
-                pac.setPRg(jFormattedTextFieldPRg.getText());
-                pac.setPCpf(jFormattedTextFieldPCpf.getText());
-                pac.setPBairro(jTextFieldPBairro.getText());
-                pac.setPUf(jTextFieldPUf.getText());
-                pac.setPCidade(jTextFieldPCidade.getText());
-                pac.setPLogradouro(jTextFieldPendereco.getText());
-                pac.setPNumero(Integer.parseInt(jTextFieldPNumero.getText()));
-                pac.setPCompl(jTextFieldPComplemento.getText());
-                pac.setPCep(jFormattedTextFieldPCep.getText());
-                pac.setPDtNascimento(jFormattedTextFieldPDtNascimento.getText());
-                pac.setPTelCelular(jFormattedTextFieldPTelCel.getText());
-                pac.setPTelResidencial(jFormattedTextFieldPTelRes.getText());
-                pac.setPEmail(jTextFieldPEmail.getText());
-                pac.setPEmerNome(jTextFieldPEmerNome.getText());
-                pac.setPEmerTelCelular(jFormattedTextFieldPEmerTelCel1.getText());
-                pac.setPEmerTelResidencial(jFormattedTextFieldPEmerTelRes1.getText());
-                pac.setPCod(Integer.parseInt(jTextFieldPIdPaciente.getText()));
-
-                controlP.Editar(pac);
-                preencherTabelaPaciente("SELECT IDPACIENTE,NOME,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOME");
-
-                //Desaabilitar Campos tela cadastro Medico IDENFERMEIRO,NOME, COREN
-                DesabilitarCampos();
-            }
         }
+
+        if (flag == 1) {
+            //Ler campos da tela de cadastro do medico
+
+            pac.setPNome(jTextFieldPNome.getText());
+            pac.setPRg(jFormattedTextFieldPRg.getText());
+            pac.setPCpf(jFormattedTextFieldPCpf.getText());
+            pac.setPBairro(jTextFieldPBairro.getText());
+            pac.setPUf(jTextFieldPUf.getText());
+            pac.setPCidade(jTextFieldPCidade.getText());
+            pac.setPLogradouro(jTextFieldPendereco.getText());
+            pac.setPNumero(Integer.parseInt(jTextFieldPNumero.getText()));
+            pac.setPCompl(jTextFieldPComplemento.getText());
+            pac.setPCep(jFormattedTextFieldPCep.getText());
+            pac.setPDtNascimento(jFormattedTextFieldPDtNascimento.getText());
+            pac.setPTelCelular(jFormattedTextFieldPTelCel.getText());
+            pac.setPTelResidencial(jFormattedTextFieldPTelRes.getText());
+            pac.setPEmail(jTextFieldPEmail.getText());
+            pac.setPEmerNome(jTextFieldPEmerNome.getText());
+            pac.setPEmerTelCelular(jFormattedTextFieldPEmerTelCel1.getText());
+            pac.setPEmerTelResidencial(jFormattedTextFieldPEmerTelRes1.getText());
+
+            controlP.salvar(pac);
+
+            preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE ORDER BY NOMEPACIENTE");
+            //Limpar os campos
+            LimparCampos();
+
+            DesabilitarCampos();
+
+            jButtonBuscarCep.setEnabled(false);
+            jTextFieldPPesquisar.setEnabled(true);
+            jButtonAgendarConsulta.setEnabled(true);
+            jButtonCancelar.setEnabled(false);
+            jButtonSalvar.setEnabled(false);
+            jButtonIncluir.setEnabled(true);
+            jButtonEditar.setEnabled(false);
+            jButtonExcluir.setEnabled(false);
+        } else {
+            flag = 2;
+
+            pac.setPNome(jTextFieldPNome.getText());
+            pac.setPRg(jFormattedTextFieldPRg.getText());
+            pac.setPCpf(jFormattedTextFieldPCpf.getText());
+            pac.setPBairro(jTextFieldPBairro.getText());
+            pac.setPUf(jTextFieldPUf.getText());
+            pac.setPCidade(jTextFieldPCidade.getText());
+            pac.setPLogradouro(jTextFieldPendereco.getText());
+            pac.setPNumero(Integer.parseInt(jTextFieldPNumero.getText()));
+            pac.setPCompl(jTextFieldPComplemento.getText());
+            pac.setPCep(jFormattedTextFieldPCep.getText());
+            pac.setPDtNascimento(jFormattedTextFieldPDtNascimento.getText());
+            pac.setPTelCelular(jFormattedTextFieldPTelCel.getText());
+            pac.setPTelResidencial(jFormattedTextFieldPTelRes.getText());
+            pac.setPEmail(jTextFieldPEmail.getText());
+            pac.setPEmerNome(jTextFieldPEmerNome.getText());
+            pac.setPEmerTelCelular(jFormattedTextFieldPEmerTelCel1.getText());
+            pac.setPEmerTelResidencial(jFormattedTextFieldPEmerTelRes1.getText());
+            pac.setPCod(Integer.parseInt(jTextFieldPIdPaciente.getText()));
+
+            controlP.Editar(pac);
+            preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE ORDER BY NOMEPACIENTE");
+
+            //Desaabilitar Campos tela cadastro Medico IDENFERMEIRO,NOME, COREN
+            DesabilitarCampos();
+          
+            jButtonBuscarCep.setEnabled(false);
+            jTextFieldPPesquisar.setEnabled(true);
+            jButtonAgendarConsulta.setEnabled(true);
+            jButtonCancelar.setEnabled(false);
+            jButtonSalvar.setEnabled(false);
+            jButtonIncluir.setEnabled(true);
+            jButtonEditar.setEnabled(false);
+            jButtonExcluir.setEnabled(false);
+        }
+
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
@@ -704,7 +723,7 @@ public class FormPaciente extends javax.swing.JFrame {
     private void jButtonIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIncluirActionPerformed
         // TODO add your handling code here:
         flag = 1;
-
+        preencherIDPacienteIncluir();
         HabilitarCampos();
         jButtonBuscarCep.setEnabled(true);
         jTextFieldPPesquisar.setEnabled(true);
@@ -771,7 +790,7 @@ public class FormPaciente extends javax.swing.JFrame {
         jFormattedTextFieldPEmerTelCel1.setText(pacien.getPEmerTelCelular());
         jFormattedTextFieldPEmerTelRes1.setText(pacien.getPEmerTelResidencial());
 
-        preencherTabelaPaciente("SELECT IDPACIENTE,NOME,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE WHERE NOME LIKE '%" + pac.getPesquisa() + "%'");
+        preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE WHERE NOMEPACIENTE LIKE '%" + pac.getPesquisa() + "%'");
 
     }//GEN-LAST:event_jButtonPPesquisarActionPerformed
 
@@ -792,7 +811,8 @@ public class FormPaciente extends javax.swing.JFrame {
         // TODO add your handling code here:
         String Nome = "" + jTablePaciente.getValueAt(jTablePaciente.getSelectedRow(), 1);
         conBd.conectarBd();
-        String sql = "SELECT * FROM PACIENTE WHERE NOME = '" + Nome + "'";
+        String sql = "SELECT IDPACIENTE,NOMEPACIENTE,RG,CPF,BAIRRO,ESTADO,CIDADE,LOGRADOURO,NUMERO,COMPL,CEP,EMAIL,DATANASCIMENTO,TELRESIDENCIAL,TELCELULAR,"
+                + "CENOME,CETELCELULAR,CETELRESIDENCIAL FROM PACIENTE WHERE NOMEPACIENTE = '" + Nome + "'";
         try {
             conBd.executaSql(sql);
             conBd.rs.first();
@@ -802,7 +822,7 @@ public class FormPaciente extends javax.swing.JFrame {
             DesabilitarCampos();
 
             jTextFieldPIdPaciente.setText(String.valueOf(conBd.rs.getInt("IDPACIENTE")));
-            jTextFieldPNome.setText(conBd.rs.getString("NOME"));
+            jTextFieldPNome.setText(conBd.rs.getString("NOMEPACIENTE"));
             jFormattedTextFieldPRg.setText(conBd.rs.getString("RG"));
             jFormattedTextFieldPCpf.setText(conBd.rs.getString("CPF"));
             jTextFieldPBairro.setText(conBd.rs.getString("BAIRRO"));
@@ -817,13 +837,13 @@ public class FormPaciente extends javax.swing.JFrame {
             jFormattedTextFieldPTelRes.setText(conBd.rs.getString("TELRESIDENCIAL"));
             jFormattedTextFieldPTelCel.setText(conBd.rs.getString("TELCELULAR"));
             jTextFieldPEmerNome.setText(conBd.rs.getString("CENOME"));
-            jFormattedTextFieldPEmerTelCel1.setText(conBd.rs.getString("CETELRESIDENCIAL"));
+            jFormattedTextFieldPEmerTelCel1.setText(conBd.rs.getString("CETELCELULAR"));
             jFormattedTextFieldPEmerTelRes1.setText(conBd.rs.getString("CETELRESIDENCIAL"));
 
             jTextFieldPPesquisar.setText("");
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "erro ao selecionar os dados" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao selecionar os dados" + ex.getMessage());
         }
         jButtonIncluir.setEnabled(false);
         jButtonEditar.setEnabled(true);
@@ -832,7 +852,17 @@ public class FormPaciente extends javax.swing.JFrame {
         conBd.DesconectarBd();
     }//GEN-LAST:event_jTablePacienteMouseClicked
 
+    private void jButtonAgendarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgendarConsultaActionPerformed
+        // TODO add your handling code here:
+                    telaAgenda = new FormAgendamento(jTextFieldPNome.getText());
+                    telaAgenda.setVisible(true);
+                    telaAgenda.setResizable(false);   
+                 
+    }//GEN-LAST:event_jButtonAgendarConsultaActionPerformed
+
     public void LimparCampos() {
+        
+        jTextFieldPIdPaciente.setText("");
         jTextFieldPIdPaciente.setText("");
         jTextFieldPNome.setText("");
         jFormattedTextFieldPRg.setText("");
@@ -900,28 +930,45 @@ public class FormPaciente extends javax.swing.JFrame {
         jFormattedTextFieldPEmerTelCel1.setEnabled(false);
         jFormattedTextFieldPEmerTelRes1.setEnabled(false);
     }
+    
+//mostrar o proximo id ao incluir 
+    public void preencherIDPacienteIncluir() {
+        conBd.conectarBd();
+        try {
+            String sql = "SELECT MAX(IDPACIENTE+1) AS PROXID FROM PACIENTE";
+           
+            conBd.executaSql(sql);
+
+            conBd.rs.first();
+                         
+            jTextFieldPIdPaciente.setText(String.valueOf (conBd.rs.getInt("PROXID")));
+         
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID do paciente");
+        }
+        conBd.DesconectarBd();
+    }
 
     public void preencherTabelaPaciente(String sql) {
 
         ArrayList dados = new ArrayList();
-        String[] colunas = new String[]{"IDPACIENTE", "NOME", "TEL.RESIDENCIAL", "TEL.CELULAR", "EMAIL"};
+        String[] colunas = new String[]{"IDPACIENTE", "NOME DO PACIENTE", "TEL.RESIDENCIAL", "TEL.CELULAR", "EMAIL"};
 
         conBd.conectarBd();
 
         conBd.executaSql(sql);
-     try {
+        try {
             conBd.rs.first();
             do {
                 dados.add(new Object[]{
-                    conBd.rs.getInt("IDPACIENTE"), conBd.rs.getString("NOME"), conBd.rs.getString("TELRESIDENCIAL"),
+                    conBd.rs.getInt("IDPACIENTE"), conBd.rs.getString("NOMEPACIENTE"), conBd.rs.getString("TELRESIDENCIAL"),
                     conBd.rs.getString("TELCELULAR"), conBd.rs.getString("EMAIL")
-                }
-                );
+                });
             } while (conBd.rs.next());
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "Erro ao carregar os dados da tabela." + ex);
         }
-        ModeloTabela modelo = new ModeloTabela(dados, colunas);
+        BeansModeloTabela modelo = new BeansModeloTabela(dados, colunas);
         jTablePaciente.setModel(modelo);
 
         jTablePaciente.getColumnModel().getColumn(0).setPreferredWidth(38);//Tamanho da tabela
@@ -945,7 +992,6 @@ public class FormPaciente extends javax.swing.JFrame {
         //total do tamanho dos campos = 38 + 237 + 110 + 65 = 450
         conBd.DesconectarBd();
     }
-
     /**
      * @param args the command line arguments
      */
@@ -960,16 +1006,24 @@ public class FormPaciente extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormPaciente.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormPaciente.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormPaciente.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormPaciente.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -980,8 +1034,8 @@ public class FormPaciente extends javax.swing.JFrame {
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAgendarConsulta;
     private javax.swing.JButton jButtonBuscarCep;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonEditar;

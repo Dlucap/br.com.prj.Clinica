@@ -23,7 +23,7 @@ public class DaoPaciente {
 
     public void salvar(BeansPaciente pac) {
         conex.conectarBd();
-        String sql = "INSERT INTO PACIENTE (NOME ,CPF ,RG ,DATANASCIMENTO, TELRESIDENCIAL, TELCELULAR ,LOGRADOURO ,NUMERO ,BAIRRO ,"
+        String sql = "INSERT INTO PACIENTE (NOMEPACIENTE ,CPF ,RG ,DATANASCIMENTO, TELRESIDENCIAL, TELCELULAR ,LOGRADOURO ,NUMERO ,BAIRRO ,"
                 + "CIDADE ,ESTADO ,CEP ,COMPL ,EMAIL ,CENOME ,CETELRESIDENCIAL, CETELCELULAR) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             pstP = conex.con.prepareStatement(sql);
@@ -50,8 +50,7 @@ public class DaoPaciente {
 
             JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!!!");
         } catch (SQLException ex) {
-            // med.HabilitarCampos();
-            JOptionPane.showMessageDialog(null, "\n Não foi possível realizar a inserção dos dados. \n\n" + ex.getMessage() + "\n");
+             JOptionPane.showMessageDialog(null, "\n Não foi possível realizar a inserção dos dados. \n\n" + ex.getMessage() + "\n");
              JOptionPane.showMessageDialog(null, "\n Não foi possível realizar a inserção dos dados. \n\n" + ex + "\n");
                    }
         conex.DesconectarBd();
@@ -60,7 +59,7 @@ public class DaoPaciente {
     public void Editar(BeansPaciente pac) {
         conex.conectarBd();
 
-        String sql = "UPDATE PACIENTE SET NOME = ? ,CPF = ? ,RG = ? ,DATANASCIMENTO = ?, TELRESIDENCIAL = ?, TELCELULAR = ?,LOGRADOURO = ?,"
+        String sql = "UPDATE PACIENTE SET NOMEPACIENTE = ? ,CPF = ? ,RG = ? ,DATANASCIMENTO = ?, TELRESIDENCIAL = ?, TELCELULAR = ?,LOGRADOURO = ?,"
                 + "NUMERO = ?,BAIRRO = ?,CIDADE = ?,ESTADO = ?,CEP = ?,COMPL = ?,EMAIL = ?,CENOME = ?,CETELRESIDENCIAL = ?, CETELCELULAR = ?"
                 + " WHERE IDPACIENTE = ?";
 
@@ -102,14 +101,15 @@ public class DaoPaciente {
 
         conex.conectarBd();
 
-        String sql1 = "SELECT * FROM PACIENTE WHERE NOME like '%" + pac.getPesquisa() + "%'";
+        String sql = "SELECT IDPACIENTE,NOMEPACIENTE,LOGRADOURO,NUMERO,BAIRRO,CPF,RG,TELRESIDENCIAL,TELCELULAR,CEP,COMPL,CIDADE,ESTADO,EMAIL " +
+                     "FROM PACIENTE WHERE NOMEPACIENTE LIKE'%" + pac.getPesquisa() + "%'";
  
        try {
-             conex.executaSql(sql1);
+             conex.executaSql(sql);
             conex.rs.first();
             
             pac.setPCod(conex.rs.getInt("IDPACIENTE"));
-            pac.setPNome(conex.rs.getString("Nome"));
+            pac.setPNome(conex.rs.getString("NOMEPACIENTE"));
             pac.setPLogradouro(conex.rs.getString("LOGRADOURO"));
             pac.setPNumero(conex.rs.getInt("NUMERO"));
             pac.setPBairro(conex.rs.getString("BAIRRO"));
