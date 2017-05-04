@@ -177,9 +177,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jLabel1.setText("Usuário:");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 660, 50, 20);
+        jLabel1.setBounds(0, 650, 50, 20);
         getContentPane().add(jLabelUsuario);
-        jLabelUsuario.setBounds(50, 660, 190, 20);
+        jLabelUsuario.setBounds(50, 650, 190, 20);
 
         jLabelFundoPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/fundo_telaprincipal.jpg"))); // NOI18N
         getContentPane().add(jLabelFundoPrincipal);
