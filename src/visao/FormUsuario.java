@@ -349,7 +349,7 @@ public class FormUsuario extends javax.swing.JFrame {
                 jPasswordFieldConfirmarSenha.setEnabled(false);
                 jTextFieldEmail.setEnabled(false);
                 jComboBoxTipoUsuario.setEnabled(false);
-
+ 
                 jButtonEditar.setEnabled(!true);
                 jButtonCancelar.setEnabled(false);
                 preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO FROM USUARIO ORDER BY NOME");

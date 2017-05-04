@@ -50,13 +50,13 @@ public class FormAgendaMedico extends javax.swing.JFrame {
         DataHoje();
         
 //        preencherTabelaAgenda(
-//      "SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUS, PACIENTE.NOME, " +
-//        "AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOME, ESPECIALIDADE.ESPEC FROM AGENDAMENTO " +
+//      "SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE, " +
+//        "AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC FROM AGENDAMENTO " +
 //            "INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE " +
 //                "INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO " +
 //                    "INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE " +
 //                        "WHERE AGENDAMENTO.IDMEDICO  = '"+codigo+"' AGENDAMENTO.DTAGENDAMENTO  = '"+dtHoje+"' AND " +
-//                            "AGENDAMENTO.STATUS = '"+status+"' ORDER BY PACIENTE.NOME");
+//                            "AGENDAMENTO.STATUS = '"+status+"' ORDER BY PACIENTE.NOMEPACIENTE");
     }
 
     public void preencherMedico() {
@@ -65,16 +65,16 @@ public class FormAgendaMedico extends javax.swing.JFrame {
         try {
 
             jComboBoxAgendaMedico.addItem("Selecione");
-            String sql = "SELECT NOME FROM MEDICO ";
+            String sql = "SELECT NOMEMEDICO FROM MEDICO ";
        
             jComboBoxAgendaMedico.addItem("Selecione");
-            //String sql = "SELECT NOME FROM MEDICO";
+            //String sql = "SELECT NOMEMEDICO FROM MEDICO";
 
             pstAM = conBd.con.prepareStatement(sql);
             rs = pstAM.executeQuery();
 
             while (rs.next()) {
-                jComboBoxAgendaMedico.addItem(rs.getString("NOME"));
+                jComboBoxAgendaMedico.addItem(rs.getString("NOMEMEDICO"));
             }
 
         } catch (SQLException ex) {
@@ -278,7 +278,7 @@ public class FormAgendaMedico extends javax.swing.JFrame {
         String Agenda = "" + jTableAgendaMedica.getValueAt(jTableAgendaMedica.getSelectedRow(), 0); //pega o primeira coluna da tabela
         conBd.conectarBd();
 
-        String sql = "select STATUS,IDPACIENTE, IDMEDICO, IDESPECIALIDADE, TURNO,DTAGENDAMENTO,IDAGENDAMENTO from agendamento where IDAGENDAMENTO = '" + Agenda + "'";
+        String sql = "select STATUSCONSULTA,IDPACIENTE, IDMEDICO, IDESPECIALIDADE, TURNO,DTAGENDAMENTO,IDAGENDAMENTO from agendamento where IDAGENDAMENTO = '" + Agenda + "'";
         conBd.executaSql(sql);
 
         try {
@@ -306,13 +306,13 @@ public class FormAgendaMedico extends javax.swing.JFrame {
       codigo = String.valueOf(cod);
      
       preencherTabelaAgenda(
-      "SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUS, PACIENTE.NOME, " +
-        "AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOME, ESPECIALIDADE.ESPEC FROM AGENDAMENTO " +
-            "INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE " +
-                "INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO " +
-                    "INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE " +
-                        "WHERE AGENDAMENTO.IDMEDICO  = '"+codigo+"'AND AGENDAMENTO.DTAGENDAMENTO  = '"+dtHoje+"' AND " +
-                            "AGENDAMENTO.STATUS = '"+status+"' ORDER BY PACIENTE.NOME");
+      "SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE, "+
+        "AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC FROM AGENDAMENTO "+
+            "INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE "+
+                "INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO "+
+                    "INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE "+
+                          "WHERE AGENDAMENTO.IDMEDICO  = '"+codigo+"'AND AGENDAMENTO.DTAGENDAMENTO  = '"+dtHoje+"' AND "+
+                            "AGENDAMENTO.STATUSCONSULTA = '"+status+"' ORDER BY PACIENTE.NOMEPACIENTE");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

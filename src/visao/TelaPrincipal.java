@@ -28,9 +28,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form TelaPrincipal
      */
-    public TelaPrincipal(String usuario) {
+    public TelaPrincipal(String usuario) { //
         initComponents();
-        jLabelUsuario.setText(usuario);
+        jLabelUsuario.setText("Adm");
         conecta.conectarBd();
 
     }

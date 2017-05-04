@@ -37,7 +37,7 @@ public class FormPaciente extends javax.swing.JFrame {
      */
     public FormPaciente() {
         initComponents();
-        // preencherTabelaPaciente("SELECT IDPACIENTE,NOME,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOME");
+        // preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOMEPACIENTE");
         preencherTabelaPaciente("SELECT * FROM PACIENTE");
         //preencherTabelaPaciente("SELECT * FROM PACIENTE ");
     }
@@ -596,7 +596,7 @@ public class FormPaciente extends javax.swing.JFrame {
         if (resposta == JOptionPane.YES_OPTION) {
             pac.setPCod(Integer.parseInt(jTextFieldPIdPaciente.getText()));
             controlP.Excluir(pac);
-            preencherTabelaPaciente("SELECT IDPACIENTE,NOME,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOME ");
+            preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOMEPACIENTE ");
 
             jButtonSalvar.setEnabled(false);
             jButtonBuscarCep.setEnabled(!true);
@@ -643,7 +643,7 @@ public class FormPaciente extends javax.swing.JFrame {
 
                 controlP.salvar(pac);
 
-                preencherTabelaPaciente("SELECT IDPACIENTE,NOME,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOME");
+                preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOMEPACIENTE");
                 //Limpar os campos
                 LimparCampos();
 
@@ -680,7 +680,7 @@ public class FormPaciente extends javax.swing.JFrame {
                 pac.setPCod(Integer.parseInt(jTextFieldPIdPaciente.getText()));
 
                 controlP.Editar(pac);
-                preencherTabelaPaciente("SELECT IDPACIENTE,NOME,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOME");
+                preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOMEPACIENTE");
 
                 //Desaabilitar Campos tela cadastro Medico IDENFERMEIRO,NOME, COREN
                 DesabilitarCampos();
@@ -771,7 +771,7 @@ public class FormPaciente extends javax.swing.JFrame {
         jFormattedTextFieldPEmerTelCel1.setText(pacien.getPEmerTelCelular());
         jFormattedTextFieldPEmerTelRes1.setText(pacien.getPEmerTelResidencial());
 
-        preencherTabelaPaciente("SELECT IDPACIENTE,NOME,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE WHERE NOME LIKE '%" + pac.getPesquisa() + "%'");
+        preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE WHERE NOMEPACIENTE LIKE '%" + pac.getPesquisa() + "%'");
 
     }//GEN-LAST:event_jButtonPPesquisarActionPerformed
 
@@ -792,7 +792,7 @@ public class FormPaciente extends javax.swing.JFrame {
         // TODO add your handling code here:
         String Nome = "" + jTablePaciente.getValueAt(jTablePaciente.getSelectedRow(), 1);
         conBd.conectarBd();
-        String sql = "SELECT * FROM PACIENTE WHERE NOME = '" + Nome + "'";
+        String sql = "SELECT * FROM PACIENTE WHERE NOMEPACIENTE = '" + Nome + "'";
         try {
             conBd.executaSql(sql);
             conBd.rs.first();
@@ -802,7 +802,7 @@ public class FormPaciente extends javax.swing.JFrame {
             DesabilitarCampos();
 
             jTextFieldPIdPaciente.setText(String.valueOf(conBd.rs.getInt("IDPACIENTE")));
-            jTextFieldPNome.setText(conBd.rs.getString("NOME"));
+            jTextFieldPNome.setText(conBd.rs.getString("NOMEPACIENTE"));
             jFormattedTextFieldPRg.setText(conBd.rs.getString("RG"));
             jFormattedTextFieldPCpf.setText(conBd.rs.getString("CPF"));
             jTextFieldPBairro.setText(conBd.rs.getString("BAIRRO"));
@@ -913,7 +913,7 @@ public class FormPaciente extends javax.swing.JFrame {
             conBd.rs.first();
             do {
                 dados.add(new Object[]{
-                    conBd.rs.getInt("IDPACIENTE"), conBd.rs.getString("NOME"), conBd.rs.getString("TELRESIDENCIAL"),
+                    conBd.rs.getInt("IDPACIENTE"), conBd.rs.getString("NOMEPACIENTE"), conBd.rs.getString("TELRESIDENCIAL"),
                     conBd.rs.getString("TELCELULAR"), conBd.rs.getString("EMAIL")
                 }
                 );

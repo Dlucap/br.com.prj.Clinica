@@ -40,11 +40,12 @@ public class FormAgenda extends javax.swing.JFrame {
 
         DataHoje();
 
-        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUS, PACIENTE.NOME, AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOME, ESPECIALIDADE.ESPEC FROM AGENDAMENTO"
+        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
+                + " AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC FROM AGENDAMENTO"
                 + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
                 + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
                 + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE"
-                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUS = '" + status + "' ORDER BY TURNO");
+                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY TURNO");
     }
 
     public final void preencherTabelaAgenda(String sql) {
@@ -59,8 +60,8 @@ public class FormAgenda extends javax.swing.JFrame {
             conBd.rs.first();
 
             do {
-                dados.add(new Object[]{conBd.rs.getInt("IDAGENDAMENTO"), conBd.rs.getString("STATUS"), conBd.rs.getString("NOME"),
-                    conBd.rs.getString("TURNO"), conBd.rs.getString("DTAGENDAMENTO"), conBd.rs.getString("NOME"), conBd.rs.getString("ESPEC")});
+                dados.add(new Object[]{conBd.rs.getInt("IDAGENDAMENTO"), conBd.rs.getString("STATUSCONSULTA"), conBd.rs.getString("NOMEPACIENTE"),
+                    conBd.rs.getString("TURNO"), conBd.rs.getString("DTAGENDAMENTO"), conBd.rs.getString("NOMEMEDICO"), conBd.rs.getString("ESPEC")});
 
             } while (conBd.rs.next());
 
@@ -212,7 +213,7 @@ public class FormAgenda extends javax.swing.JFrame {
         String Agenda = "" + jTableAgenda.getValueAt(jTableAgenda.getSelectedRow(), 0); //pega o primeira coluna da tabela
         conBd.conectarBd();
 
-        String sql = "select STATUS,IDPACIENTE, IDMEDICO, IDESPECIALIDADE, TURNO,DTAGENDAMENTO,IDAGENDAMENTO from agendamento where IDAGENDAMENTO = '" + Agenda + "'";
+        String sql = "select STATUSCONSULTA,IDPACIENTE, IDMEDICO, IDESPECIALIDADE, TURNO,DTAGENDAMENTO,IDAGENDAMENTO from agendamento where IDAGENDAMENTO = '" + Agenda + "'";
         conBd.executaSql(sql);
 
         try {
@@ -233,11 +234,12 @@ public class FormAgenda extends javax.swing.JFrame {
     private void jButtonIniConusultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniConusultaActionPerformed
         // TODO add your handling code here:
         daoagenda.Alterar(agen);
-        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUS, PACIENTE.NOME, AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOME, ESPECIALIDADE.ESPEC FROM AGENDAMENTO"
+        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
+                + " AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC FROM AGENDAMENTO"
                 + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
                 + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
                 + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE"
-                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUS = '" + status + "' ORDER BY TURNO");
+                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY TURNO");
     }//GEN-LAST:event_jButtonIniConusultaActionPerformed
 
     /**

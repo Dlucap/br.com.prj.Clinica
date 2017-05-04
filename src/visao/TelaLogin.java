@@ -17,6 +17,9 @@ package visao;
 import ModeloConection.ConexaoBd;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import ModeloDao.DaoCripSenhaUser;
+
+
 
 /**
  * @author Daniel Lucas
@@ -24,7 +27,7 @@ import javax.swing.JOptionPane;
 public class TelaLogin extends javax.swing.JFrame {
 
     ConexaoBd con = new ConexaoBd();
-
+    
     /**
      * Creates new form visão
      */
@@ -112,7 +115,8 @@ public class TelaLogin extends javax.swing.JFrame {
         try {
             con.executaSql("SELECT * FROM USUARIO WHERE NOME ='"+jTextFieldUsuário.getText()+"'");
             con.rs.first();
-            if (con.rs.getString("SENHA").equals(jPasswordField1.getText())) {
+            
+            if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(jPasswordField1.getText()))) {
                 TelaPrincipal tela = new TelaPrincipal(jTextFieldUsuário.getText());
                 tela.setVisible(true);
                 dispose();
@@ -120,15 +124,13 @@ public class TelaLogin extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane,"Usuário/Senha inválido ou não cadastrado no sistema!");
             }
         } catch (SQLException ex) {
-             JOptionPane.showMessageDialog(rootPane,"Usuário/Senha inválido ou não cadastrado no sistema!\nErro:");
-
+             JOptionPane.showMessageDialog(rootPane,"Usuário/Senha inválido ou não cadastrado no sistema!\nErro:"+ex);
         }
-con.DesconectarBd();//NA VIDEO AULA O PERRONE NÃO FECHOU A CONEXÃO AO BANCO
+        con.DesconectarBd();
     }//GEN-LAST:event_BtnAcessarActionPerformed
 
     private void BtnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSairActionPerformed
         dispose();
-
     }//GEN-LAST:event_BtnSairActionPerformed
 
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed

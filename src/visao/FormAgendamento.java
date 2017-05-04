@@ -41,7 +41,7 @@ public class FormAgendamento extends javax.swing.JFrame {
         preencherEspecMedica();
         preencherMedico();
         jComboBoxTurno.setSelectedItem("selecione");
-        preencherTabelaAgendamento("SELECT IDPACIENTE,NOME,TELRESIDENCIAL, TELCELULAR,CENOME,CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOME like '%" + jTextFieldPaciente.getText() + "%'");
+        preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
     }
 
     /**
@@ -88,18 +88,18 @@ public class FormAgendamento extends javax.swing.JFrame {
         try {
 
             jComboBoxMedico.addItem("Selecione");
-            String sql = "SELECT NOME FROM MEDICO ";
+            String sql = "SELECT NOMEMEDICO FROM MEDICO ";
                         //"INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE " +
                      //   "WHERE ESPECIALIDADE.IDESPECIALIDADE =(select idespecialidade from especialidade where ESPEC = '"+jComboBoxEspecMedica.getSelectedIndex()+"')";
 
            jComboBoxMedico.addItem("Selecione");
-            //String sql = "SELECT NOME FROM MEDICO";
+            //String sql = "SELECT NOMEMEDICO FROM MEDICO";
 
             pstA = conBd.con.prepareStatement(sql);
             rs = pstA.executeQuery();
 
             while (rs.next()) {
-                jComboBoxMedico.addItem(rs.getString("NOME"));
+                jComboBoxMedico.addItem(rs.getString("NOMEMEDICO"));
             }
 
         } catch (SQLException ex) {
@@ -352,14 +352,14 @@ public class FormAgendamento extends javax.swing.JFrame {
 
     private void jButtonBuscarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarPacienteActionPerformed
         // TODO add your handling code here:
-        preencherTabelaAgendamento("SELECT IDPACIENTE,NOME,TELRESIDENCIAL, TELCELULAR,CENOME,CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOME like '%" + jTextFieldPaciente.getText() + "%'");
+        preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
     }//GEN-LAST:event_jButtonBuscarPacienteActionPerformed
 
     private void jTableAgendamentoConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAgendamentoConsultaMouseClicked
         // TODO add your handling code here:
          String Nome = "" + jTableAgendamentoConsulta.getValueAt(jTableAgendamentoConsulta.getSelectedRow(), 1);
         conBd.conectarBd();
-        String sql = "SELECT IDPACIENTE,NOME,TELRESIDENCIAL, TELCELULAR,CENOME,CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOME = '" + Nome + "'";
+        String sql = "SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE = '" + Nome + "'";
 
         
         try {
@@ -369,7 +369,7 @@ public class FormAgendamento extends javax.swing.JFrame {
             //LimparCampos();
 
            // DesabilitarCampos();
-            jTextFieldPaciente.setText(conBd.rs.getString("NOME"));
+            jTextFieldPaciente.setText(conBd.rs.getString("NOMEPACIENTE"));
             
        //jTextFieldPPesquisar.set
 
@@ -452,7 +452,7 @@ public class FormAgendamento extends javax.swing.JFrame {
             conBd.rs.first();
             do {
                 dados.add(new Object[]{
-                    conBd.rs.getInt("IDPACIENTE"), conBd.rs.getString("NOME"), conBd.rs.getString("TELRESIDENCIAL"),
+                    conBd.rs.getInt("IDPACIENTE"), conBd.rs.getString("NOMEPACIENTE"), conBd.rs.getString("TELRESIDENCIAL"),
                     conBd.rs.getString("TELCELULAR"), conBd.rs.getString("CENOME"),conBd.rs.getString("CETELRESIDENCIAL"),
                     conBd.rs.getString("CETELCELULAR")}
                 );

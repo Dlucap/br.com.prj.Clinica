@@ -47,7 +47,7 @@ public class DaoAgendamento {
 
     public void BuscarMedico(String nomeMedico) {
         conBdMedico.conectarBd();
-        conBdMedico.executaSql("SELECT * FROM MEDICO WHERE NOME ='" + nomeMedico + "'");
+        conBdMedico.executaSql("SELECT * FROM MEDICO WHERE NOMEMEDICO ='" + nomeMedico + "'");
         try {
             conBdMedico.rs.first();
             codMedico = conBdMedico.rs.getInt("IDMEDICO");
@@ -59,7 +59,7 @@ public class DaoAgendamento {
     }
  public int BuscarCodMedico(String nomeMedico) {
         conBdMedico.conectarBd();
-        conBdMedico.executaSql("SELECT * FROM MEDICO WHERE NOME ='" + nomeMedico + "'");
+        conBdMedico.executaSql("SELECT * FROM MEDICO WHERE NOMEMEDICO ='" + nomeMedico + "'");
         try {
             conBdMedico.rs.first();
             codMedico = conBdMedico.rs.getInt("IDMEDICO");
@@ -73,7 +73,7 @@ public class DaoAgendamento {
     }
     public void Buscarpaciente(String nomePaciente) {
         conBdPaciente.conectarBd();
-        conBdPaciente.executaSql("SELECT * FROM PACIENTE WHERE NOME ='" + nomePaciente + "'");
+        conBdPaciente.executaSql("SELECT * FROM PACIENTE WHERE NOMEPACIENTE ='" + nomePaciente + "'");
         try {
             conBdPaciente.rs.first();
             codPaciente = conBdPaciente.rs.getInt("IDPACIENTE");

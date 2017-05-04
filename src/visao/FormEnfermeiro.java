@@ -31,10 +31,10 @@ public class FormEnfermeiro extends javax.swing.JFrame {
     BeansEnfermeiro enf = new BeansEnfermeiro();
     DaoEnfermeiro controlM = new DaoEnfermeiro();
    
-
+ 
     ResultSet rs = null;
     PreparedStatement pstM;
-    // private final String SQLTABLE = "SELECT IDENFEMEIRO,NOME, COREN FROM ENFERMEIRO ORDER BY NOME";
+    // private final String SQLTABLE = "SELECT IDENFEMEIRO,NOMENOMEENFERMEIRO, COREN FROM ENFERMEIRO ORDER BY NOMENOMEENFERMEIRO";
     private int flag = 0;
 
     /**
@@ -42,7 +42,7 @@ public class FormEnfermeiro extends javax.swing.JFrame {
      */
     public FormEnfermeiro() {
         initComponents();
-        preencherTabelaEnfermeiro("SELECT IDENFERMEIRO,NOME, COREN FROM ENFERMEIRO ORDER BY NOME");
+        preencherTabelaEnfermeiro("SELECT IDENFERMEIRO,NOMEENFERMEIRO, COREN FROM ENFERMEIRO ORDER BY NOMEENFERMEIRO");
     }
 
     /**
@@ -538,7 +538,7 @@ public class FormEnfermeiro extends javax.swing.JFrame {
         jFormattedTextFieldCoren.setText(enfel.getECoren());
         jFormattedTextFieldCep.setText(enfel.getECep());
         jTextFieldCompl.setText(enfel.getECompl());
-        preencherTabelaEnfermeiro("SELECT IDENFERMEIRO,NOME, COREN FROM ENFERMEIRO WHERE NOME like '%" + enf.getEPesquisa() + "%'");
+        preencherTabelaEnfermeiro("SELECT IDENFERMEIRO,NOMEENFERMEIRO, COREN FROM ENFERMEIRO WHERE NOMEENFERMEIRO like '%" + enf.getEPesquisa() + "%'");
     }//GEN-LAST:event_jButtonPesquisaActionPerformed
 
     private void jTableEnfermeiroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableEnfermeiroMouseClicked
@@ -547,13 +547,13 @@ public class FormEnfermeiro extends javax.swing.JFrame {
         String Nome = "" + jTableEnfermeiro.getValueAt(jTableEnfermeiro.getSelectedRow(), 1);
         conBd.conectarBd();
         try {
-            String sql = "select * from ENFERMEIRO where nome = '" + Nome + "'";
+            String sql = "select * from ENFERMEIRO where nomeENFERMEIRO = '" + Nome + "'";
             conBd.executaSql(sql);
             conBd.rs.first();
             LimparCampos();
             DesabilitarCampos();
             jTextFieldIDEnfermeiro.setText(String.valueOf(conBd.rs.getInt("IDENFERMEIRO")));
-            jTextFieldNomeEnfermeiro.setText(conBd.rs.getString("NOME"));
+            jTextFieldNomeEnfermeiro.setText(conBd.rs.getString("NOMEENFERMEIRO"));
             jTextFieldEndereco.setText(conBd.rs.getString("LOGRADOURO"));
             jTextFieldNumero.setText(String.valueOf(conBd.rs.getInt("NUMERO")));
             jTextFieldBairro.setText(conBd.rs.getString("BAIRRO"));
@@ -603,7 +603,7 @@ public class FormEnfermeiro extends javax.swing.JFrame {
         if (resposta == JOptionPane.YES_OPTION) {
             enf.setECod(Integer.parseInt(jTextFieldIDEnfermeiro.getText()));
             controlM.Excluir(enf);
-            preencherTabelaEnfermeiro("SELECT IDENFERMEIRO,NOME, COREN FROM ENFERMEIRO ORDER BY NOME");
+            preencherTabelaEnfermeiro("SELECT IDENFERMEIRO,NOMEENFERMEIRO, COREN FROM ENFERMEIRO ORDER BY NOMEENFERMEIRO");
 
             jButtonSalvar.setEnabled(!true);
             jButtonBuscarCep.setEnabled(true);
@@ -644,7 +644,7 @@ public class FormEnfermeiro extends javax.swing.JFrame {
             enf.setEEmail(jTextFieldEmail.getText());
             controlM.salvar(enf);
 
-            preencherTabelaEnfermeiro("SELECT IDENFERMEIRO,NOME, COREN FROM ENFERMEIRO ORDER BY NOME");
+            preencherTabelaEnfermeiro("SELECT IDENFERMEIRO,NOMEENFERMEIRO, COREN FROM ENFERMEIRO ORDER BY NOMEENFERMEIRO");
             //Limpar os campos
             LimparCampos();
 
@@ -670,7 +670,7 @@ public class FormEnfermeiro extends javax.swing.JFrame {
             enf.setEEmail(jTextFieldEmail.getText());
 
             controlM.Editar(enf);
-            preencherTabelaEnfermeiro("SELECT * FROM ENFERMEIRO ORDER BY NOME");
+            preencherTabelaEnfermeiro("SELECT * FROM ENFERMEIRO ORDER BY NOMEENFERMEIRO");
 
             //Desaabilitar Campos tela cadastro Medico IDENFERMEIRO,NOME, COREN
             DesabilitarCampos();
@@ -786,12 +786,12 @@ public class FormEnfermeiro extends javax.swing.JFrame {
         try {
             conBd.rs.first();
             do {
-                dados.add(new Object[]{conBd.rs.getInt("IDENFERMEIRO"), conBd.rs.getString("NOME"), conBd.rs.getInt("COREN")});
+                dados.add(new Object[]{conBd.rs.getInt("IDENFERMEIRO"), conBd.rs.getString("NOMEENFERMEIRO"), conBd.rs.getInt("COREN")});
 
             } while (conBd.rs.next());
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Busque por outro medico para preencher tabela.");
+            JOptionPane.showMessageDialog(null, "Busque por outro ENFERMEIRO para preencher tabela.");
         }
 
         

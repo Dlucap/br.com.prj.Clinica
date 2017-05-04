@@ -13,7 +13,7 @@ public class DaoUsuario {
 
     PreparedStatement pstM;
 
-    public void Salvar(BeansUsuario mod) {
+    public void Salvar(BeansUsuario mod) { 
         conex.conectarBd();
 
         String sql = "insert into usuario (NOME ,SENHA,EMAIL, TIPO) values (?,?,?,?)";
