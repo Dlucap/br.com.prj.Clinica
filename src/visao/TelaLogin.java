@@ -19,8 +19,6 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import ModeloDao.DaoCripSenhaUser;
 
-
-
 /**
  * @author Daniel Lucas
  */
@@ -62,6 +60,11 @@ public class TelaLogin extends javax.swing.JFrame {
         BtnAcessar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnAcessarActionPerformed(evt);
+            }
+        });
+        BtnAcessar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                BtnAcessarKeyPressed(evt);
             }
         });
         getContentPane().add(BtnAcessar);
@@ -111,8 +114,23 @@ public class TelaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAcessarActionPerformed
-        
-        try {
+      
+      
+    }//GEN-LAST:event_BtnAcessarActionPerformed
+
+    private void BtnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSairActionPerformed
+        dispose();
+    }//GEN-LAST:event_BtnSairActionPerformed
+
+    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+
+
+    }//GEN-LAST:event_jPasswordField1ActionPerformed
+
+    private void BtnAcessarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnAcessarKeyPressed
+        // TODO add your handling code here:
+                  if(evt.getKeyCode() == evt.VK_ENTER){
+         try {
             con.executaSql("SELECT * FROM USUARIO WHERE NOME ='"+jTextFieldUsuário.getText()+"'");
             con.rs.first();
             
@@ -127,16 +145,8 @@ public class TelaLogin extends javax.swing.JFrame {
              JOptionPane.showMessageDialog(rootPane,"Usuário/Senha inválido ou não cadastrado no sistema!\nErro:"+ex);
         }
         con.DesconectarBd();
-    }//GEN-LAST:event_BtnAcessarActionPerformed
-
-    private void BtnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSairActionPerformed
-        dispose();
-    }//GEN-LAST:event_BtnSairActionPerformed
-
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
-
-
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
+    }
+    }//GEN-LAST:event_BtnAcessarKeyPressed
 
     /**
      * @param args the command line arguments

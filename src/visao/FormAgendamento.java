@@ -87,17 +87,16 @@ public class FormAgendamento extends javax.swing.JFrame {
         
         try {
 
-            jComboBoxMedico.addItem("Selecione");
-            String sql = "SELECT NOMEMEDICO FROM MEDICO ";
-                        //"INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE " +
-                     //   "WHERE ESPECIALIDADE.IDESPECIALIDADE =(select idespecialidade from especialidade where ESPEC = '"+jComboBoxEspecMedica.getSelectedIndex()+"')";
+           
+            String sql = "SELECT NOMEMEDICO FROM MEDICO " +
+                        "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE " +
+                        "WHERE ESPECIALIDADE.IDESPECIALIDADE =(select idespecialidade from especialidade where ESPEC = '"+jComboBoxEspecMedica.getSelectedIndex()+"')";
 
-           jComboBoxMedico.addItem("Selecione");
-            //String sql = "SELECT NOMEMEDICO FROM MEDICO";
-
+       
             pstA = conBd.con.prepareStatement(sql);
             rs = pstA.executeQuery();
-
+            jComboBoxMedico.addItem("Selecione");
+            
             while (rs.next()) {
                 jComboBoxMedico.addItem(rs.getString("NOMEMEDICO"));
             }
@@ -213,6 +212,11 @@ public class FormAgendamento extends javax.swing.JFrame {
 
         jButtonEmail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/email1.png"))); // NOI18N
         jButtonEmail.setEnabled(false);
+        jButtonEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEmailActionPerformed(evt);
+            }
+        });
 
         jTextAreaMotivo.setColumns(20);
         jTextAreaMotivo.setRows(5);
@@ -438,6 +442,18 @@ public class FormAgendamento extends javax.swing.JFrame {
 //                }
 //            });
     }//GEN-LAST:event_jComboBoxEspecMedicaMouseClicked
+
+    private void jButtonEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEmailActionPerformed
+        // TODO add your handling code here:
+        
+        /**
+         * Implementar o envio por email da marcação da consulta.
+         * Deve conter:
+         * Assunto - Usuário do sistema que marcou a consulta - dia que foi marcado e hora - 
+         * medico e a sua especialidade -  contato da clinica
+         * 
+         */
+    }//GEN-LAST:event_jButtonEmailActionPerformed
 
        
     public void preencherTabelaAgendamento(String sql) {

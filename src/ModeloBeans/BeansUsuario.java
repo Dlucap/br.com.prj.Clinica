@@ -1,18 +1,22 @@
-
 package ModeloBeans;
 
 public class BeansUsuario {
-   
+
     private Integer UCodUser;
-    private String  UNomeUser;
+    private String UNomeUser;
     private String USenhaUser;
     private String UEmaiUser;
     private String UTipo;
     private String UPesquisa;
+    private String USerSaiSMTP;
+    private String USenhaEmail;
+    private Boolean UEnviaEmail;
+    private Integer USMTP;
 
     /**
      * @return the UCodUser
      */
+
     public Integer getUCodUser() {
         return UCodUser;
     }
@@ -94,6 +98,60 @@ public class BeansUsuario {
         this.UPesquisa = UPesquisa;
     }
 
-   
-           
+    /**
+     * @return the USerSaiSMTP
+     */
+    public String getUSerSaiSMTP() {
+        return USerSaiSMTP;
+    }
+
+    /**
+     * @param USerSaiSMTP the USerSaiSMTP to set
+     */
+    public void setUSerSaiSMTP(String USerSaiSMTP) {
+        this.USerSaiSMTP = USerSaiSMTP;
+    }
+
+    /**
+     * @return the USenhaEmail
+     */
+    public String getUSenhaEmail() {
+        return USenhaEmail;
+    }
+
+    /**
+     * @param USenhaEmail the USenhaEmail to set
+     */
+    public void setUSenhaEmail(String USenhaEmail) {
+        this.USenhaEmail = USenhaEmail;
+    }
+
+    /**
+     * @return the UEnviaEmail
+     */
+    public Boolean getUEnviaEmail() {
+        return UEnviaEmail;
+    }
+
+    /**
+     * @param UEnviaEmail the UEnviaEmail to set
+     */
+    public void setUEnviaEmail(Boolean UEnviaEmail) {
+        this.UEnviaEmail = UEnviaEmail;
+    }
+
+    /**
+     * @return the USMTP
+     */
+    public Integer getUSMTP() {
+        return USMTP;
+    }
+
+    /**
+     * @param USMTP the USMTP to set
+     */
+    public void setUSMTP(Integer USMTP) {
+        this.USMTP = USMTP;
+    }
+
 }

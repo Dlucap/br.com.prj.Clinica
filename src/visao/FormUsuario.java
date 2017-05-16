@@ -1,12 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Ao editar um usuário que possui o envio de email igual a um, e trocar o envio para zero,
+ *os campos relacionados ao email permanecem preencidos no banco, sendo que deveriam ser
+ *apagados ao desmarcar a opção do envio de email.
+ * Envio de email para teste:
  */
 package visao;
 
 import ModeloConection.ConexaoBd;
-//import ModeloDao.DaoTabelas;
 import ModeloDao.DaoUsuario;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import ModeloBeans.BeansUsuario;
 import ModeloBeans.ModeloTabela;
-
+import ModeloDao.DaoCripSenhaUser;
 
 /**
  *
@@ -25,8 +25,8 @@ public class FormUsuario extends javax.swing.JFrame {
     ConexaoBd conBd = new ConexaoBd();
     BeansUsuario mod = new BeansUsuario();
     DaoUsuario dao = new DaoUsuario();
-    // DaoTabelas daoTabelas =  new DaoTabelas();
-    int flag;
+
+    public int flag, flagEmail;
 
     /**
      * Creates new form FormUsuario
@@ -56,8 +56,8 @@ public class FormUsuario extends javax.swing.JFrame {
         jTextFieldIDusuario = new javax.swing.JTextField();
         jTextFieldUsuario = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jLabelSenha = new javax.swing.JLabel();
-        jPasswordFieldSenha = new javax.swing.JPasswordField();
+        jLabelSenhaLoginSistema = new javax.swing.JLabel();
+        jPasswordFieldSenhaLoginSistema = new javax.swing.JPasswordField();
         jLabelConfirmarSenha = new javax.swing.JLabel();
         jPasswordFieldConfirmarSenha = new javax.swing.JPasswordField();
         jLabelEmail = new javax.swing.JLabel();
@@ -67,6 +67,19 @@ public class FormUsuario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableUsuario = new javax.swing.JTable();
         jComboBoxTipoUsuario = new javax.swing.JComboBox<>();
+        jCheckBoxEnviaEmail = new javax.swing.JCheckBox();
+        jPanelConfigEmail = new javax.swing.JPanel();
+        jLabelSenhaEmail = new javax.swing.JLabel();
+        jLabelSeverEmail = new javax.swing.JLabel();
+        jTextFieldSeverEmailUsu = new javax.swing.JTextField();
+        jLabelSMTP = new javax.swing.JLabel();
+        jTextFieldPortaSmtp = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jComboBoxCriptografia = new javax.swing.JComboBox<>();
+        jCheckBoxAutenticacaoUsu = new javax.swing.JCheckBox();
+        jButtonTesteEnvEmailUsu = new javax.swing.JButton();
+        jPasswordFieldSenhaEmail = new javax.swing.JPasswordField();
+        jCheckBoxUsuarioAtivo = new javax.swing.JCheckBox();
         jLabelCadUsuario = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -122,9 +135,9 @@ public class FormUsuario extends javax.swing.JFrame {
 
         jLabel1.setText("Tipo :");
 
-        jLabelSenha.setText("Senha");
+        jLabelSenhaLoginSistema.setText("Senha");
 
-        jPasswordFieldSenha.setEnabled(false);
+        jPasswordFieldSenhaLoginSistema.setEnabled(false);
 
         jLabelConfirmarSenha.setText("Confirmar Senha");
 
@@ -160,97 +173,226 @@ public class FormUsuario extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTableUsuario);
 
         jComboBoxTipoUsuario.setEditable(true);
-        jComboBoxTipoUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecionar", "Medico", "Secretaria", "Enfermeira", "Administrador" }));
+        jComboBoxTipoUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecionar", "Administrador", "Enfermeira", "Medico", "Secretaria" }));
         jComboBoxTipoUsuario.setEnabled(false);
+        jComboBoxTipoUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxTipoUsuarioActionPerformed(evt);
+            }
+        });
+
+        jCheckBoxEnviaEmail.setText("Envia Email");
+        jCheckBoxEnviaEmail.setEnabled(false);
+        jCheckBoxEnviaEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxEnviaEmailActionPerformed(evt);
+            }
+        });
+
+        jPanelConfigEmail.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuração", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("sansserif", 1, 14))); // NOI18N
+
+        jLabelSenhaEmail.setText("Senha :");
+
+        jLabelSeverEmail.setText("Servidor de saída de Email (SMTP) : ");
+
+        jTextFieldSeverEmailUsu.setEnabled(false);
+
+        jLabelSMTP.setText("Porta Servidor de sáida (Smtp) :");
+
+        jTextFieldPortaSmtp.setEnabled(false);
+
+        jLabel4.setText("Usar o seguinte tipo de conexão criptografada:");
+
+        jComboBoxCriptografia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nenhum", "SSL", "TSL", "Automático" }));
+        jComboBoxCriptografia.setEnabled(false);
+
+        jCheckBoxAutenticacaoUsu.setSelected(true);
+        jCheckBoxAutenticacaoUsu.setText("O servidor requer autenticação");
+        jCheckBoxAutenticacaoUsu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jCheckBoxAutenticacaoUsu.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jCheckBoxAutenticacaoUsu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCheckBoxAutenticacaoUsuMouseClicked(evt);
+            }
+        });
+
+        jButtonTesteEnvEmailUsu.setText("Testar ");
+        jButtonTesteEnvEmailUsu.setEnabled(false);
+        jButtonTesteEnvEmailUsu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTesteEnvEmailUsuActionPerformed(evt);
+            }
+        });
+
+        jPasswordFieldSenhaEmail.setEnabled(false);
+
+        javax.swing.GroupLayout jPanelConfigEmailLayout = new javax.swing.GroupLayout(jPanelConfigEmail);
+        jPanelConfigEmail.setLayout(jPanelConfigEmailLayout);
+        jPanelConfigEmailLayout.setHorizontalGroup(
+            jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelConfigEmailLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jCheckBoxAutenticacaoUsu)
+                    .addComponent(jButtonTesteEnvEmailUsu)
+                    .addGroup(jPanelConfigEmailLayout.createSequentialGroup()
+                        .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabelSeverEmail)
+                            .addComponent(jTextFieldSeverEmailUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelSenhaEmail)
+                            .addComponent(jPasswordFieldSenhaEmail)))
+                    .addGroup(jPanelConfigEmailLayout.createSequentialGroup()
+                        .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelConfigEmailLayout.createSequentialGroup()
+                                .addComponent(jLabelSMTP)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldPortaSmtp))
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBoxCriptografia, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanelConfigEmailLayout.setVerticalGroup(
+            jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelConfigEmailLayout.createSequentialGroup()
+                .addComponent(jButtonTesteEnvEmailUsu)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelSenhaEmail)
+                    .addComponent(jLabelSeverEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldSeverEmailUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPasswordFieldSenhaEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelSMTP)
+                    .addComponent(jTextFieldPortaSmtp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBoxAutenticacaoUsu)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jComboBoxCriptografia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        jCheckBoxUsuarioAtivo.setText("Ativo");
+        jCheckBoxUsuarioAtivo.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jButtonIncluir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonEditar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonSalvar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonCancelar)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabelUser)
-                    .addComponent(jLabelIdUser)
-                    .addComponent(jLabelSenha)
-                    .addComponent(jLabelEmail)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldIDusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabelConfirmarSenha)
-                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelUser)
+                                    .addComponent(jLabelIdUser))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldIDusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jTextFieldUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(41, 41, 41)
+                                        .addComponent(jLabelSenhaLoginSistema)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jPasswordFieldSenhaLoginSistema, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jComboBoxTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabelConfirmarSenha))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jLabelEmail)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jCheckBoxEnviaEmail)
+                                            .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(78, 78, 78)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jPasswordFieldConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jTextFieldUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 426, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jPanelConfigEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBoxTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jTextFieldPesquisaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonPesquisar))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextFieldPesquisaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonIncluir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonPesquisar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19))
+                        .addComponent(jButtonEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonSalvar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonCancelar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jCheckBoxUsuarioAtivo, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonIncluir)
-                    .addComponent(jButtonEditar)
-                    .addComponent(jButtonSalvar)
-                    .addComponent(jButtonExcluir)
-                    .addComponent(jButtonCancelar))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButtonIncluir)
+                        .addComponent(jButtonEditar)
+                        .addComponent(jButtonSalvar)
+                        .addComponent(jButtonExcluir)
+                        .addComponent(jButtonCancelar))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jCheckBoxUsuarioAtivo)))
                 .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelIdUser)
                     .addComponent(jTextFieldIDusuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelUser)
-                    .addComponent(jTextFieldUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                    .addComponent(jTextFieldUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPasswordFieldSenhaLoginSistema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelSenhaLoginSistema))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelSenha)
+                    .addComponent(jComboBoxTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelConfirmarSenha)
-                    .addComponent(jPasswordFieldConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                    .addComponent(jPasswordFieldConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelEmail)
                     .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jComboBoxTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldPesquisaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonPesquisar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(21, 21, 21)
+                .addComponent(jCheckBoxEnviaEmail)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelConfigEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldPesquisaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonPesquisar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
+
+        jPanelConfigEmail.setVisible(false);
 
         jLabelCadUsuario.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelCadUsuario.setText("Cadastro de Usuários");
@@ -260,14 +402,13 @@ public class FormUsuario extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(328, 328, 328)
-                        .addComponent(jLabelCadUsuario))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGap(328, 328, 328)
+                .addComponent(jLabelCadUsuario)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(82, 82, 82))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,90 +416,124 @@ public class FormUsuario extends javax.swing.JFrame {
                 .addGap(7, 7, 7)
                 .addComponent(jLabelCadUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        setBounds(0, 0, 918, 564);
+        setBounds(0, 0, 919, 580);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIncluirActionPerformed
         // TODO add your handling code here:
-
         flag = 1;
         //Habilitar campos
         habilitaCampos();
         limparCampos();
+        preencherIDUuarioIncluir();
         jButtonCancelar.setEnabled(true);
         jButtonSalvar.setEnabled(true);
         jButtonPesquisar.setEnabled(false);
-        jButtonIncluir.setEnabled(!true);
+        jButtonIncluir.setEnabled(false);
         jButtonExcluir.setEnabled(false);
         jButtonEditar.setEnabled(false);
-
-
+        if (jCheckBoxEnviaEmail.isSelected()) {
+            jButtonTesteEnvEmailUsu.setEnabled(true);
+        }
+        jCheckBoxEnviaEmail.setEnabled(true);
+        //  jPanelConfigEmail.setVisible(false);
     }//GEN-LAST:event_jButtonIncluirActionPerformed
 
+    /* Metodo para salvar:
+    * O metodo salvar possui dois controladores, são eles:
+    * flag: informa se o sistema mai editar 2 (update) ou salvar 1 (insert);
+    * flagemail: habilita as configurações de envio de email,(1 habilita e 0 desabilita)
+    * quando flagemail está igual a 1 o sistema ao salvar ou editar realiza um insert no banco 
+    * de dados com todas as infomações da tela do cadastro do usuário, com o flagemail = 0 o 
+    * mesmo irá inserirou ou editar apenas as informações básicas do cadastro de usuário.
+    * INFORMAÇÕES BÁSICAS DO CAD USUARIO:
+    * Id usuário - Usuário - Senha - e-mail - Tipo - Usuário Ativo
+    * INFORMAÇÕES COMPLETAS DO CAD USUARIO:
+    * Id usuário - Usuário - Senha - e-mail - Tipo - Usuário Ativo - Servidor de saida Smtp 
+    * - Senha Email - Porta servidor saida smtp - Autenticação do servidor - Criptografia da conexão - 
+     */
+    @SuppressWarnings("deprecation")
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
         // TODO add your handling code here:
         if (jTextFieldUsuario.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Preencha o NOME para continuar.");
+            JOptionPane.showMessageDialog(null, "Preencha o 'NOME' para continuar.");
             jTextFieldUsuario.requestFocus();
-        } else if (jPasswordFieldSenha.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Preencha o SENHA para continuar.");
-            jPasswordFieldSenha.requestFocus();
+        } else if (jPasswordFieldSenhaLoginSistema.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Preencha o 'SENHA' para continuar.");
+            jPasswordFieldSenhaLoginSistema.requestFocus();
         } else if (jPasswordFieldConfirmarSenha.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Preencha o campo CONFIRMAR SENHA para continuar.");
+            JOptionPane.showMessageDialog(null, "Preencha o campo 'CONFIRMAR' SENHA para continuar.");
             jPasswordFieldConfirmarSenha.requestFocus();
-        } else if (jPasswordFieldSenha.getText().equals(jPasswordFieldConfirmarSenha.getText())) {
-            if (flag == 1) {
-                //Ler campos da tela de cadastro do medico
+        } else if (jComboBoxTipoUsuario.getSelectedItem().equals("Selecione")) {
+            JOptionPane.showMessageDialog(rootPane, "Escolha um 'TIPO' para o usuário.");
+        } else if (jPasswordFieldSenhaLoginSistema.getText().equals(jPasswordFieldConfirmarSenha.getText())) {
+            if (flag == 1) {//inserindo
                 mod.setUNomeUser(jTextFieldUsuario.getText());
-                mod.setUSenhaUser(jPasswordFieldSenha.getText());
+                mod.setUSenhaUser(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldSenhaLoginSistema.getText()));
                 mod.setUEmaiUser(jTextFieldEmail.getText());
                 mod.setUTipo((String) jComboBoxTipoUsuario.getSelectedItem());
-                dao.Salvar(mod);
-                DesabilitaCampso();
-                //jTextFieldUsuario.setEnabled(false);
-                //jTextFieldEmail.setEnabled(false);
-                //jPasswordFieldSenha.setEnabled(false);
-                //jPasswordFieldConfirmarSenha.setEnabled(false);
-                //jTextFieldEmail.setEnabled(false);
-                //jComboBoxTipoUsuario.setEnabled(false);
-//
-                jButtonEditar.setEnabled(!true);
-                jButtonCancelar.setEnabled(false);
-                preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO FROM USUARIO ORDER BY NOME");
+                //configuração de envio de email
+                mod.setUEnviaEmail(jCheckBoxEnviaEmail.isSelected()); // true estava 
 
-            } else {
-                flag = 2;
+                if (jCheckBoxEnviaEmail.isSelected() == true) {
+                    mod.setUSMTP(Integer.parseInt(jTextFieldPortaSmtp.getText()));
+                    mod.setUSerSaiSMTP(jTextFieldSeverEmailUsu.getText());
+                    mod.setUSenhaEmail(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldSenhaEmail.getText()));
+                    dao.SalvarComEnvioEmail(mod);
+                } else {
+                    dao.Salvar(mod);
+                }
+
+            } else if (flag == 2) {// FLAG = DOIS EXECUTA O METODO PARA EDITAR UPDATE
+                //Ler campos da tela de cadastro do medico
                 mod.setUCodUser(Integer.parseInt(jTextFieldIDusuario.getText()));
                 mod.setUNomeUser(jTextFieldUsuario.getText());
-                mod.setUSenhaUser(jPasswordFieldSenha.getText());
+                mod.setUSenhaUser(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldSenhaLoginSistema.getText()));
                 mod.setUEmaiUser(jTextFieldEmail.getText());
                 mod.setUTipo((String) jComboBoxTipoUsuario.getSelectedItem());
-                dao.Editar(mod);
-                //limpar campos
-                limparCampos();
-                //Bloquear os campos
-                // jTextFieldPesquisaUsuario.setText("");
-                jComboBoxTipoUsuario.setSelectedItem("Selecione");
-                jTextFieldUsuario.setEnabled(false);
-                jTextFieldEmail.setEnabled(false);
-                jPasswordFieldSenha.setEnabled(false);
-                jPasswordFieldConfirmarSenha.setEnabled(false);
-                jTextFieldEmail.setEnabled(false);
-                jComboBoxTipoUsuario.setEnabled(false);
- 
-                jButtonEditar.setEnabled(!true);
-                jButtonCancelar.setEnabled(false);
-                preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO FROM USUARIO ORDER BY NOME");
-            }
+                //configuração de envio de email
+                mod.setUEnviaEmail(jCheckBoxEnviaEmail.isSelected()); // true estava 
+                if (jCheckBoxEnviaEmail.isSelected() == true) {
+                    mod.setUSMTP(Integer.parseInt(jTextFieldPortaSmtp.getText()));
+                    mod.setUSerSaiSMTP(jTextFieldSeverEmailUsu.getText());
+                    mod.setUSenhaEmail(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldSenhaEmail.getText()));
 
+                    dao.EditarComEnvioEmail(mod);
+                } else {
+                    dao.Editar(mod);
+                }
+                DesabilitaCampos();
+            }
         } else {
-            JOptionPane.showMessageDialog(rootPane, "As senhas não correspondem!\n"
-                    + "Verifique as senhas informadas.");
+            JOptionPane.showMessageDialog(rootPane, "Erro ao salvar:!\n"
+                    + "Verifique os dados informados no cadastro de usuário.");
         }
+
+        jComboBoxTipoUsuario.setEditable(false);
+        jTextFieldUsuario.setEnabled(false);
+        jTextFieldEmail.setEnabled(false);
+        jPasswordFieldSenhaLoginSistema.setEnabled(false);
+        jCheckBoxEnviaEmail.setEnabled(false);
+
+        jPasswordFieldConfirmarSenha.setEnabled(false);
+        jTextFieldEmail.setEnabled(false);
+        jComboBoxTipoUsuario.setEnabled(false);
+        jButtonExcluir.setEnabled(true);
+        jButtonEditar.setEnabled(true);
+        jButtonCancelar.setEnabled(true);
+        jButtonIncluir.setEnabled(false);
+        jButtonSalvar.setEnabled(false);
+        if (flagEmail == 1) {
+            jTextFieldPortaSmtp.setEnabled(false);
+            jTextFieldSeverEmailUsu.setEnabled(false);
+            jPasswordFieldSenhaEmail.setEnabled(false);
+        }
+
+        preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO FROM USUARIO ORDER BY NOME");
 
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
@@ -377,7 +552,7 @@ public class FormUsuario extends javax.swing.JFrame {
         jTextFieldIDusuario.setText(String.valueOf(model.getUCodUser()));
         jTextFieldUsuario.setText(model.getUNomeUser());
         jTextFieldEmail.setText(model.getUEmaiUser());
-        jPasswordFieldSenha.setText(model.getUSenhaUser());
+        jPasswordFieldSenhaLoginSistema.setText(model.getUSenhaUser());
         jPasswordFieldConfirmarSenha.setText(model.getUSenhaUser());
         jComboBoxTipoUsuario.setSelectedItem(model.getUTipo());
 
@@ -387,14 +562,18 @@ public class FormUsuario extends javax.swing.JFrame {
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
         // TODO add your handling code here:
-        int flag = 2;
-
+        flag = 2;
         habilitaCampos();
-        //  jButtonNovo.setEnabled(false);
         jButtonSalvar.setEnabled(true);
         jButtonCancelar.setEnabled(true);
-        //  jButtonEditar.setEnabled(!true);
-        jButtonExcluir.setEnabled(true);
+        jButtonEditar.setEnabled(false);
+        jButtonIncluir.setEnabled(false);
+        jButtonExcluir.setEnabled(false);
+        if (jCheckBoxEnviaEmail.isSelected()) {
+            jButtonTesteEnvEmailUsu.setEnabled(true);
+        } else {
+            jButtonTesteEnvEmailUsu.setEnabled(false);
+        }
         jTextFieldPesquisaUsuario.setText("");
 
     }//GEN-LAST:event_jButtonEditarActionPerformed
@@ -406,62 +585,87 @@ public class FormUsuario extends javax.swing.JFrame {
         if (resposta == JOptionPane.YES_OPTION) {
             mod.setUCodUser(Integer.parseInt(jTextFieldIDusuario.getText()));
             dao.Excluir(mod);
-            // preencherTabelaMedico("SELECT IDMEDICO,NOME,ESPEC, CRM FROM MEDICO "
-            //       + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOME");
 
             jButtonSalvar.setEnabled(false);
             jButtonCancelar.setEnabled(false);
             jButtonIncluir.setEnabled(true);
             jButtonExcluir.setEnabled(false);
             jButtonEditar.setEnabled(false);
+            jCheckBoxEnviaEmail.setEnabled(false);
 
             limparCampos();
-//        jButtonEditar.setEnabled(false);
-//            jButtonCancelar.setEnabled(false);
-//            jButtonNovo.setEnabled(true);
-//            jButtonExcluir.setEnabled(false);
             preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO FROM USUARIO ORDER BY NOME");
         }
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
+    public void preencherIDUuarioIncluir() {
+        try {
+            conBd.conectarBd();
+            String sql = "SELECT MAX(IDUSUARIO+1) AS PROXID FROM USUARIO";
+            conBd.executaSql(sql);
+
+            conBd.rs.first();
+
+            jTextFieldIDusuario.setText(String.valueOf(conBd.rs.getInt("PROXID")));
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID do usuário! " + ex.getMessage());
+        }
+        conBd.DesconectarBd();
+    }
+
     private void jTableUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableUsuarioMouseClicked
         // TODO add your handling code here:
         String NomeUsuario = "" + jTableUsuario.getValueAt(jTableUsuario.getSelectedRow(), 1);
+        jCheckBoxEnviaEmail.setEnabled(false);
+        limparCampos();
+        DesabilitaCampos();
         conBd.conectarBd();
         try {
-            String sql = "SELECT * FROM USUARIO WHERE NOME = '" + NomeUsuario + "'";//String 
+            String sql = "SELECT * FROM USUARIO WHERE NOME = '" + NomeUsuario + "'";
             conBd.executaSql(sql);
             conBd.rs.first();
 
             jTextFieldIDusuario.setText(String.valueOf(conBd.rs.getInt("IDUSUARIO")));
             jTextFieldUsuario.setText(conBd.rs.getString("NOME"));
             jTextFieldEmail.setText(conBd.rs.getString("EMAIL"));
-            jPasswordFieldSenha.setText(conBd.rs.getString("SENHA"));
-            jPasswordFieldConfirmarSenha.setText(conBd.rs.getString("SENHA"));
+            jPasswordFieldSenhaLoginSistema.setText(DaoCripSenhaUser.decodificaBase64Decoder(conBd.rs.getString("SENHA")));
+            jPasswordFieldConfirmarSenha.setText(DaoCripSenhaUser.decodificaBase64Decoder(conBd.rs.getString("SENHA")));
             jComboBoxTipoUsuario.setSelectedItem(conBd.rs.getString("TIPO"));
             jTextFieldPesquisaUsuario.setText("");
+            jCheckBoxEnviaEmail.setSelected(conBd.rs.getBoolean("UENVIAEMAIL"));
 
-            jButtonIncluir.setEnabled(false);
-            jButtonSalvar.setEnabled(false);
-            jButtonExcluir.setEnabled(true);
-            jButtonCancelar.setEnabled(true);
-            jButtonEditar.setEnabled(true);
+            if (conBd.rs.getBoolean("UENVIAEMAIL") == true) {
+
+                jPanelConfigEmail.setVisible(true);
+                jTextFieldSeverEmailUsu.setText(conBd.rs.getString("USERSAISMTP"));
+                jPasswordFieldSenhaEmail.setText(DaoCripSenhaUser.decodificaBase64Decoder(conBd.rs.getString("USENHAEMAIL")));
+                jTextFieldPortaSmtp.setText(String.valueOf(conBd.rs.getInt("UPORTASMTP")));
+                jTextFieldSeverEmailUsu.setEnabled(false);
+                jPasswordFieldSenhaEmail.setEnabled(false);
+                jTextFieldPortaSmtp.setEnabled(false);
+                jButtonTesteEnvEmailUsu.setEnabled(true);
+            } else {
+                jPanelConfigEmail.setVisible(false);
+            }
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao selecionar os dados do usuario!\n" + ex.getMessage());
         }
+        conBd.DesconectarBd();
+
         jButtonIncluir.setEnabled(false);
-        jButtonEditar.setEnabled(true);
+        jButtonSalvar.setEnabled(false);
         jButtonExcluir.setEnabled(true);
         jButtonCancelar.setEnabled(true);
-        conBd.DesconectarBd();
+        jButtonEditar.setEnabled(true);
 
     }//GEN-LAST:event_jTableUsuarioMouseClicked
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         // TODO add your handling code here:
 
-        DesabilitaCampso();
+        DesabilitaCampos();
         limparCampos();
 
         jButtonCancelar.setEnabled(false);
@@ -470,38 +674,118 @@ public class FormUsuario extends javax.swing.JFrame {
         jButtonIncluir.setEnabled(true);
         jButtonExcluir.setEnabled(false);
         jButtonEditar.setEnabled(false);
+        jCheckBoxEnviaEmail.setEnabled(false);
+        jPanelConfigEmail.setVisible(false);
+        jCheckBoxEnviaEmail.setSelected(false);
 
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
+    private void jCheckBoxEnviaEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxEnviaEmailActionPerformed
+        // TODO add your handling code here:
+        if (jCheckBoxEnviaEmail.isSelected()) {
+            jPanelConfigEmail.setVisible(true);
+            jButtonTesteEnvEmailUsu.setEnabled(true);
+            habilitaCampos();
+            flagEmail = 1;
+
+        } else {
+            jPanelConfigEmail.setVisible(false);
+            flagEmail = 0;
+            //jPasswordFieldSenhaEmail.setText(null);
+            jTextFieldPortaSmtp.setText("");
+            jTextFieldSeverEmailUsu.setText("");
+            jPasswordFieldSenhaEmail.setText("");
+            jComboBoxCriptografia.setEnabled(true);
+            jCheckBoxAutenticacaoUsu.setSelected(true);
+
+        }
+
+    }//GEN-LAST:event_jCheckBoxEnviaEmailActionPerformed
+
+    private void jCheckBoxAutenticacaoUsuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxAutenticacaoUsuMouseClicked
+        // TODO add your handling code here:
+        if (jCheckBoxAutenticacaoUsu.isSelected()) {
+            jPasswordFieldSenhaEmail.setEnabled(true);
+        } else {
+            jPasswordFieldSenhaEmail.setEnabled(false);
+        }
+
+    }//GEN-LAST:event_jCheckBoxAutenticacaoUsuMouseClicked
+
+    private void jButtonTesteEnvEmailUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTesteEnvEmailUsuActionPerformed
+        //TODO add your handling code here:
+        /**
+         * Realizar a implementação par testar as parametrizações do envio de
+         * email no cadastro no usuário.
+         */
+
+        FormTesteEnvioEmail telaEnvio = new FormTesteEnvioEmail(jTextFieldEmail.getText(),jTextFieldSeverEmailUsu.getText(),
+                Integer.parseInt(jTextFieldPortaSmtp.getText()), jPasswordFieldSenhaEmail.getText());
+
+        telaEnvio.setVisible(true);
+        telaEnvio.setResizable(false);
+
+    }//GEN-LAST:event_jButtonTesteEnvEmailUsuActionPerformed
+
+    private void jComboBoxTipoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxTipoUsuarioActionPerformed
+
     public void limparCampos() {
 
+        jTextFieldIDusuario.setText("");
         jTextFieldUsuario.setText("");
         jTextFieldEmail.setText("");
-        jPasswordFieldSenha.setText("");
+        jPasswordFieldSenhaLoginSistema.setText("");
         jPasswordFieldConfirmarSenha.setText("");
         jTextFieldEmail.setText("");
         jComboBoxTipoUsuario.setSelectedItem("Selecione");
+
+        if (jCheckBoxEnviaEmail.isSelected() == true) {
+            jPasswordFieldSenhaEmail.setText("");
+            jTextFieldPortaSmtp.setText("");
+            jTextFieldSeverEmailUsu.setText("");
+            jComboBoxCriptografia.setEnabled(true);
+            jCheckBoxAutenticacaoUsu.setSelected(true);
+        }
     }
 
     public void habilitaCampos() {
 
         jTextFieldUsuario.setEnabled(true);
         jTextFieldEmail.setEnabled(true);
-        jPasswordFieldSenha.setEnabled(true);
+        jPasswordFieldSenhaLoginSistema.setEnabled(true);
         jPasswordFieldConfirmarSenha.setEnabled(true);
         jTextFieldEmail.setEnabled(true);
         jComboBoxTipoUsuario.setEnabled(true);
-
+        jCheckBoxUsuarioAtivo.setEnabled(true);
+        jCheckBoxEnviaEmail.setEnabled(true);
+        if (jCheckBoxEnviaEmail.isSelected()) {
+            jPasswordFieldSenhaEmail.setEnabled(true);
+            jTextFieldPortaSmtp.setEnabled(true);
+            jTextFieldSeverEmailUsu.setEnabled(true);
+            jComboBoxCriptografia.setEnabled(true);
+            jCheckBoxAutenticacaoUsu.setEnabled(true);
+        }
     }
 
-    public void DesabilitaCampso() {
+    public void DesabilitaCampos() {
 
         jTextFieldUsuario.setEnabled(false);
         jTextFieldEmail.setEnabled(false);
-        jPasswordFieldSenha.setEnabled(false);
+        jPasswordFieldSenhaLoginSistema.setEnabled(false);
         jPasswordFieldConfirmarSenha.setEnabled(false);
         jTextFieldEmail.setEnabled(false);
         jComboBoxTipoUsuario.setEnabled(false);
+        jCheckBoxUsuarioAtivo.setEnabled(false);
+        if (jCheckBoxEnviaEmail.isSelected()) {
+            jPasswordFieldSenhaEmail.setEnabled(false);
+            jTextFieldPortaSmtp.setEnabled(false);
+            jTextFieldSeverEmailUsu.setEnabled(false);
+            jComboBoxCriptografia.setEnabled(false);
+            jCheckBoxAutenticacaoUsu.setEnabled(false);
+
+        }
 
     }
 
@@ -526,7 +810,6 @@ public class FormUsuario extends javax.swing.JFrame {
         }
         ModeloTabela modelo = new ModeloTabela(dados, colunas);
         jTableUsuario.setModel(modelo);
-        
 
         jTableUsuario.getColumnModel().getColumn(0).setPreferredWidth(36);//Tamanho da tabela
         jTableUsuario.getColumnModel().getColumn(0).setResizable(false);
@@ -558,17 +841,28 @@ public class FormUsuario extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormUsuario.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormUsuario.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormUsuario.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormUsuario.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
@@ -586,22 +880,35 @@ public class FormUsuario extends javax.swing.JFrame {
     protected javax.swing.JButton jButtonIncluir;
     private javax.swing.JButton jButtonPesquisar;
     private javax.swing.JButton jButtonSalvar;
+    private javax.swing.JButton jButtonTesteEnvEmailUsu;
+    private javax.swing.JCheckBox jCheckBoxAutenticacaoUsu;
+    private javax.swing.JCheckBox jCheckBoxEnviaEmail;
+    private javax.swing.JCheckBox jCheckBoxUsuarioAtivo;
+    private javax.swing.JComboBox<String> jComboBoxCriptografia;
     private javax.swing.JComboBox<String> jComboBoxTipoUsuario;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelCadUsuario;
     private javax.swing.JLabel jLabelConfirmarSenha;
     private javax.swing.JLabel jLabelEmail;
     private javax.swing.JLabel jLabelIdUser;
-    private javax.swing.JLabel jLabelSenha;
+    private javax.swing.JLabel jLabelSMTP;
+    private javax.swing.JLabel jLabelSenhaEmail;
+    private javax.swing.JLabel jLabelSenhaLoginSistema;
+    private javax.swing.JLabel jLabelSeverEmail;
     private javax.swing.JLabel jLabelUser;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanelConfigEmail;
     protected javax.swing.JPasswordField jPasswordFieldConfirmarSenha;
-    protected javax.swing.JPasswordField jPasswordFieldSenha;
+    private javax.swing.JPasswordField jPasswordFieldSenhaEmail;
+    protected javax.swing.JPasswordField jPasswordFieldSenhaLoginSistema;
     private javax.swing.JScrollPane jScrollPane1;
     protected javax.swing.JTable jTableUsuario;
     protected javax.swing.JTextField jTextFieldEmail;
     public javax.swing.JTextField jTextFieldIDusuario;
     private javax.swing.JTextField jTextFieldPesquisaUsuario;
+    private javax.swing.JTextField jTextFieldPortaSmtp;
+    private javax.swing.JTextField jTextFieldSeverEmailUsu;
     protected javax.swing.JTextField jTextFieldUsuario;
     // End of variables declaration//GEN-END:variables
 }

@@ -23,6 +23,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     FormAgendamento telaAgenda = new FormAgendamento();
     FormAgenda telaagen = new FormAgenda();
     FormAgendaMedico telaAgenMedico = new FormAgendaMedico();
+    TelaLogin telaLogin = new TelaLogin();
             
 
     /**
@@ -177,9 +178,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jLabel1.setText("Usuário:");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 650, 50, 20);
+        jLabel1.setBounds(10, 650, 50, 20);
         getContentPane().add(jLabelUsuario);
-        jLabelUsuario.setBounds(50, 650, 190, 20);
+        jLabelUsuario.setBounds(60, 650, 190, 20);
 
         jLabelFundoPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/fundo_telaprincipal.jpg"))); // NOI18N
         getContentPane().add(jLabelFundoPrincipal);
@@ -279,6 +280,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
 
         jMenuItem2.setText("Logout");
+        jMenuItem2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuItem2MouseClicked(evt);
+            }
+        });
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -287,6 +293,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenuSair.add(jMenuItem2);
 
         jMenuISairb.setText("Sair");
+        jMenuISairb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuISairbMouseClicked(evt);
+            }
+        });
         jMenuISairb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuISairbActionPerformed(evt);
@@ -391,7 +402,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnCadMedicoActionPerformed
 
     private void jMenuSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSairMouseClicked
-        System.exit(0);
+       
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuSairMouseClicked
 
@@ -482,8 +493,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
-        TelaPrincipal principal = new TelaPrincipal();
-        principal.setVisible(false);
+//        TelaPrincipal principal = new TelaPrincipal();
+//        principal.setVisible(false);
+        dispose();
         
         TelaLogin login = new TelaLogin();
         login.setVisible(true);
@@ -524,6 +536,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         telaAgenMedico.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuISairbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuISairbMouseClicked
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_jMenuISairbMouseClicked
+
+    private void jMenuItem2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem2MouseClicked
+        // TODO add your handling code here:
+  
+    }//GEN-LAST:event_jMenuItem2MouseClicked
 
     /**
      * @param args the command line arguments
