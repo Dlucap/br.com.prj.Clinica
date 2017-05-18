@@ -16,6 +16,15 @@ public class BeansAgendamento {
     private Integer AEspecialidade;
     private Integer AIdPaciente;
     private Integer AIdMedico;
+    private String ARetorno;
+
+    public String getARetorno() {
+        return ARetorno;
+    }
+
+    public void setARetorno(String ARetorno) {
+        this.ARetorno = ARetorno;
+    }
 
           
     public void setAIdPaciente(Integer AIdPaciente) {
