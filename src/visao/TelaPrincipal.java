@@ -24,14 +24,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
     FormAgenda telaagen = new FormAgenda();
     FormAgendaMedico telaAgenMedico = new FormAgendaMedico();
     TelaLogin telaLogin = new TelaLogin();
-            
 
     /**
      * Creates new form TelaPrincipal
+     *
+     * @param usuario usuário de login do sistema
      */
-    public TelaPrincipal(String usuario) { //
+    public TelaPrincipal(String usuario) {
         initComponents();
-        jLabelUsuario.setText("Adm");
+        jLabelUsuario.setText(usuario);
+        // DadosUsuario dadosuser = new DadosUsuario(usuario);
         conecta.conectarBd();
 
     }
@@ -89,8 +91,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
+        TelaBemVindo.setClosable(true);
+        TelaBemVindo.setResizable(true);
         TelaBemVindo.setTitle("Seja Bem-Vindo");
         TelaBemVindo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        TelaBemVindo.setInheritsPopupMenu(true);
         TelaBemVindo.setVisible(true);
         TelaBemVindo.getContentPane().setLayout(null);
 
@@ -172,7 +177,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
         getContentPane().add(TelaBemVindo);
         TelaBemVindo.setBounds(0, 260, 1240, 390);
 
-        jCalendar2.setBackground(new java.awt.Color(202, 211, 229));
+        jCalendar2.setBackground(new java.awt.Color(248, 248, 255));
+        jCalendar2.setDecorationBackgroundColor(new java.awt.Color(248, 248, 255));
         getContentPane().add(jCalendar2);
         jCalendar2.setBounds(830, 10, 400, 230);
 
@@ -402,7 +408,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnCadMedicoActionPerformed
 
     private void jMenuSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSairMouseClicked
-       
+
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuSairMouseClicked
 
@@ -439,7 +445,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void BtnPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPacienteActionPerformed
         // TODO add your handling code here:
-             try {
+        try {
             conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
             conecta.rs.first();
             if (conecta.rs.getString("TIPO").equalsIgnoreCase("ADMINISTRADOR")) {
@@ -496,19 +502,19 @@ public class TelaPrincipal extends javax.swing.JFrame {
 //        TelaPrincipal principal = new TelaPrincipal();
 //        principal.setVisible(false);
         dispose();
-        
+
         TelaLogin login = new TelaLogin();
         login.setVisible(true);
-        
+
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void BtnAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgendaActionPerformed
         // TODO add your handling code here:
-       try {
+        try {
             conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
             conecta.rs.first();
             if (conecta.rs.getString("TIPO").equalsIgnoreCase("ADMINISTRADOR")) {
-                if (telaAgenda== null) {
+                if (telaAgenda == null) {
                     telaAgenda = new FormAgendamento();
                     telaAgenda.setVisible(true);
                     telaAgenda.setResizable(false);
@@ -529,7 +535,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
         telaagen.setVisible(true);
-        
+
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -544,7 +550,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem2MouseClicked
         // TODO add your handling code here:
-  
+
     }//GEN-LAST:event_jMenuItem2MouseClicked
 
     /**
