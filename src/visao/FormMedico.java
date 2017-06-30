@@ -18,7 +18,6 @@ import javax.swing.ListSelectionModel;
 import ModeloBeans.BeansMedico;
 import ModeloBeans.ModeloTabela;
 
-
 /**
  *
  * @author Daniel Lucas
@@ -588,7 +587,7 @@ public class FormMedico extends javax.swing.JFrame {
         jTextFieldCompl.setText(model.getMcompl());
         jComboBoxEspecializacao.setSelectedItem(model.getMSespecialidade());
         preencherTabelaMedico("select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE "
-                + "where medico.nome like '%" + mod.getMPesquisa() + "%'");
+                + "where medico.nomemedico like '%" + mod.getMPesquisa() + "%'");
 
         /*
         jButtonEditar.setEnabled(false);
@@ -608,7 +607,7 @@ public class FormMedico extends javax.swing.JFrame {
         String Nome = "" + jTableMedicos.getValueAt(jTableMedicos.getSelectedRow(), 1);
         conBd.conectarBd();
         try {
-            String sql = "select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE where nome = '" + Nome + "'";
+            String sql = "select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE where nomemedico = '" + Nome + "'";
             conBd.executaSql(sql);
             conBd.rs.first();
             LimparCampos();
@@ -743,7 +742,21 @@ public class FormMedico extends javax.swing.JFrame {
             //LimparCampos();
         }
     }//GEN-LAST:event_jButtonSalvarActionPerformed
+    public void preencherIdMedicoIncluir() {
+        try {
+            conBd.conectarBd();
+            String sql = "SELECT MAX(IDMEDICO+1) AS PROXID FROM MEDICO";
+            conBd.executaSql(sql);
 
+            conBd.rs.first();
+
+            jTextFieldIDMedico.setText(String.valueOf(conBd.rs.getInt("PROXID")));
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID do usuário! " + ex.getMessage());
+        }
+        conBd.DesconectarBd();
+    }
     private void jButtonIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIncluirActionPerformed
 
         flag = 1;
@@ -751,7 +764,7 @@ public class FormMedico extends javax.swing.JFrame {
         LimparCampos();
         //metodo para preencher Jcombox Especialidade
         this.preencherEspecialidade();
-
+        preencherIdMedicoIncluir();
         HabilitarCampos();
         jButtonBuscarCep.setEnabled(true);
         jTextFieldPesquisa.setEnabled(true);
@@ -910,7 +923,6 @@ public class FormMedico extends javax.swing.JFrame {
         }
         ModeloTabela modelo = new ModeloTabela(dados, colunas);
         jTableMedicos.setModel(modelo);
-     
 
         jTableMedicos.getColumnModel().getColumn(0).setPreferredWidth(38);//Tamanho da tabela
         jTableMedicos.getColumnModel().getColumn(0).setResizable(false);
@@ -1009,7 +1021,5 @@ public class FormMedico extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldPesquisa;
     private javax.swing.JTextField jTextFieldUF;
     // End of variables declaration//GEN-END:variables
-
-    
 
 }

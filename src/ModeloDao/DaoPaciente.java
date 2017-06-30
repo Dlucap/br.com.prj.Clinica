@@ -61,11 +61,11 @@ public class DaoPaciente {
         conex.conectarBd();
 
         String sql = "UPDATE PACIENTE SET NOMEPACIENTE = ? ,CPF = ? ,RG = ? ,DATANASCIMENTO = ?, TELRESIDENCIAL = ?, TELCELULAR = ?,LOGRADOURO = ?,"
-                + "NUMERO = ?,BAIRRO = ?,CIDADE = ?,ESTADO = ?,CEP = ?,COMPL = ?,EMAIL = ?,CENOME = ?,CETELRESIDENCIAL = ?, CETELCELULAR = ?"
-                + " WHERE IDPACIENTE = ?";
+                + "NUMERO = ?,BAIRRO = ?,CIDADE = ?,ESTADO = ?,CEP = ?,COMPL = ?,EMAIL = ?,CENOME = ?,CETELRESIDENCIAL = ?, CETELCELULAR = ? "
+                + "WHERE IDPACIENTE = ?";
 
         try {
-            //PreparedStatement pst = conex.con.prepareStatement(sql);    
+           // PreparedStatement pst = conex.con.prepareStatement(sql);    
             pstP = conex.con.prepareStatement(sql);
 
             pstP.setString(1, pac.getPNome());
@@ -86,7 +86,6 @@ public class DaoPaciente {
             pstP.setString(16, pac.getPEmerTelResidencial());
             pstP.setString(17,pac.getPEmerTelCelular());
             pstP.setInt(18, pac.getPCod());
-
             pstP.execute();
 
             JOptionPane.showMessageDialog(null, "Dados atualizados com sucesso.");
@@ -135,9 +134,9 @@ public class DaoPaciente {
         String sql = "DELETE FROM PACIENTE WHERE IDPACIENTE = ? ";
 
         try {
-            PreparedStatement pst = conex.con.prepareStatement(sql);
-            pst.setInt(1, pac.getPCod());
-            pst.execute();
+            pstP = conex.con.prepareStatement(sql);
+            pstP.setInt(1, pac.getPCod());
+            pstP.execute();
             JOptionPane.showMessageDialog(null, "Dados  excluidos com sucesso!");
         } catch (SQLException ex) {
 

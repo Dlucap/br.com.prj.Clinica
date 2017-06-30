@@ -18,9 +18,6 @@ import javax.swing.ListSelectionModel;
 import ModeloBeans.BeansEnfermeiro;
 import ModeloBeans.ModeloTabela;
 
-
-
-
 /**
  *
  * @author Daniel Lucas
@@ -30,8 +27,7 @@ public class FormEnfermeiro extends javax.swing.JFrame {
     ConexaoBd conBd = new ConexaoBd();
     BeansEnfermeiro enf = new BeansEnfermeiro();
     DaoEnfermeiro controlM = new DaoEnfermeiro();
-   
- 
+
     ResultSet rs = null;
     PreparedStatement pstM;
     // private final String SQLTABLE = "SELECT IDENFEMEIRO,NOMENOMEENFERMEIRO, COREN FROM ENFERMEIRO ORDER BY NOMENOMEENFERMEIRO";
@@ -652,7 +648,7 @@ public class FormEnfermeiro extends javax.swing.JFrame {
 
         } else {
             flag = 2;
-            
+
             enf.setECod((Integer.parseInt(jTextFieldIDEnfermeiro.getText())));
             enf.setENome(jTextFieldNomeEnfermeiro.getText());
             enf.setECpf(jFormattedTextFieldCpf.getText());
@@ -676,13 +672,27 @@ public class FormEnfermeiro extends javax.swing.JFrame {
             DesabilitarCampos();
         }
     }//GEN-LAST:event_jButtonSalvarActionPerformed
+    public void preencherIdEnfermeiroIncluir() {
+        try {
+            conBd.conectarBd();
+            String sql = "SELECT MAX(IDENFERMEIRO+1) AS PROXID FROM ENFERMEIRO";
+            conBd.executaSql(sql);
 
+            conBd.rs.first();
+
+            jTextFieldIDEnfermeiro.setText(String.valueOf(conBd.rs.getInt("PROXID")));
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID do usuário! " + ex.getMessage());
+        }
+        conBd.DesconectarBd();
+    }
     private void jButtonIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIncluirActionPerformed
 
         flag = 1;
         //Limpar os campos
         LimparCampos();
-
+        preencherIdEnfermeiroIncluir();
         HabilitarCampos();
         jButtonBuscarCep.setEnabled(true);
         jTextFieldPesquisa.setEnabled(true);
@@ -794,7 +804,6 @@ public class FormEnfermeiro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Busque por outro ENFERMEIRO para preencher tabela.");
         }
 
-        
         ModeloTabela modelo = new ModeloTabela(dados, colunas);
         jTableEnfermeiro.setModel(modelo);
 

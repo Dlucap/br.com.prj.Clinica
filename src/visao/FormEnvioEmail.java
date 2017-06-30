@@ -5,8 +5,6 @@
  *http://www.vipan.com/htdocs/javamail.html
  *
  */
-
-
 package visao;
 
 import org.apache.commons.mail.EmailException;
@@ -19,13 +17,13 @@ import org.apache.commons.mail.SimpleEmail;
 public class FormEnvioEmail extends javax.swing.JFrame {
 
     org.apache.commons.mail.Email email;
-    
+
     /**
      * Creates new form FormEnvioEmail
      */
     public FormEnvioEmail() {
-       initComponents();
-          email = new SimpleEmail();
+        initComponents();
+        email = new SimpleEmail();
         //email = new MultiPartEmail();
         configuracao();
     }
@@ -385,15 +383,15 @@ public class FormEnvioEmail extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(218, 218, 218)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap(31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(39, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(239, 239, 239)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -404,42 +402,48 @@ public class FormEnvioEmail extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
-        setSize(new java.awt.Dimension(845, 621));
+        setSize(new java.awt.Dimension(845, 625));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonTesteEnvEmailUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTesteEnvEmailUsuActionPerformed
         // TODO add your handling code here:
-                 configuracao();
+        configuracao();
 
-      enviarEmail(jTextFieldEmailUsu.getText(),"Teste de envio de email!","Mensagem automática\n Teste de envio automático, gentileza não responder.",jTextFieldEmailUsu.getText());
+        enviarEmail(jTextFieldEmailUsu.getText(), "Teste de envio de email!", "Mensagem automática\n Teste de envio automático, gentileza não responder.", jTextFieldEmailUsu.getText());
     }//GEN-LAST:event_jButtonTesteEnvEmailUsuActionPerformed
-/**
- *       email.setHostName("smtp.gmail.com");//servidor de email
- *       email.setSmtpPort(465); //porta de conexão pode deixar comentado
- *       email.setAuthenticator(new DefaultAuthenticator("username", "password")); //usuário e senha 
- *       email.setAuthentication("climedjaadm@gmail.com", "clinicamedicajava12345");
- * 
- * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE 
- * WHERE especialidade.IDESPECIALIDADE = (select idespecialidade from especialidade where IDESPECIALIDADE= 4)
- * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE 
- * WHERE especialidade.IDESPECIALIDADE = (select idespecialidade from especialidade where IDESPECIALIDADE= 3)
- * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE 
- * WHERE especialidade.IDESPECIALIDADE = (select idespecialidade from especialidade where IDESPECIALIDADE= 5)
- *
- */
-      private void configuracao() {
- 
+    /**
+     * email.setHostName("smtp.gmail.com");//servidor de email
+     * email.setSmtpPort(465); //porta de conexão pode deixar comentado
+     * email.setAuthenticator(new DefaultAuthenticator("username", "password"));
+     * //usuário e senha email.setAuthentication("climedjaadm@gmail.com",
+     * "clinicamedicajava12345");
+     *
+     * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON
+     * MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE WHERE
+     * especialidade.IDESPECIALIDADE = (select idespecialidade from
+     * especialidade where IDESPECIALIDADE= 4) SELECT NOME FROM MEDICO INNER
+     * JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE =
+     * ESPECIALIDADE.IDESPECIALIDADE WHERE especialidade.IDESPECIALIDADE =
+     * (select idespecialidade from especialidade where IDESPECIALIDADE= 3)
+     * SELECT NOME FROM MEDICO INNER JOIN ESPECIALIDADE ON
+     * MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE WHERE
+     * especialidade.IDESPECIALIDADE = (select idespecialidade from
+     * especialidade where IDESPECIALIDADE= 5)
+     *
+     */
+    private void configuracao() {
+
         email.setHostName(jTextFieldSeverEmailUsu.getText());//servidor de email
         email.setSmtpPort(465); //porta de conexão pode deixar comentado
         email.setSSL(true);
         email.setTLS(true);
         email.setDebug(true);
         //email.setAuthenticator(new DefaultAuthenticator("username", "password")); //usuário e senha 
-        email.setAuthentication(jTextFieldEmailUsu.getText(),jPasswordFieldSenhaUsu.getText()); //usuário e senha 
+        email.setAuthentication(jTextFieldEmailUsu.getText(), jPasswordFieldSenhaUsu.getText()); //usuário e senha 
         email.setSSLOnConnect(true);// ssl conexão segura
 
     }
@@ -457,7 +461,7 @@ public class FormEnvioEmail extends javax.swing.JFrame {
 
         }
     }
-    
+
     /**
      * @param args the command line arguments
      */

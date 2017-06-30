@@ -25,6 +25,8 @@ public class FormUsuario extends javax.swing.JFrame {
     ConexaoBd conBd = new ConexaoBd();
     BeansUsuario mod = new BeansUsuario();
     DaoUsuario dao = new DaoUsuario();
+    FormTesteEnvioEmail emailTela = new FormTesteEnvioEmail();
+    
 
     public int flag, flagEmail;
 
@@ -33,7 +35,7 @@ public class FormUsuario extends javax.swing.JFrame {
      */
     public FormUsuario() {
         initComponents();
-        preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO FROM USUARIO ORDER BY NOME");
+        preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO, ATIVO FROM USUARIO ORDER BY NOME");
     }
 
     /**
@@ -175,11 +177,6 @@ public class FormUsuario extends javax.swing.JFrame {
         jComboBoxTipoUsuario.setEditable(true);
         jComboBoxTipoUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecionar", "Administrador", "Enfermeira", "Medico", "Secretaria" }));
         jComboBoxTipoUsuario.setEnabled(false);
-        jComboBoxTipoUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxTipoUsuarioActionPerformed(evt);
-            }
-        });
 
         jCheckBoxEnviaEmail.setText("Envia Email");
         jCheckBoxEnviaEmail.setEnabled(false);
@@ -197,7 +194,7 @@ public class FormUsuario extends javax.swing.JFrame {
 
         jTextFieldSeverEmailUsu.setEnabled(false);
 
-        jLabelSMTP.setText("Porta Servidor de sáida (Smtp) :");
+        jLabelSMTP.setText("Servidor de sáida (Smtp) :");
 
         jTextFieldPortaSmtp.setEnabled(false);
 
@@ -233,25 +230,25 @@ public class FormUsuario extends javax.swing.JFrame {
             .addGroup(jPanelConfigEmailLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanelConfigEmailLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBoxCriptografia, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jCheckBoxAutenticacaoUsu)
                     .addComponent(jButtonTesteEnvEmailUsu)
-                    .addGroup(jPanelConfigEmailLayout.createSequentialGroup()
-                        .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabelSeverEmail)
-                            .addComponent(jTextFieldSeverEmailUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(12, 12, 12)
-                        .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelSenhaEmail)
-                            .addComponent(jPasswordFieldSenhaEmail)))
                     .addGroup(jPanelConfigEmailLayout.createSequentialGroup()
                         .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelConfigEmailLayout.createSequentialGroup()
                                 .addComponent(jLabelSMTP)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTextFieldPortaSmtp))
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBoxCriptografia, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabelSeverEmail)
+                                .addComponent(jTextFieldSeverEmailUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanelConfigEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelSenhaEmail)
+                            .addComponent(jPasswordFieldSenhaEmail))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelConfigEmailLayout.setVerticalGroup(
@@ -436,6 +433,7 @@ public class FormUsuario extends javax.swing.JFrame {
         jButtonIncluir.setEnabled(false);
         jButtonExcluir.setEnabled(false);
         jButtonEditar.setEnabled(false);
+
         if (jCheckBoxEnviaEmail.isSelected()) {
             jButtonTesteEnvEmailUsu.setEnabled(true);
         }
@@ -476,32 +474,34 @@ public class FormUsuario extends javax.swing.JFrame {
                 mod.setUSenhaUser(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldSenhaLoginSistema.getText()));
                 mod.setUEmaiUser(jTextFieldEmail.getText());
                 mod.setUTipo((String) jComboBoxTipoUsuario.getSelectedItem());
+                mod.setUAtivo(jCheckBoxUsuarioAtivo.isSelected());
                 //configuração de envio de email
-                mod.setUEnviaEmail(jCheckBoxEnviaEmail.isSelected()); // true estava 
-
+                mod.setUEnviaEmail(jCheckBoxEnviaEmail.isSelected());
                 if (jCheckBoxEnviaEmail.isSelected() == true) {
                     mod.setUSMTP(Integer.parseInt(jTextFieldPortaSmtp.getText()));
                     mod.setUSerSaiSMTP(jTextFieldSeverEmailUsu.getText());
                     mod.setUSenhaEmail(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldSenhaEmail.getText()));
-                    dao.SalvarComEnvioEmail(mod);
-                } else {
-                    dao.Salvar(mod);
                 }
-
-            } else if (flag == 2) {// FLAG = DOIS EXECUTA O METODO PARA EDITAR UPDATE
+                if (flagEmail == 0) {
+                    dao.Salvar(mod);
+                } else {
+                    dao.SalvarComEnvioEmail(mod);
+                }
+                // FLAG = DOIS EXECUTA O METODO PARA EDITAR UPDATE
+            } else if (flag == 2) {
                 //Ler campos da tela de cadastro do medico
                 mod.setUCodUser(Integer.parseInt(jTextFieldIDusuario.getText()));
                 mod.setUNomeUser(jTextFieldUsuario.getText());
                 mod.setUSenhaUser(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldSenhaLoginSistema.getText()));
                 mod.setUEmaiUser(jTextFieldEmail.getText());
                 mod.setUTipo((String) jComboBoxTipoUsuario.getSelectedItem());
+                mod.setUAtivo(jCheckBoxUsuarioAtivo.isSelected());
                 //configuração de envio de email
                 mod.setUEnviaEmail(jCheckBoxEnviaEmail.isSelected()); // true estava 
-                if (jCheckBoxEnviaEmail.isSelected() == true) {
+                if (flagEmail == 1) {
                     mod.setUSMTP(Integer.parseInt(jTextFieldPortaSmtp.getText()));
                     mod.setUSerSaiSMTP(jTextFieldSeverEmailUsu.getText());
                     mod.setUSenhaEmail(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldSenhaEmail.getText()));
-
                     dao.EditarComEnvioEmail(mod);
                 } else {
                     dao.Editar(mod);
@@ -533,7 +533,7 @@ public class FormUsuario extends javax.swing.JFrame {
             jPasswordFieldSenhaEmail.setEnabled(false);
         }
 
-        preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO FROM USUARIO ORDER BY NOME");
+        preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO, ATIVO FROM USUARIO ORDER BY NOME");
 
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
@@ -557,7 +557,7 @@ public class FormUsuario extends javax.swing.JFrame {
         jComboBoxTipoUsuario.setSelectedItem(model.getUTipo());
 
         //daoTabelas.preencherTabelaUsuario("select * from usuario order by nome");
-        preencherTabelaUsuario("select IDUSUARIO, NOME,EMAIL, TIPO from usuario  WHERE nome like '%" + mod.getUPesquisa() + "%'");
+        preencherTabelaUsuario("select IDUSUARIO, NOME,EMAIL, TIPO, ATIVO from usuario  WHERE nome like '%" + mod.getUPesquisa() + "%'");
     }//GEN-LAST:event_jButtonPesquisarActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
@@ -569,6 +569,7 @@ public class FormUsuario extends javax.swing.JFrame {
         jButtonEditar.setEnabled(false);
         jButtonIncluir.setEnabled(false);
         jButtonExcluir.setEnabled(false);
+
         if (jCheckBoxEnviaEmail.isSelected()) {
             jButtonTesteEnvEmailUsu.setEnabled(true);
         } else {
@@ -594,14 +595,15 @@ public class FormUsuario extends javax.swing.JFrame {
             jCheckBoxEnviaEmail.setEnabled(false);
 
             limparCampos();
-            preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO FROM USUARIO ORDER BY NOME");
+            preencherTabelaUsuario("SELECT IDUSUARIO, NOME, EMAIL, TIPO, ATIVO FROM USUARIO ORDER BY NOME");
         }
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
     public void preencherIDUuarioIncluir() {
         try {
-            conBd.conectarBd();
+
             String sql = "SELECT MAX(IDUSUARIO+1) AS PROXID FROM USUARIO";
+            conBd.conectarBd();
             conBd.executaSql(sql);
 
             conBd.rs.first();
@@ -634,6 +636,7 @@ public class FormUsuario extends javax.swing.JFrame {
             jComboBoxTipoUsuario.setSelectedItem(conBd.rs.getString("TIPO"));
             jTextFieldPesquisaUsuario.setText("");
             jCheckBoxEnviaEmail.setSelected(conBd.rs.getBoolean("UENVIAEMAIL"));
+            jCheckBoxUsuarioAtivo.setSelected(conBd.rs.getBoolean("ATIVO"));
 
             if (conBd.rs.getBoolean("UENVIAEMAIL") == true) {
 
@@ -713,23 +716,17 @@ public class FormUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxAutenticacaoUsuMouseClicked
 
     private void jButtonTesteEnvEmailUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTesteEnvEmailUsuActionPerformed
-        //TODO add your handling code here:
-        /**
-         * Realizar a implementação par testar as parametrizações do envio de
-         * email no cadastro no usuário.
-         */
+        // TODO add your handling code here:
+        DadosUsuario dados = new DadosUsuario();
+      
 
-        FormTesteEnvioEmail telaEnvio = new FormTesteEnvioEmail(jTextFieldEmail.getText(),jTextFieldSeverEmailUsu.getText(),
-                Integer.parseInt(jTextFieldPortaSmtp.getText()), jPasswordFieldSenhaEmail.getText());
-
-        telaEnvio.setVisible(true);
-        telaEnvio.setResizable(false);
+        //emailTela.FormTesteEnvioEmail(dados.email,dados.hostname,dados.porta,dados.senhaEmail);
+        emailTela.FormTesteEnvioEmail();
+        System.out.println(dados.email+dados.hostname+dados.porta+dados.senhaEmail+" FormUsuario");
+        emailTela.setVisible(true);
+        emailTela.setResizable(false);
 
     }//GEN-LAST:event_jButtonTesteEnvEmailUsuActionPerformed
-
-    private void jComboBoxTipoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoUsuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBoxTipoUsuarioActionPerformed
 
     public void limparCampos() {
 
@@ -740,6 +737,7 @@ public class FormUsuario extends javax.swing.JFrame {
         jPasswordFieldConfirmarSenha.setText("");
         jTextFieldEmail.setText("");
         jComboBoxTipoUsuario.setSelectedItem("Selecione");
+        jCheckBoxUsuarioAtivo.setSelected(false);
 
         if (jCheckBoxEnviaEmail.isSelected() == true) {
             jPasswordFieldSenhaEmail.setText("");
@@ -760,6 +758,7 @@ public class FormUsuario extends javax.swing.JFrame {
         jComboBoxTipoUsuario.setEnabled(true);
         jCheckBoxUsuarioAtivo.setEnabled(true);
         jCheckBoxEnviaEmail.setEnabled(true);
+
         if (jCheckBoxEnviaEmail.isSelected()) {
             jPasswordFieldSenhaEmail.setEnabled(true);
             jTextFieldPortaSmtp.setEnabled(true);
@@ -778,6 +777,7 @@ public class FormUsuario extends javax.swing.JFrame {
         jTextFieldEmail.setEnabled(false);
         jComboBoxTipoUsuario.setEnabled(false);
         jCheckBoxUsuarioAtivo.setEnabled(false);
+
         if (jCheckBoxEnviaEmail.isSelected()) {
             jPasswordFieldSenhaEmail.setEnabled(false);
             jTextFieldPortaSmtp.setEnabled(false);
@@ -793,7 +793,8 @@ public class FormUsuario extends javax.swing.JFrame {
     public final void preencherTabelaUsuario(String sql) {
 
         ArrayList dados = new ArrayList();
-        String[] colunas = new String[]{"ID", "NOME", "TIPO"};
+        String[] colunas = new String[]{"ID", "NOME", "TIPO", "ATIVO"};
+        String ativ;
         conBd.conectarBd();
 
         conBd.executaSql(sql);
@@ -801,7 +802,14 @@ public class FormUsuario extends javax.swing.JFrame {
         try {
             conBd.rs.first();
             do {
-                dados.add(new Object[]{conBd.rs.getInt("IDUSUARIO"), conBd.rs.getString("NOME"), conBd.rs.getString("TIPO")});
+                if (conBd.rs.getBoolean("ATIVO") == true) {
+                    ativ = "Sim";
+
+                } else {
+                    ativ = "Não";
+                }
+                dados.add(new Object[]{conBd.rs.getInt("IDUSUARIO"), conBd.rs.getString("NOME"),
+                    conBd.rs.getString("TIPO"), ativ});
 
             } while (conBd.rs.next());
 
@@ -814,11 +822,14 @@ public class FormUsuario extends javax.swing.JFrame {
         jTableUsuario.getColumnModel().getColumn(0).setPreferredWidth(36);//Tamanho da tabela
         jTableUsuario.getColumnModel().getColumn(0).setResizable(false);
 
-        jTableUsuario.getColumnModel().getColumn(1).setPreferredWidth(220);
+        jTableUsuario.getColumnModel().getColumn(1).setPreferredWidth(150);
         jTableUsuario.getColumnModel().getColumn(1).setResizable(false);
 
         jTableUsuario.getColumnModel().getColumn(2).setPreferredWidth(120);
         jTableUsuario.getColumnModel().getColumn(2).setResizable(false);
+
+        jTableUsuario.getColumnModel().getColumn(3).setPreferredWidth(55);
+        jTableUsuario.getColumnModel().getColumn(3).setResizable(true);
 
         jTableUsuario.getTableHeader().setReorderingAllowed(false);//reorganizar o cabeçalho
         jTableUsuario.setAutoResizeMode(jTableUsuario.AUTO_RESIZE_OFF); //NÃO VAI PODER REDIMENCIONAR A TABELA
@@ -860,6 +871,10 @@ public class FormUsuario extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(FormUsuario.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

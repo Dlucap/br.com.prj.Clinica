@@ -12,6 +12,7 @@ public class BeansUsuario {
     private String USenhaEmail;
     private Boolean UEnviaEmail;
     private Integer USMTP;
+    private Boolean UAtivo;
 
     /**
      * @return the UCodUser
@@ -152,6 +153,20 @@ public class BeansUsuario {
      */
     public void setUSMTP(Integer USMTP) {
         this.USMTP = USMTP;
+    }
+
+    /**
+     * @return the UAtivo
+     */
+    public Boolean getUAtivo() {
+        return UAtivo;
+    }
+
+    /**
+     * @param UAtivo the UAtivo to set
+     */
+    public void setUAtivo(Boolean UAtivo) {
+        this.UAtivo = UAtivo;
     }
 
 }

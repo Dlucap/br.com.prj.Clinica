@@ -363,9 +363,6 @@
             </Property>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxTipoUsuarioActionPerformed"/>
-          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
@@ -399,19 +396,13 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jComboBoxCriptografia" min="-2" pref="102" max="-2" attributes="0"/>
+                          </Group>
                           <Component id="jCheckBoxAutenticacaoUsu" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonTesteEnvEmailUsu" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jLabelSeverEmail" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldSeverEmailUsu" alignment="0" min="-2" pref="214" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabelSenhaEmail" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jPasswordFieldSenhaEmail" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
@@ -419,10 +410,16 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jTextFieldPortaSmtp" max="32767" attributes="0"/>
                                   </Group>
-                                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="jLabelSeverEmail" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextFieldSeverEmailUsu" alignment="0" min="-2" pref="214" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jComboBoxCriptografia" min="-2" pref="102" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabelSenhaEmail" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jPasswordFieldSenhaEmail" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
@@ -478,7 +475,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabelSMTP">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Porta Servidor de s&#xe1;ida (Smtp) :"/>
+                <Property name="text" type="java.lang.String" value="Servidor de s&#xe1;ida (Smtp) :"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextFieldPortaSmtp">

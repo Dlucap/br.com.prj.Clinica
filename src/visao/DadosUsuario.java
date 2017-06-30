@@ -19,8 +19,8 @@ public class DadosUsuario {
 
     String usuario;
     String nome;
-     String senhaEmail;
-     String email;
+    String senhaEmail;
+    String email;
     Integer porta;
     String hostname;
 
@@ -28,19 +28,18 @@ public class DadosUsuario {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
 //   
-   public void  DadosUsuario(){
-       
-   }
-  
+    public void DadosUsuario() {
+
+    }
 
     public void DadosUsuario(String nome, String senhaEmail, String email, Integer porta, String hostname) {
-    
+
         this.nome = nome;
         this.senhaEmail = senhaEmail;
-        this.email = email;
+        this.email = "CU";
         this.porta = porta;
         this.hostname = hostname;
-        System.out.println(nome + senhaEmail + email + porta + hostname+" Teste de envio de dados - Msg DadosUsuários");
+        System.out.println(nome + senhaEmail + email + porta + hostname + " Teste de envio de dados - Msg DadosUsuários");
 
     }
 

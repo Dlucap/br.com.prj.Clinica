@@ -25,7 +25,9 @@ import ModeloDao.DaoCripSenhaUser;
 public class TelaLogin extends javax.swing.JFrame {
 
     ConexaoBd con = new ConexaoBd();
-    
+    String nome, senhaEmail, email, smtp, usuario;
+    Integer porta;
+
     /**
      * Creates new form visão
      */
@@ -114,8 +116,36 @@ public class TelaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAcessarActionPerformed
-      
-      
+        try {
+            con.executaSql("SELECT NOME,USENHAEMAIL,EMAIL,UPORTASMTP,USERSAISMTP,SENHA FROM USUARIO WHERE NOME ='" + jTextFieldUsuário.getText() + "'");
+            con.rs.first();
+
+            if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(jPasswordField1.getText()))) {
+                TelaPrincipal tela = new TelaPrincipal(con.rs.getString("NOME"));
+
+                DadosUsuario dados = new DadosUsuario();
+               dados.DadosUsuario(con.rs.getString("NOME"),
+                        con.rs.getString("USENHAEMAIL"),
+                        con.rs.getString("EMAIL"),
+                        con.rs.getInt("UPORTASMTP"),
+                        con.rs.getString("USERSAISMTP"));
+                System.out.println(con.rs.getString("NOME")
+                        + con.rs.getString("USENHAEMAIL")
+                        + con.rs.getString("EMAIL")
+                        + con.rs.getInt("UPORTASMTP")
+                        + con.rs.getString("USERSAISMTP") + " Tela Login");
+                tela.setVisible(true);
+                dispose();
+
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!\nErro:" + ex);
+        }
+
+        con.DesconectarBd();
+
     }//GEN-LAST:event_BtnAcessarActionPerformed
 
     private void BtnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSairActionPerformed
@@ -129,23 +159,24 @@ public class TelaLogin extends javax.swing.JFrame {
 
     private void BtnAcessarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnAcessarKeyPressed
         // TODO add your handling code here:
-                  if(evt.getKeyCode() == evt.VK_ENTER){
-         try {
-            con.executaSql("SELECT * FROM USUARIO WHERE NOME ='"+jTextFieldUsuário.getText()+"'");
-            con.rs.first();
-            
-            if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(jPasswordField1.getText()))) {
-                TelaPrincipal tela = new TelaPrincipal(jTextFieldUsuário.getText());
-                tela.setVisible(true);
-                dispose();
-            }else{
-                JOptionPane.showMessageDialog(rootPane,"Usuário/Senha inválido ou não cadastrado no sistema!");
+        if (evt.getKeyCode() == evt.VK_ENTER) {
+            try {
+                con.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jTextFieldUsuário.getText() + "'");
+                con.rs.first();
+
+                if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(jPasswordField1.getText()))) {
+                    TelaPrincipal tela = new TelaPrincipal(jTextFieldUsuário.getText());
+
+                    tela.setVisible(true);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!");
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!\nErro:" + ex);
             }
-        } catch (SQLException ex) {
-             JOptionPane.showMessageDialog(rootPane,"Usuário/Senha inválido ou não cadastrado no sistema!\nErro:"+ex);
+            con.DesconectarBd();
         }
-        con.DesconectarBd();
-    }
     }//GEN-LAST:event_BtnAcessarKeyPressed
 
     /**

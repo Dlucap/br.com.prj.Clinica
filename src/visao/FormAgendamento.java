@@ -11,6 +11,7 @@ package visao;
 import ModeloBeans.BeansAgendamento;
 import ModeloBeans.ModeloTabela;
 import ModeloConection.ConexaoBd;
+import ModeloConection.Email;
 import ModeloDao.DaoAgendamento;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,6 +32,7 @@ public class FormAgendamento extends javax.swing.JFrame {
     ConexaoBd conBd = new ConexaoBd();
     BeansAgendamento agenda = new BeansAgendamento();
     DaoAgendamento daoagenda = new DaoAgendamento();
+    Email mail = new Email();
 
     ResultSet rs = null;
     PreparedStatement pstA;
@@ -39,10 +41,9 @@ public class FormAgendamento extends javax.swing.JFrame {
 //   // String status;
     String codigo;
     String resposta;
-       Locale local = new Locale("br", "PT");
-        SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy", local);
-      
-    
+    Locale local = new Locale("br", "PT");
+    SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy", local);
+
     public String teste;
 
     /**
@@ -147,7 +148,7 @@ public class FormAgendamento extends javax.swing.JFrame {
         jComboBoxEspecMedica = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jComboBoxRetorno = new javax.swing.JComboBox<>();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jDateChooserAgendamento = new com.toedter.calendar.JDateChooser();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -161,7 +162,8 @@ public class FormAgendamento extends javax.swing.JFrame {
 
         jLabel4.setText("Data");
 
-        jLabel5.setText("Motivo:");
+        jLabel5.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        jLabel5.setText("Informações Adicionais");
 
         jLabel6.setText("Turno:");
 
@@ -253,9 +255,9 @@ public class FormAgendamento extends javax.swing.JFrame {
         jComboBoxRetorno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Não", "Sim" }));
         jComboBoxRetorno.setEnabled(false);
 
-        jDateChooser1.addMouseListener(new java.awt.event.MouseAdapter() {
+        jDateChooserAgendamento.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jDateChooser1MouseClicked(evt);
+                jDateChooserAgendamentoMouseClicked(evt);
             }
         });
 
@@ -290,27 +292,28 @@ public class FormAgendamento extends javax.swing.JFrame {
                         .addGap(152, 152, Short.MAX_VALUE)
                         .addComponent(jButtonEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(424, 424, 424)
-                        .addComponent(jLabel5)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 913, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jComboBoxEspecMedica, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jComboBoxMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel4)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jDateChooserAgendamento, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(388, 388, 388)
+                                .addComponent(jLabel5)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 913, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBoxEspecMedica, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBoxMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -342,12 +345,12 @@ public class FormAgendamento extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel7)
                         .addComponent(jComboBoxEspecMedica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jDateChooserAgendamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -412,15 +415,13 @@ public class FormAgendamento extends javax.swing.JFrame {
     private void jButtonConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConcluirActionPerformed
         // TODO add your handling code here:
         DaoAgendamento dao = new DaoAgendamento();
-//        Locale local = new Locale("br", "PT");
-//        SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy", local);
-        dt.format(jDateChooser1.getDate());
-     
+        dt.format(jDateChooserAgendamento.getDate());
+
         agenda.setNomePaciente(jTextFieldPaciente.getText());
         agenda.setNomeMedico((String) jComboBoxMedico.getSelectedItem());
         agenda.setTurno((String) jComboBoxTurno.getSelectedItem());
         agenda.setMotivo(jTextAreaMotivo.getText());
-        agenda.setData(jDateChooser1.getDate());
+        agenda.setData(jDateChooserAgendamento.getDate());
 
         agenda.setAEspecialidade(jComboBoxEspecMedica.getSelectedIndex());
         agenda.setStatus("Aberto");
@@ -428,11 +429,11 @@ public class FormAgendamento extends javax.swing.JFrame {
 
         if (agenda.getARetorno().equalsIgnoreCase("Sim")) {
 
-            agenda.setARetorno((String) "1");
+            agenda.setARetorno("1");
 
         } else if (agenda.getARetorno().equalsIgnoreCase("Não")) {
 
-            agenda.setARetorno((String) "0");
+            agenda.setARetorno("0");
         }
 
         dao.Salvar(agenda);
@@ -447,6 +448,10 @@ public class FormAgendamento extends javax.swing.JFrame {
         LimparCampos();
         DesabilitarCampos();
         DesabilitarBtn();
+        jComboBoxTurno.setSelectedItem("selecione");
+        preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,"
+                + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
+    
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jComboBoxTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTurnoActionPerformed
@@ -457,7 +462,7 @@ public class FormAgendamento extends javax.swing.JFrame {
     private void jComboBoxEspecMedicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxEspecMedicaActionPerformed
         // TODO add your handling code here:
         resposta = (String) jComboBoxEspecMedica.getSelectedItem();
-      
+
         if (resposta == "Selecione") {
             jComboBoxMedico.removeAllItems();
             jComboBoxMedico.addItem("Selecione");
@@ -477,23 +482,22 @@ public class FormAgendamento extends javax.swing.JFrame {
         // preencherMedicoEspec();
     }//GEN-LAST:event_jComboBoxEspecMedicaMouseClicked
 
-    private void jDateChooser1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jDateChooser1MouseClicked
+    private void jDateChooserAgendamentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jDateChooserAgendamentoMouseClicked
         // TODO add your handling code here:
 
         //	System.out.println(texto.toLowerCase().contains(procurarPor.toLowerCase()));
-    }//GEN-LAST:event_jDateChooser1MouseClicked
+    }//GEN-LAST:event_jDateChooserAgendamentoMouseClicked
 
     private void jButtonEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEmailActionPerformed
         // TODO add your handling code here:
-       String email = jTextFieldPaciente.getText()+",\n\n \tInformamos que a sua consulta foi agendada com o Doutor(a)"
-                +jComboBoxMedico.getSelectedItem()+" ("+jComboBoxEspecMedica.getSelectedItem()+") para o dia "+dt.format(jDateChooser1.getDate())+", proximo ao dia \n"
-                + "da consulta será encaminhado um email de confirmação, solicitamos para que o mesmo seja respondido e caso exista uma desistência,\n"
-                + "gentleza nos informe com um prazo de 24h.\n\n"
+        String email = jTextFieldPaciente.getText() + ",\n\n \tInformamos que a sua consulta foi agendada com o Doutor(a)"
+                + jComboBoxMedico.getSelectedItem() + " (" + jComboBoxEspecMedica.getSelectedItem() + ") para o dia " + dt.format(jDateChooserAgendamento.getDate()) + ", proximo ao dia \n"
+                + "da consulta será encaminhado um email de confirmação, solicitamos para que o mesmo seja respondido e caso exista uma desistência, gentileza nos informe com um prazo de 24h.\n\n"
                 + "Certo de sua compreensão. \n\n"
                 + "Att,\n"
                 + "Clinica Medica";
-        System.out.println("Consulta:"+email);
-        
+        System.out.println("Consulta:" + email);
+
     }//GEN-LAST:event_jButtonEmailActionPerformed
 
     public void preencherTabelaAgendamento(String sql) {
@@ -555,7 +559,7 @@ public class FormAgendamento extends javax.swing.JFrame {
         jComboBoxTurno.setSelectedItem("Selecione");
         jTextFieldPaciente.setText(" ");
         //jComboBoxRetorno.setEnabled(false);
-        jDateChooser1.setDate(null);
+        jDateChooserAgendamento.setDate(null);
     }
 
     public void DesabilitarBtn() {
@@ -576,7 +580,7 @@ public class FormAgendamento extends javax.swing.JFrame {
         jComboBoxTurno.setEnabled(true);
         jComboBoxEspecMedica.setEnabled(true);
         jComboBoxRetorno.setEnabled(true);
-        jDateChooser1.setEnabled(true);
+        jDateChooserAgendamento.setEnabled(true);
 
     }
 
@@ -585,7 +589,7 @@ public class FormAgendamento extends javax.swing.JFrame {
         jTextAreaMotivo.setEnabled(false);
         jComboBoxMedico.setEnabled(false);
         jComboBoxTurno.setEnabled(false);
-        jDateChooser1.setEnabled(false);
+        jDateChooserAgendamento.setEnabled(false);
         jComboBoxEspecMedica.setEnabled(false);
         jComboBoxRetorno.setEnabled(false);
         jButtonConcluir.setEnabled(false);
@@ -640,7 +644,7 @@ public class FormAgendamento extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBoxMedico;
     private javax.swing.JComboBox<String> jComboBoxRetorno;
     private javax.swing.JComboBox<String> jComboBoxTurno;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser jDateChooserAgendamento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

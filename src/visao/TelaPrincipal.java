@@ -154,7 +154,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jLabelPainelfundo11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/internalframe.png"))); // NOI18N
         jPanelTelaSejaBemVindo.add(jLabelPainelfundo11);
-        jLabelPainelfundo11.setBounds(0, 0, 1220, 300);
+        jLabelPainelfundo11.setBounds(0, 0, 1230, 310);
 
         TelaBemVindo.getContentPane().add(jPanelTelaSejaBemVindo);
         jPanelTelaSejaBemVindo.setBounds(0, 50, 1220, 320);

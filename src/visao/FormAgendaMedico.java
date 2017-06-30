@@ -31,24 +31,24 @@ public class FormAgendaMedico extends javax.swing.JFrame {
     String dtHoje;
     String status;
     String codigo;
-    
-   public void DataHoje(){
-      
-       Calendar data = Calendar.getInstance();
+
+    public void DataHoje() {
+
+        Calendar data = Calendar.getInstance();
         Date d = data.getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.format(d);
-       
+
         dtHoje = dateFormat.format(d);
-       status = "Em Atendimento";
-   }
-    
+        status = "Em Atendimento";
+    }
+
     public FormAgendaMedico() {
         initComponents();
 
         preencherMedico();
         DataHoje();
-        
+
 //        preencherTabelaAgenda(
 //      "SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE, " +
 //        "AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC FROM AGENDAMENTO " +
@@ -66,9 +66,6 @@ public class FormAgendaMedico extends javax.swing.JFrame {
 
             jComboBoxAgendaMedico.addItem("Selecione");
             String sql = "SELECT NOMEMEDICO FROM MEDICO ";
-       
-            jComboBoxAgendaMedico.addItem("Selecione");
-            //String sql = "SELECT NOMEMEDICO FROM MEDICO";
 
             pstAM = conBd.con.prepareStatement(sql);
             rs = pstAM.executeQuery();
@@ -86,7 +83,7 @@ public class FormAgendaMedico extends javax.swing.JFrame {
 
         conBd.DesconectarBd();
     }
-    
+
     public final void preencherTabelaAgenda(String sql) {
 
         ArrayList dados = new ArrayList();
@@ -251,13 +248,13 @@ public class FormAgendaMedico extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(405, 405, 405)
-                .addComponent(jLabelAgendaMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(405, 405, 405)
+                .addComponent(jLabelAgendaMedico)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,22 +294,22 @@ public class FormAgendaMedico extends javax.swing.JFrame {
     }//GEN-LAST:event_jTableAgendaMedicaMouseClicked
 
     private void jButtonIniAtenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniAtenderActionPerformed
-       
+
     }//GEN-LAST:event_jButtonIniAtenderActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-      int cod =  daoagenda.BuscarCodMedico((String)jComboBoxAgendaMedico.getSelectedItem());
-      codigo = String.valueOf(cod);
-     
-      preencherTabelaAgenda(
-      "SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE, "+
-        "AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC FROM AGENDAMENTO "+
-            "INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE "+
-                "INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO "+
-                    "INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE "+
-                          "WHERE AGENDAMENTO.IDMEDICO  = '"+codigo+"'AND AGENDAMENTO.DTAGENDAMENTO  = '"+dtHoje+"' AND "+
-                            "AGENDAMENTO.STATUSCONSULTA = '"+status+"' ORDER BY PACIENTE.NOMEPACIENTE");
+        int cod = daoagenda.BuscarCodMedico((String)jComboBoxAgendaMedico.getSelectedItem());
+        codigo = String.valueOf(cod);
+
+        preencherTabelaAgenda(
+                "SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE, "
+                + "AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC FROM AGENDAMENTO "
+                + "INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE "
+                + "INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO "
+                + "INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE "
+                + "WHERE AGENDAMENTO.IDMEDICO  = '" + codigo + "'AND AGENDAMENTO.DTAGENDAMENTO  = '" + dtHoje + "' AND "
+                + "AGENDAMENTO.STATUSCONSULTA = '" + status + "' ORDER BY PACIENTE.NOMEPACIENTE");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
