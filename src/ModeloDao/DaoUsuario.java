@@ -16,7 +16,7 @@ public class DaoUsuario {
 
     public void Salvar(BeansUsuario mod) {
         conex.conectarBd();
-
+       
         String sql1 = "INSERT INTO USUARIO (NOME,SENHA,EMAIL,TIPO,UENVIAEMAIL,ATIVO) VALUES (?,?,?,?,?,?)";
 
         try {

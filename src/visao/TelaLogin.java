@@ -1,15 +1,18 @@
 //https://www.youtube.com/watch?v=OfsCClnnY6U&list=PLyQ9CRKOzOWqVZ5nDspGFVgybs3zRGPUL video 13
 /**
  *    ANDAMENTO DO PROJETO
- *
+ *https://cachina.wordpress.com/2008/03/17/muito-material-sobre-java-mega-post/
  * ferramentas / tela de bemvindos ok
  * tela Cadastro medio ok
  * Acesso ao banco de dados ok
  * Cadastro enfermeira
- * cadastro paciete
+ * cadastro paciente
  * Pesquisa
- * Relatório]
- *
+ * Relatório
+ * links para baixar icones
+ *https://www.iconfinder.com/search/?q=medico
+ * http://www.iconspedia.com/pack/medico-icons-3755/30.html
+ * 
  *
  */
 package visao;
@@ -51,7 +54,9 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabelUsuário = new javax.swing.JLabel();
         jTextFieldUsuário = new javax.swing.JTextField();
         jPasswordField1 = new javax.swing.JPasswordField();
-        jLabelLogo = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jButtonBancoDados = new javax.swing.JButton();
+        choiceBancoDados = new java.awt.Choice();
         JLTelaLogin = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -70,28 +75,30 @@ public class TelaLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(BtnAcessar);
-        BtnAcessar.setBounds(300, 220, 73, 28);
+        BtnAcessar.setBounds(300, 270, 80, 30);
 
         BtnSair.setText("Sair");
+        BtnSair.setMaximumSize(new java.awt.Dimension(73, 28));
+        BtnSair.setMinimumSize(new java.awt.Dimension(73, 28));
         BtnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnSairActionPerformed(evt);
             }
         });
         getContentPane().add(BtnSair);
-        BtnSair.setBounds(390, 220, 73, 28);
+        BtnSair.setBounds(390, 270, 80, 30);
 
         jLabelSenha.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
         jLabelSenha.setText("Senha");
         getContentPane().add(jLabelSenha);
-        jLabelSenha.setBounds(270, 160, 50, 30);
+        jLabelSenha.setBounds(20, 110, 50, 30);
 
         jLabelUsuário.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
         jLabelUsuário.setText("Usuário");
         getContentPane().add(jLabelUsuário);
-        jLabelUsuário.setBounds(270, 140, 54, 21);
+        jLabelUsuário.setBounds(20, 60, 54, 21);
         getContentPane().add(jTextFieldUsuário);
-        jTextFieldUsuário.setBounds(330, 130, 140, 28);
+        jTextFieldUsuário.setBounds(20, 80, 140, 28);
 
         jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,41 +106,49 @@ public class TelaLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jPasswordField1);
-        jPasswordField1.setBounds(330, 160, 140, 28);
+        jPasswordField1.setBounds(20, 140, 140, 28);
 
-        jLabelLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/linguagens-de-programacao_21083330.jpg"))); // NOI18N
-        jLabelLogo.setText("jLabel1");
-        getContentPane().add(jLabelLogo);
-        jLabelLogo.setBounds(-10, 130, 280, 180);
+        jLabel1.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
+        jLabel1.setText("Banco de Dados");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(20, 180, 120, 21);
+
+        jButtonBancoDados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/Bd.png"))); // NOI18N
+        jButtonBancoDados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBancoDadosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButtonBancoDados);
+        jButtonBancoDados.setBounds(20, 260, 30, 30);
+        getContentPane().add(choiceBancoDados);
+        choiceBancoDados.setBounds(20, 210, 140, 40);
 
         JLTelaLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/fundotelaLogin.png"))); // NOI18N
         JLTelaLogin.setName(""); // NOI18N
         getContentPane().add(JLTelaLogin);
-        JLTelaLogin.setBounds(0, 0, 500, 300);
+        JLTelaLogin.setBounds(0, 0, 500, 320);
 
-        setSize(new java.awt.Dimension(514, 335));
+        setSize(new java.awt.Dimension(514, 355));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAcessarActionPerformed
         try {
-            con.executaSql("SELECT NOME,USENHAEMAIL,EMAIL,UPORTASMTP,USERSAISMTP,SENHA FROM USUARIO WHERE NOME ='" + jTextFieldUsuário.getText() + "'");
+            con.executaSql("SELECT NOME,USENHAEMAIL,EMAIL,UPORTASMTP,USERSAISMTP,"
+                    + "SENHA FROM USUARIO WHERE NOME ='" + jTextFieldUsuário.getText() + "'");
             con.rs.first();
 
             if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(jPasswordField1.getText()))) {
                 TelaPrincipal tela = new TelaPrincipal(con.rs.getString("NOME"));
-
-                DadosUsuario dados = new DadosUsuario();
-               dados.DadosUsuario(con.rs.getString("NOME"),
-                        con.rs.getString("USENHAEMAIL"),
-                        con.rs.getString("EMAIL"),
-                        con.rs.getInt("UPORTASMTP"),
-                        con.rs.getString("USERSAISMTP"));
-                System.out.println(con.rs.getString("NOME")
-                        + con.rs.getString("USENHAEMAIL")
-                        + con.rs.getString("EMAIL")
-                        + con.rs.getInt("UPORTASMTP")
-                        + con.rs.getString("USERSAISMTP") + " Tela Login");
+/**
+ * Busca os dados de login do usuário
+ */
+//                DaoDadosUsuario dados = new DaoDadosUsuario(con.rs.getString("NOME"),
+//                                                         con.rs.getString("USENHAEMAIL"),
+//                                                            con.rs.getString("EMAIL"),
+//                                                            con.rs.getInt("UPORTASMTP"),
+//                                                            con.rs.getString("USERSAISMTP"));
                 tela.setVisible(true);
                 dispose();
 
@@ -153,8 +168,6 @@ public class TelaLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnSairActionPerformed
 
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
-
-
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     private void BtnAcessarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnAcessarKeyPressed
@@ -178,6 +191,12 @@ public class TelaLogin extends javax.swing.JFrame {
             con.DesconectarBd();
         }
     }//GEN-LAST:event_BtnAcessarKeyPressed
+
+    private void jButtonBancoDadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBancoDadosActionPerformed
+        // TODO add your handling code here:
+        FormAlias bd = new FormAlias();
+        bd.setVisible(true);
+    }//GEN-LAST:event_jButtonBancoDadosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -221,7 +240,9 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JButton BtnAcessar;
     private javax.swing.JButton BtnSair;
     private javax.swing.JLabel JLTelaLogin;
-    private javax.swing.JLabel jLabelLogo;
+    private java.awt.Choice choiceBancoDados;
+    private javax.swing.JButton jButtonBancoDados;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelSenha;
     private javax.swing.JLabel jLabelUsuário;
     private javax.swing.JPasswordField jPasswordField1;

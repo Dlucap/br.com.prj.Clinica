@@ -20,20 +20,35 @@ public class Email {
     String hostname, emailUsuario, senha;
     Integer porta;
 
+    /**
+     * Método para receber os dados de configuração do envio de email.
+     *
+     * @param hostname
+     * @param porta
+     * @param emailUsuario
+     * @param senha
+     */
     public void Email(String hostname, Integer porta, String emailUsuario, String senha) {
         email = new SimpleEmail();
         this.hostname = hostname;
         this.porta = porta;
         this.emailUsuario = emailUsuario;
         this.senha = senha;
-        configuracao(hostname, porta, emailUsuario, senha);
+        Configuracao(hostname, porta, emailUsuario, senha);
     }
 
-    // public void configuracao(String hostname, Integer porta,String email1, String senha) {
-    public void configuracao(String hostname, Integer porta, String email1, String senha) {
+    /**
+     * Metodo que reliza a inserção dos parametros de envio de email.
+     *
+     * @param hostname
+     * @param porta
+     * @param email1
+     * @param senha
+     */
+    public void Configuracao(String hostname, Integer porta, String email1, String senha) {
 
         email.setHostName(hostname);//servidor de email
-        email.setAuthentication(email1,senha);//usuário e senha 
+        email.setAuthentication(email1, senha);//usuário e senha 
         email.setSmtpPort(porta); //porta de conexão pode deixar comentado
         email.setSSL(true);
         //email.setStartTLSEnabled(true);
@@ -41,25 +56,36 @@ public class Email {
         email.setSSLOnConnect(true);// ssl conexão segura
         email.setDebug(true);
     }
-  
-       public void enviarEmail(String from, String subject, String msg, String to) {
+
+    /**
+     * Metodo contém as informações do email, para quem quem envia, assunto,
+     * mensagem e para quem será enviado, ocorre o envio
+     *
+     * @param from
+     * @param subject
+     * @param msg
+     * @param to
+     */
+    public void enviarEmail(String from, String subject, String msg, String to) {
         // public void enviarEmail() {
         try {
-             
+
             email.setFrom(from);//quem está enviando 
             email.setSubject(subject); //assuntoe
             email.setMsg(msg); // mensagem
             email.addTo(to); // quem recebe
-                
+
             email.send();// envio do email
             email.setDebug(true);
-            
+
         } catch (EmailException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
-              System.out.println(ex);
+          
 
             //ex.printStackTrace();
-           // ex.getMessage();
+            // ex.getMessage();
+        } finally {
+            JOptionPane.showMessageDialog(null, "Teste de envio de email concluido com sucesso.\n");
         }
     }
 }

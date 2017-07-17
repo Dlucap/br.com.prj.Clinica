@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import visao.FormAlias;
 
 /**
  * A classe ConexaoBd tem como objetivo conectar ao banco de dados MsSql sempre
@@ -20,6 +22,7 @@ public class ConexaoBd {
     public ResultSet rs;
     private String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     private String caminho = "jdbc:sqlserver://localhost:1433;databaseName=ClinicaMedica";
+    // private String caminho = url;
     private String usuario = "Admin";
     private String senha = "12345";
     public Connection con;
@@ -34,6 +37,7 @@ public class ConexaoBd {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver()); //Essa linha foi a diferença
             System.setProperty("jdbc.Drivers", driver);
             con = DriverManager.getConnection(caminho, usuario, senha);
+            // con = DriverManager.getConnection(url, usuario, senha);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ConexaoBd.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao se conectar ao banco de dados:\n" + ex.getMessage());
@@ -51,7 +55,6 @@ public class ConexaoBd {
             java.util.logging.Logger.getLogger(ConexaoBd.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao fechar a conexão com o banco de dados:\n" + ex.getMessage());
         }
-
     }
 
     /**
@@ -67,5 +70,7 @@ public class ConexaoBd {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao executar a sentença em sql\n" + ex.getMessage());
         }
+        
     }
+    
 }

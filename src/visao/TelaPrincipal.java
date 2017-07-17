@@ -33,9 +33,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     public TelaPrincipal(String usuario) {
         initComponents();
         jLabelUsuario.setText(usuario);
-        // DadosUsuario dadosuser = new DadosUsuario(usuario);
         conecta.conectarBd();
-
     }
 
     private TelaPrincipal() {
@@ -177,8 +175,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         getContentPane().add(TelaBemVindo);
         TelaBemVindo.setBounds(0, 260, 1240, 390);
 
-        jCalendar2.setBackground(new java.awt.Color(248, 248, 255));
-        jCalendar2.setDecorationBackgroundColor(new java.awt.Color(248, 248, 255));
+        jCalendar2.setDecorationBordersVisible(true);
         getContentPane().add(jCalendar2);
         jCalendar2.setBounds(830, 10, 400, 230);
 

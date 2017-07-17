@@ -118,14 +118,14 @@ public class FormPaciente extends javax.swing.JFrame {
         jLabel10.setText("Telefone Residencial");
 
         try {
-            jFormattedTextFieldPEmerTelRes1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(###)####-####")));
+            jFormattedTextFieldPEmerTelRes1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)####-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
         jFormattedTextFieldPEmerTelRes1.setEnabled(false);
 
         try {
-            jFormattedTextFieldPEmerTelCel.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(###)#####-####")));
+            jFormattedTextFieldPEmerTelCel.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)#####-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -246,6 +246,7 @@ public class FormPaciente extends javax.swing.JFrame {
         jFormattedTextFieldPCep.setEnabled(false);
 
         jButtonBuscarCep.setText("Buscar");
+        jButtonBuscarCep.setEnabled(false);
         jButtonBuscarCep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBuscarCepActionPerformed(evt);
@@ -300,7 +301,7 @@ public class FormPaciente extends javax.swing.JFrame {
         jLabel6.setText("Telefone Residencial :");
 
         try {
-            jFormattedTextFieldPTelRes.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(###)####-####")));
+            jFormattedTextFieldPTelRes.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)####-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -314,7 +315,7 @@ public class FormPaciente extends javax.swing.JFrame {
         jLabel7.setText("Telefone Celular :");
 
         try {
-            jFormattedTextFieldPTelCel.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(###)#####-####")));
+            jFormattedTextFieldPTelCel.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)#####-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -697,6 +698,7 @@ public class FormPaciente extends javax.swing.JFrame {
         jButtonSalvar.setEnabled(true);
         jButtonBuscarCep.setEnabled(true);
         jButtonCancelar.setEnabled(true);
+        jButtonBuscarCep.setEnabled(true);
 
         HabilitarCampos();
 
@@ -730,6 +732,7 @@ public class FormPaciente extends javax.swing.JFrame {
         jButtonIncluir.setEnabled(false);
         jButtonEditar.setEnabled(false);
         jButtonExcluir.setEnabled(false);
+        jButtonBuscarCep.setEnabled(true);
 
     }//GEN-LAST:event_jButtonIncluirActionPerformed
 
@@ -845,6 +848,7 @@ public class FormPaciente extends javax.swing.JFrame {
         jButtonEditar.setEnabled(true);
         jButtonExcluir.setEnabled(true);
         jButtonCancelar.setEnabled(true);
+        jButtonBuscarCep.setEnabled(false);
         conBd.DesconectarBd();
     }//GEN-LAST:event_jTablePacienteMouseClicked
 

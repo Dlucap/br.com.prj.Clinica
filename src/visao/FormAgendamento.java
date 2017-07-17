@@ -38,7 +38,7 @@ public class FormAgendamento extends javax.swing.JFrame {
     PreparedStatement pstA;
 
     //String dtHoje;
-//   // String status;
+   // String status;
     String codigo;
     String resposta;
     Locale local = new Locale("br", "PT");
@@ -70,7 +70,6 @@ public class FormAgendamento extends javax.swing.JFrame {
         conBd.conectarBd();
 
         try {
-
             jComboBoxEspecMedica.addItem("Selecione");
             String sql = "SELECT ESPEC FROM ESPECIALIDADE";
 
@@ -87,7 +86,6 @@ public class FormAgendamento extends javax.swing.JFrame {
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados da especialidade " + ex.getMessage());
         }
-
         conBd.DesconectarBd();
     }
 
@@ -112,7 +110,6 @@ public class FormAgendamento extends javax.swing.JFrame {
                 while (rs.next()) {
                     jComboBoxMedico.addItem(rs.getString("NOMEMEDICO"));
                 }
-
             } catch (SQLException ex) {
                 // Logger.getLogger(FormMedico.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados do Medico  " + ex);
@@ -440,7 +437,8 @@ public class FormAgendamento extends javax.swing.JFrame {
 
         LimparCampos();
         DesabilitarCampos();
-        dispose();
+      
+        //dispose();
     }//GEN-LAST:event_jButtonConcluirActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
@@ -555,11 +553,13 @@ public class FormAgendamento extends javax.swing.JFrame {
     public void LimparCampos() {
 
         jTextAreaMotivo.setText(" ");
+        jComboBoxEspecMedica.setSelectedItem("Selecione");
         jComboBoxMedico.setSelectedItem("Selecione");
         jComboBoxTurno.setSelectedItem("Selecione");
         jTextFieldPaciente.setText(" ");
         //jComboBoxRetorno.setEnabled(false);
         jDateChooserAgendamento.setDate(null);
+        
     }
 
     public void DesabilitarBtn() {
@@ -581,7 +581,6 @@ public class FormAgendamento extends javax.swing.JFrame {
         jComboBoxEspecMedica.setEnabled(true);
         jComboBoxRetorno.setEnabled(true);
         jDateChooserAgendamento.setEnabled(true);
-
     }
 
     public void DesabilitarCampos() {

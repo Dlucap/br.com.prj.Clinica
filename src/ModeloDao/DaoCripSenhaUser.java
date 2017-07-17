@@ -18,7 +18,6 @@ public class DaoCripSenhaUser {
     public static String codificaBase64Encoder(String msg) {
         return new Base64().encodeToString(msg.getBytes());
     }
-
     /**
      * Decodifica string na base 64 (Decoder)
      */

@@ -93,7 +93,7 @@ public class DaoMedico {
         conex.conectarBd();
 
         String sql1 = "select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE "
-                + "where medico.nomeNOMEMEDICO like '%" + mod.getMPesquisa() + "%'";
+                + "where medico.NOMEMEDICO like '%" + mod.getMPesquisa() + "%'";
 
         conex.executaSql(sql1);
 

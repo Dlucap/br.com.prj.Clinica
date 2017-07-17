@@ -25,10 +25,10 @@ public class FormUsuario extends javax.swing.JFrame {
     ConexaoBd conBd = new ConexaoBd();
     BeansUsuario mod = new BeansUsuario();
     DaoUsuario dao = new DaoUsuario();
-    FormTesteEnvioEmail emailTela = new FormTesteEnvioEmail();
-    
 
-    public int flag, flagEmail;
+    private int flag, flagEmail;
+    private String userSelecionado, userEmail, userHost, userSenha;
+    private Integer userPortas;
 
     /**
      * Creates new form FormUsuario
@@ -417,7 +417,8 @@ public class FormUsuario extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        setBounds(0, 0, 919, 580);
+        setSize(new java.awt.Dimension(919, 580));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIncluirActionPerformed
@@ -624,7 +625,8 @@ public class FormUsuario extends javax.swing.JFrame {
         DesabilitaCampos();
         conBd.conectarBd();
         try {
-            String sql = "SELECT * FROM USUARIO WHERE NOME = '" + NomeUsuario + "'";
+            String sql = "SELECT IDUSUARIO,NOME,EMAIL,SENHA,TIPO,UENVIAEMAIL,ATIVO,USERSAISMTP,"
+                    + "USENHAEMAIL,UPORTASMTP FROM USUARIO WHERE NOME = '" + NomeUsuario + "'";
             conBd.executaSql(sql);
             conBd.rs.first();
 
@@ -639,6 +641,12 @@ public class FormUsuario extends javax.swing.JFrame {
             jCheckBoxUsuarioAtivo.setSelected(conBd.rs.getBoolean("ATIVO"));
 
             if (conBd.rs.getBoolean("UENVIAEMAIL") == true) {
+
+                userSelecionado = conBd.rs.getString("NOME");
+                userEmail = conBd.rs.getString("EMAIL");
+                userHost = conBd.rs.getString("USERSAISMTP");
+                userPortas = conBd.rs.getInt("UPORTASMTP");
+                userSenha = DaoCripSenhaUser.decodificaBase64Decoder(conBd.rs.getString("USENHAEMAIL"));
 
                 jPanelConfigEmail.setVisible(true);
                 jTextFieldSeverEmailUsu.setText(conBd.rs.getString("USERSAISMTP"));
@@ -680,7 +688,6 @@ public class FormUsuario extends javax.swing.JFrame {
         jCheckBoxEnviaEmail.setEnabled(false);
         jPanelConfigEmail.setVisible(false);
         jCheckBoxEnviaEmail.setSelected(false);
-
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jCheckBoxEnviaEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxEnviaEmailActionPerformed
@@ -717,12 +724,10 @@ public class FormUsuario extends javax.swing.JFrame {
 
     private void jButtonTesteEnvEmailUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTesteEnvEmailUsuActionPerformed
         // TODO add your handling code here:
-        DadosUsuario dados = new DadosUsuario();
-      
 
-        //emailTela.FormTesteEnvioEmail(dados.email,dados.hostname,dados.porta,dados.senhaEmail);
-        emailTela.FormTesteEnvioEmail();
-        System.out.println(dados.email+dados.hostname+dados.porta+dados.senhaEmail+" FormUsuario");
+        FormTesteEnvioEmail emailTela = new FormTesteEnvioEmail(userSelecionado, userHost,
+                userEmail, userPortas, userSenha);
+
         emailTela.setVisible(true);
         emailTela.setResizable(false);
 

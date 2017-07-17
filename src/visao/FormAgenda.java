@@ -23,16 +23,16 @@ public class FormAgenda extends javax.swing.JFrame {
     BeansAgendamento agenda = new BeansAgendamento();
     BeansAgendamento agen = new BeansAgendamento();
     DaoAgendamento daoagenda = new DaoAgendamento();
-    //SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+
     String dtHoje;
     String status;
 
     public void DataHoje() {
         Calendar data = Calendar.getInstance();
         Date d = data.getTime();
-       // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+     
         dateFormat.format(d);
         dtHoje = dateFormat.format(d);
         status = "Aberto";
