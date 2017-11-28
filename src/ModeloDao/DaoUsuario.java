@@ -16,7 +16,7 @@ public class DaoUsuario {
 
     public void Salvar(BeansUsuario mod) {
         conex.conectarBd();
-       
+
         String sql1 = "INSERT INTO USUARIO (NOME,SENHA,EMAIL,TIPO,UENVIAEMAIL,ATIVO) VALUES (?,?,?,?,?,?)";
 
         try {
@@ -162,4 +162,19 @@ public class DaoUsuario {
         }
         conex.DesconectarBd();
     }
+
+    public void Listar() {
+        conex.conectarBd();
+        String sql17 = "SELECT * FROM USARIO";
+        try{
+            pstU = conex.con.prepareStatement(sql17);
+            pstU.execute();
+        }catch(SQLException ex){
+             JOptionPane.showMessageDialog(null, "Erro ao listar os usuário.\n Erro: "+ex);
+    }finally{
+             conex.DesconectarBd();
+        }
+              
+    }
+
 }

@@ -19,7 +19,7 @@ public class DaoAgendamento {
 
     public void Salvar(BeansAgendamento agenda) {
         BuscarMedico(agenda.getNomeMedico());
-        Buscarpaciente(agenda.getNomePaciente());
+        buscarPaciente(agenda.getNomePaciente());
 
         conBd.conectarBd();
         String sql = "INSERT  INTO AGENDAMENTO (IDPACIENTE,IDMEDICO,TURNO,DTAGENDAMENTO,MOTIVO,STATUSCONSULTA,IDESPECIALIDADE,RETORNO) "
@@ -39,7 +39,7 @@ public class DaoAgendamento {
             pst.execute();
             JOptionPane.showMessageDialog(null, "Agendamento executado com sucesso.");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao salvar o agendamento. \n Erro:\n " + ex);
+            JOptionPane.showMessageDialog(null, "Erro ao salvar o agendamento. \n Erro:\n " + ex.getMessage());
         }
 
         conBd.DesconectarBd();
@@ -69,27 +69,30 @@ public class DaoAgendamento {
             JOptionPane.showMessageDialog(null, "Medico não cadastrado. 1" + ex);
         } finally {
             conBdMedico.DesconectarBd();
-        } return codMedico;
-    } 
+        }
+        return codMedico;
+    }
+
     /* Método tem a finalidade de buscar o Id da especialidade escolida no JcomboboxEspec e utilizar o id da especialidade 
        * para retornar ao jcomboboxMedico todos os médicos que possui tal especialidade, */
     public String BuscarCodEspec(String nomeEspec) {
         conBdMedico.conectarBd();
-        String sql = "SELECT NOMEMEDICO FROM ESPECIALIDADE " +
-                    "INNER JOIN  MEDICO on MEDICO.IDESPECIALIDADE= ESPECIALIDADE.IDESPECIALIDADE " +
-                    "WHERE ESPEC ='"+nomeEspec+"'";
+        String sql = "SELECT NOMEMEDICO FROM ESPECIALIDADE "
+                + "INNER JOIN  MEDICO on MEDICO.IDESPECIALIDADE= ESPECIALIDADE.IDESPECIALIDADE "
+                + "WHERE ESPEC ='" + nomeEspec + "'";
         conBdMedico.executaSql(sql);
         try {
             conBdMedico.rs.first();
             nomeMedico = conBdMedico.rs.getString("NOMEMEDICO");
-            } catch (SQLException ex) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "No momento não existe medico cadastrado para essa especialidade selecionada.");
         } finally {
             conBdMedico.DesconectarBd();
-        } return nomeEspec;
+        }
+        return nomeEspec;
     }
 
-    public void Buscarpaciente(String nomePaciente) {
+    public void buscarPaciente(String nomePaciente) {
         conBdPaciente.conectarBd();
         conBdPaciente.executaSql("SELECT IDPACIENTE FROM PACIENTE WHERE NOMEPACIENTE ='" + nomePaciente + "'");
         try {
@@ -130,4 +133,36 @@ public class DaoAgendamento {
         }
     }
 
+    public BeansAgendamento buscaAgendaPorCodigo(int cod) {
+        Boolean retorno;
+        BeansAgendamento agen = new BeansAgendamento();
+        conBd.conectarBd();
+        conBd.executaSql("SELECT PACIENTE.NOMEPACIENTE,PACIENTE.DATANASCIMENTO, "
+                + "AGENDAMENTO.MOTIVO,MEDICO.NOMEMEDICO,AGENDAMENTO.RETORNO "
+                + "FROM AGENDAMENTO "
+                + "INNER JOIN PACIENTE "
+                + "ON PACIENTE.IDPACIENTE = AGENDAMENTO.IDPACIENTE "
+                + "INNER JOIN MEDICO "
+                + "ON MEDICO.IDMEDICO = AGENDAMENTO.IDMEDICO "
+                + "WHERE AGENDAMENTO.IDAGENDAMENTO = '" + cod + "'");
+        try {
+            conBd.rs.first();
+            agen.setNomePaciente(conBd.rs.getString("NOMEPACIENTE"));
+            agen.setNomeMedico(conBd.rs.getString("NOMEMEDICO"));
+            agen.setMotivo(conBd.rs.getString("MOTIVO"));
+            agen.setDtNascPaciente(conBd.rs.getString("DATANASCIMENTO"));
+            retorno = conBd.rs.getBoolean("RETORNO");
+           if (retorno == true ){
+               agen.setARetorno("Sim");
+           }else{
+               agen.setARetorno("Não");
+           }
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro  ao carregar os dados do paciente: \n" + ex);
+        }
+        return agen;
+    }
+
+    // public void BeansAgendamento (int cod)
 }

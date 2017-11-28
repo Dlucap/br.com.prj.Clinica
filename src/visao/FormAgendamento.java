@@ -5,10 +5,12 @@
  * http://blog.caelum.com.br/conheca-a-nova-api-de-datas-do-java-8/
  * http://pt.slideshare.net/mgraciano/finalmente-java-sabe-trabalhar-com-data-e-hora
  * http://javafree.uol.com.br/artigo/878220/javaxtime-Conheca-a-nova-especificacao-de-Data-e-Hora.html
+ *https://pt.stackoverflow.com/questions/73910/verificar-se-o-dia-x-cai-em-um-sabado-ou-domingo    
  */
 package visao;
 
 import ModeloBeans.BeansAgendamento;
+import ModeloBeans.BeansDadosUsuario;
 import ModeloBeans.ModeloTabela;
 import ModeloConection.ConexaoBd;
 import ModeloConection.Email;
@@ -18,10 +20,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import ModeloDao.DaoCheckDate;
 
 /**
  *
@@ -32,13 +34,14 @@ public class FormAgendamento extends javax.swing.JFrame {
     ConexaoBd conBd = new ConexaoBd();
     BeansAgendamento agenda = new BeansAgendamento();
     DaoAgendamento daoagenda = new DaoAgendamento();
+    DaoCheckDate dte = new DaoCheckDate();
     Email mail = new Email();
 
     ResultSet rs = null;
     PreparedStatement pstA;
 
     //String dtHoje;
-   // String status;
+    // String status;
     String codigo;
     String resposta;
     Locale local = new Locale("br", "PT");
@@ -54,7 +57,7 @@ public class FormAgendamento extends javax.swing.JFrame {
 
         preencherEspecMedica();
 
-        // preencherMedicoEspec();
+        jTextFieldIdRetorno.setVisible(false);
         jComboBoxTurno.setSelectedItem("selecione");
         preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,"
                 + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
@@ -146,9 +149,11 @@ public class FormAgendamento extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jComboBoxRetorno = new javax.swing.JComboBox<>();
         jDateChooserAgendamento = new com.toedter.calendar.JDateChooser();
+        jTextFieldIdRetorno = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setFocusableWindowState(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.setEnabled(false);
@@ -157,10 +162,10 @@ public class FormAgendamento extends javax.swing.JFrame {
 
         jLabel3.setText("Medico:");
 
-        jLabel4.setText("Data");
+        jLabel4.setText("Data:");
 
         jLabel5.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        jLabel5.setText("Informações Adicionais");
+        jLabel5.setText("Sintomas ");
 
         jLabel6.setText("Turno:");
 
@@ -251,12 +256,24 @@ public class FormAgendamento extends javax.swing.JFrame {
 
         jComboBoxRetorno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Não", "Sim" }));
         jComboBoxRetorno.setEnabled(false);
+        jComboBoxRetorno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxRetornoActionPerformed(evt);
+            }
+        });
 
+        jDateChooserAgendamento.addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                jDateChooserAgendamentoComponentAdded(evt);
+            }
+        });
         jDateChooserAgendamento.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jDateChooserAgendamentoMouseClicked(evt);
             }
         });
+
+        jTextFieldIdRetorno.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -269,24 +286,27 @@ public class FormAgendamento extends javax.swing.JFrame {
                         .addGap(12, 12, 12)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButtonConcluir)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonCancelar)
+                                .addGap(511, 511, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTextFieldPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonBuscarPaciente)
-                                .addGap(48, 48, 48)
+                                .addGap(18, 18, 18)
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBoxTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboBoxRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButtonConcluir)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonCancelar)))
-                        .addGap(152, 152, Short.MAX_VALUE)
+                                .addComponent(jComboBoxRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jTextFieldIdRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(49, 49, 49)))
                         .addComponent(jButtonEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -329,7 +349,8 @@ public class FormAgendamento extends javax.swing.JFrame {
                             .addComponent(jLabel6)
                             .addComponent(jComboBoxTurno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8)
-                            .addComponent(jComboBoxRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jComboBoxRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldIdRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jButtonEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -412,14 +433,15 @@ public class FormAgendamento extends javax.swing.JFrame {
     private void jButtonConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConcluirActionPerformed
         // TODO add your handling code here:
         DaoAgendamento dao = new DaoAgendamento();
-        dt.format(jDateChooserAgendamento.getDate());
+        dt.format(jDateChooserAgendamento.getDate());//http://www.guj.com.br/t/fazer-cast-de-string-dd-mm-yyyy-para-date/33085/6
+        System.out.println(dt.format(jDateChooserAgendamento.getDate()));
 
         agenda.setNomePaciente(jTextFieldPaciente.getText());
         agenda.setNomeMedico((String) jComboBoxMedico.getSelectedItem());
         agenda.setTurno((String) jComboBoxTurno.getSelectedItem());
         agenda.setMotivo(jTextAreaMotivo.getText());
         agenda.setData(jDateChooserAgendamento.getDate());
-
+        
         agenda.setAEspecialidade(jComboBoxEspecMedica.getSelectedIndex());
         agenda.setStatus("Aberto");
         agenda.setARetorno((String) jComboBoxRetorno.getSelectedItem());
@@ -437,7 +459,7 @@ public class FormAgendamento extends javax.swing.JFrame {
 
         LimparCampos();
         DesabilitarCampos();
-      
+
         //dispose();
     }//GEN-LAST:event_jButtonConcluirActionPerformed
 
@@ -449,7 +471,7 @@ public class FormAgendamento extends javax.swing.JFrame {
         jComboBoxTurno.setSelectedItem("selecione");
         preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,"
                 + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
-    
+
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jComboBoxTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTurnoActionPerformed
@@ -488,15 +510,47 @@ public class FormAgendamento extends javax.swing.JFrame {
 
     private void jButtonEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEmailActionPerformed
         // TODO add your handling code here:
-        String email = jTextFieldPaciente.getText() + ",\n\n \tInformamos que a sua consulta foi agendada com o Doutor(a)"
+        Email emaill = new Email();
+      BeansDadosUsuario dadosUser;
+        if(jDateChooserAgendamento.getDate()== null){
+                System.out.println("burro");
+                // dar focu a um campo
+                jDateChooserAgendamento.grabFocus();
+               // jDateChooserAgendamento.requestFocus();
+        }else{
+        String msg = jTextFieldPaciente.getText() + ",\n\n \tInformamos que a sua consulta foi agendada com o Doutor(a) "
                 + jComboBoxMedico.getSelectedItem() + " (" + jComboBoxEspecMedica.getSelectedItem() + ") para o dia " + dt.format(jDateChooserAgendamento.getDate()) + ", proximo ao dia \n"
                 + "da consulta será encaminhado um email de confirmação, solicitamos para que o mesmo seja respondido e caso exista uma desistência, gentileza nos informe com um prazo de 24h.\n\n"
                 + "Certo de sua compreensão. \n\n"
                 + "Att,\n"
                 + "Clinica Medica";
-        System.out.println("Consulta:" + email);
-
+//        System.out.println(dadosUser.getNome());
+//        emaill.Email(hostname, portas, emails, senhaEmail);//senha
+//        emaill.enviarEmail(emails, subject, msg, jTextFieldTesteEnvioemailRemetente.getText());
+        System.out.println("Envio concluido com sucesso"+ msg);
+        /**
+         * https://pt.stackoverflow.com/questions/43074/comunica%C3%A7%C3%A3o-com-a-api-do-google-calendar-usando-rest
+         * http://www.devmedia.com.br/artigo-java-magazine-67-google-data-apis-calendar-2-0/12779
+         * https://developers.google.com/google-apps/calendar/v3/reference/calendars/insert
+         * https://developers.google.com/google-apps/calendar/v3/reference/events/insert
+         */
+        }
     }//GEN-LAST:event_jButtonEmailActionPerformed
+
+    private void jComboBoxRetornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxRetornoActionPerformed
+        // TODO add your handling code here:
+        if (jComboBoxRetorno.getSelectedItem().equals("Sim")) {
+            jTextFieldIdRetorno.setVisible(true);
+            jTextFieldIdRetorno.setEnabled(true);
+        } else if (jComboBoxRetorno.getSelectedItem().equals("Não")) {
+            jTextFieldIdRetorno.setVisible(false);
+            jTextFieldIdRetorno.setEnabled(false);
+        }
+    }//GEN-LAST:event_jComboBoxRetornoActionPerformed
+
+    private void jDateChooserAgendamentoComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_jDateChooserAgendamentoComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jDateChooserAgendamentoComponentAdded
 
     public void preencherTabelaAgendamento(String sql) {
 
@@ -559,7 +613,7 @@ public class FormAgendamento extends javax.swing.JFrame {
         jTextFieldPaciente.setText(" ");
         //jComboBoxRetorno.setEnabled(false);
         jDateChooserAgendamento.setDate(null);
-        
+
     }
 
     public void DesabilitarBtn() {
@@ -581,6 +635,7 @@ public class FormAgendamento extends javax.swing.JFrame {
         jComboBoxEspecMedica.setEnabled(true);
         jComboBoxRetorno.setEnabled(true);
         jDateChooserAgendamento.setEnabled(true);
+
     }
 
     public void DesabilitarCampos() {
@@ -657,6 +712,7 @@ public class FormAgendamento extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableAgendamentoConsulta;
     private javax.swing.JTextArea jTextAreaMotivo;
+    private javax.swing.JTextField jTextFieldIdRetorno;
     private javax.swing.JTextField jTextFieldPaciente;
     // End of variables declaration//GEN-END:variables
 }

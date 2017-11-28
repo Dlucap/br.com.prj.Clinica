@@ -656,6 +656,8 @@ public class FormMedico extends javax.swing.JFrame {
         jButtonExcluir.setEnabled(false);
         jButtonPesquisa.setEnabled(true);
         jButtonSalvar.setEnabled(false);
+        preencherTabelaMedico("SELECT IDMEDICO,NOMEMEDICO,ESPEC, CRM FROM MEDICO "
+                + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
@@ -699,7 +701,7 @@ public class FormMedico extends javax.swing.JFrame {
             mod.setMlogradouro(jTextFieldEndereco.getText());
             mod.setMbairro(jTextFieldBairro.getText());
             mod.setMnumero(Integer.parseInt(jTextFieldNumero.getText()));
-            mod.setMcrm((jFormattedTextFieldCrm.getText()));
+            mod.setMcrm(jFormattedTextFieldCrm.getText());
             mod.setMcep(jFormattedTextFieldCEP.getText());
             mod.setMSCidade(jTextFieldCidade.getText());
             mod.setMSUf(jTextFieldUF.getText());
@@ -708,7 +710,8 @@ public class FormMedico extends javax.swing.JFrame {
             mod.setMEmail(jTextFieldEmail.getText());
             controlM.salvar(mod);
 
-            preencherTabelaMedico("SELECT IDMEDICO,NOMEMEDICO,ESPEC, CRM FROM MEDICO INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
+            preencherTabelaMedico("SELECT IDMEDICO,NOMEMEDICO,ESPEC, CRM FROM MEDICO "
+                    + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
             //Limpar os campos
             LimparCampos();
             DesabilitarCampos();

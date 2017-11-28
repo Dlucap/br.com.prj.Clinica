@@ -28,9 +28,7 @@ public class FormAgendaMedico extends javax.swing.JFrame {
     ResultSet rs = null;
     PreparedStatement pstAM;
 
-    String dtHoje;
-    String status;
-    String codigo;
+    String dtHoje,status,codigo,Agenda;
 
     public void DataHoje() {
 
@@ -48,15 +46,7 @@ public class FormAgendaMedico extends javax.swing.JFrame {
 
         preencherMedico();
         DataHoje();
-
-//        preencherTabelaAgenda(
-//      "SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE, " +
-//        "AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC FROM AGENDAMENTO " +
-//            "INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE " +
-//                "INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO " +
-//                    "INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDAGENDAMENTO = ESPECIALIDADE.IDESPECIALIDADE " +
-//                        "WHERE AGENDAMENTO.IDMEDICO  = '"+codigo+"' AGENDAMENTO.DTAGENDAMENTO  = '"+dtHoje+"' AND " +
-//                            "AGENDAMENTO.STATUS = '"+status+"' ORDER BY PACIENTE.NOMEPACIENTE");
+ 
     }
 
     public void preencherMedico() {
@@ -64,7 +54,7 @@ public class FormAgendaMedico extends javax.swing.JFrame {
 
         try {
 
-            jComboBoxAgendaMedico.addItem("Selecione");
+           jComboBoxAgendaMedico.addItem("Selecione");
             String sql = "SELECT NOMEMEDICO FROM MEDICO ";
 
             pstAM = conBd.con.prepareStatement(sql);
@@ -89,23 +79,23 @@ public class FormAgendaMedico extends javax.swing.JFrame {
         ArrayList dados = new ArrayList();
         String[] colunas = new String[]{"ID", "STATUS", "NOME PACIENTE", "TURNO", "DATA", "NOME MEDICO", "ESPECIALIDADE"};
         conBd.conectarBd();
-
+       
         conBd.executaSql(sql);
 
         try {
-            conBd.rs.first();
+           conBd.rs.first();
 
             do {
-                dados.add(new Object[]{conBd.rs.getInt("IDAGENDAMENTO"), conBd.rs.getString("STATUS"), conBd.rs.getString("NOME"),
-                    conBd.rs.getString("TURNO"), conBd.rs.getString("DTAGENDAMENTO"), conBd.rs.getString("NOME"), conBd.rs.getString("ESPEC")});
+                dados.add(new Object[]{conBd.rs.getInt("IDAGENDAMENTO"), conBd.rs.getString("STATUSCONSULTA"), conBd.rs.getString("NOMEPACIENTE"),
+                    conBd.rs.getString("TURNO"), conBd.rs.getString("DTAGENDAMENTO"), conBd.rs.getString("NOMEMEDICO"), conBd.rs.getString("ESPEC")});
 
             } while (conBd.rs.next());
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Não existe  mais agendamentos para o médico selecionado!");
+            JOptionPane.showMessageDialog(null, "Não existe  mais agendamentos para o médico selecionado!\n");
         }
 
-        ModeloTabela modelo = new ModeloTabela(dados, colunas);
+        ModeloTabela modelo = new ModeloTabela(dados,colunas);
         jTableAgendaMedica.setModel(modelo);
 
         jTableAgendaMedica.getColumnModel().getColumn(0).setPreferredWidth(40);//Tamanho da tabela
@@ -201,12 +191,6 @@ public class FormAgendaMedico extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(679, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jComboBoxAgendaMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -215,7 +199,12 @@ public class FormAgendaMedico extends javax.swing.JFrame {
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(67, 67, 67))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 903, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboBoxAgendaMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 903, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(30, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(352, 352, 352)
@@ -272,36 +261,46 @@ public class FormAgendaMedico extends javax.swing.JFrame {
 
     private void jTableAgendaMedicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAgendaMedicaMouseClicked
         // TODO add your handling code here:
-        String Agenda = "" + jTableAgendaMedica.getValueAt(jTableAgendaMedica.getSelectedRow(), 0); //pega o primeira coluna da tabela
-        conBd.conectarBd();
-
-        String sql = "select STATUSCONSULTA,IDPACIENTE, IDMEDICO, IDESPECIALIDADE, TURNO,DTAGENDAMENTO,IDAGENDAMENTO from agendamento where IDAGENDAMENTO = '" + Agenda + "'";
-        conBd.executaSql(sql);
-
-        try {
-            conBd.rs.first();
-            agen.setStatus("Em Atendimento");
-            agen.setAIdPaciente(conBd.rs.getInt("IDPACIENTE"));
-            agen.setAIdMedico(conBd.rs.getInt("IDMEDICO"));
-            agen.setAEspecialidade(conBd.rs.getInt("IDESPECIALIDADE"));
-            agen.setTurno("TURNO");
-            agen.setData(conBd.rs.getDate("DTAGENDAMENTO"));
-            agen.setAgendaCod(conBd.rs.getInt("IDAGENDAMENTO"));
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao selecionar os dados" + ex.getMessage());
-        }
+      Agenda = "" + jTableAgendaMedica.getValueAt(jTableAgendaMedica.getSelectedRow(), 0); //pega o primeira coluna da tabela
+//        conBd.conectarBd();
+//
+//        String sql = "select STATUSCONSULTA,IDPACIENTE, IDMEDICO, IDESPECIALIDADE, TURNO, DTAGENDAMENTO,IDAGENDAMENTO from agendamento where IDAGENDAMENTO = '" + Agenda + "'";
+//        conBd.executaSql(sql);
+//
+//        try {
+//            conBd.rs.first();
+//            agen.setStatus("Em Atendimento");
+//            agen.setAIdPaciente(conBd.rs.getInt("IDPACIENTE"));
+//            agen.setAIdMedico(conBd.rs.getInt("IDMEDICO"));
+//            agen.setAEspecialidade(conBd.rs.getInt("IDESPECIALIDADE"));
+//            agen.setTurno(conBd.rs.getString("TURNO"));
+//            agen.setData(conBd.rs.getDate("DTAGENDAMENTO"));
+//        
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "É necessário selecionar um médico para continuar. " + ex.getMessage());
+//        } finally {
+//           conBd.DesconectarBd();
+//        }
+//    
     }//GEN-LAST:event_jTableAgendaMedicaMouseClicked
 
     private void jButtonIniAtenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniAtenderActionPerformed
-
+       
+        if(Agenda == null){
+             JOptionPane.showMessageDialog(null, "Selecione a consulta a ser realziada. ");
+        } else {
+            
+        FormConsulta consulta = new FormConsulta(Agenda);
+       consulta.setVisible(true);
+        }
     }//GEN-LAST:event_jButtonIniAtenderActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         int cod = daoagenda.BuscarCodMedico((String)jComboBoxAgendaMedico.getSelectedItem());
+       
         codigo = String.valueOf(cod);
-
+      
         preencherTabelaAgenda(
                 "SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE, "
                 + "AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC FROM AGENDAMENTO "

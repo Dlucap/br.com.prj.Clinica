@@ -69,7 +69,6 @@ public class Email {
     public void enviarEmail(String from, String subject, String msg, String to) {
         // public void enviarEmail() {
         try {
-
             email.setFrom(from);//quem está enviando 
             email.setSubject(subject); //assuntoe
             email.setMsg(msg); // mensagem
@@ -77,15 +76,10 @@ public class Email {
 
             email.send();// envio do email
             email.setDebug(true);
-
-        } catch (EmailException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-          
-
-            //ex.printStackTrace();
-            // ex.getMessage();
-        } finally {
             JOptionPane.showMessageDialog(null, "Teste de envio de email concluido com sucesso.\n");
+        } catch (EmailException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao realizar o envio do email!\n" + ex.getMessage());
+
         }
     }
 }

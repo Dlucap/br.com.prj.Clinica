@@ -6,112 +6,136 @@ import java.util.Date;
 
 public class BeansAgendamento {
     
-    private int agendaCod;
-    private String nomeMedico;
-    private String nomePaciente;
-    private String Turno;
-    private Date data;
-    private String status;
-    private String motivo;
-    private Integer AEspecialidade;
-    private Integer AIdPaciente;
-    private Integer AIdMedico;
-    private String ARetorno;
+    private Integer agendaCod;
+    private String agenNomeMedico;
+    private String agenNomePaciente;
+    private String agenTurno;
+    private Date agenData;
+    private String agenStatus;
+    private String agenMotivo;
+    private Integer agenEspecialidade;
+    private Integer agenIdPaciente;
+    private Integer agenIdMedico;
+    private String agenRetorno;
+    private String agenDtNascPaciente;
+   // private Integer Idade;
 
     public String getARetorno() {
-        return ARetorno;
+        return agenRetorno;
     }
 
     public void setARetorno(String ARetorno) {
-        this.ARetorno = ARetorno;
+        this.agenRetorno = ARetorno;
     }
 
           
     public void setAIdPaciente(Integer AIdPaciente) {
-        this.AIdPaciente = AIdPaciente;
+        this.agenIdPaciente = AIdPaciente;
     }
 
     public void setAIdMedico(Integer AIdMedico) {
-        this.AIdMedico = AIdMedico;
+        this.agenIdMedico = AIdMedico;
     }
     
    
     public Integer getAEspecialidade() {
-        return AEspecialidade;
+        return agenEspecialidade;
     }
 
     public void setAEspecialidade(Integer AEspecialidade) {
-        this.AEspecialidade = AEspecialidade;
+        this.agenEspecialidade = AEspecialidade;
     }
 
-    public int getAgendaCod() {
+    public Integer getAgendaCod() {
         return agendaCod;
     }
 
-    public void setAgendaCod(int agendaCod) {
+    public void setAgendaCod(Integer agendaCod) {
         this.agendaCod = agendaCod;
     }
 
     public String getNomeMedico() {
-        return nomeMedico;
+        return agenNomeMedico;
     }
 
     public void setNomeMedico(String nomeMedico) {
-        this.nomeMedico = nomeMedico;
+        this.agenNomeMedico = nomeMedico;
     }
 
     public String getNomePaciente() {
-        return nomePaciente;
+        return agenNomePaciente;
     }
 
     public void setNomePaciente(String nomePaciente) {
-        this.nomePaciente = nomePaciente;
+        this.agenNomePaciente = nomePaciente;
     }
 
     public String getTurno() {
-        return Turno;
+        return agenTurno;
     }
 
     public void setTurno(String Turno) {
-        this.Turno = Turno;
+        this.agenTurno = Turno;
     }
 
     public Date getData() {
-        return data;
+        return agenData;
     }
 
     public void setData(Date data) {
-        this.data = data;
+        this.agenData = data;
     }
 
     public String getStatus() {
-        return status;
+        return agenStatus;
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.agenStatus = status;
     }
 
     public String getMotivo() {
-        return motivo;
+        return agenMotivo;
     }
 
     public void setMotivo(String motivo) {
-        this.motivo = motivo;
+        this.agenMotivo = motivo;
     }
 
     /**
      * @return the AIdPaciente
      */
     public Integer getAIdPaciente() {
-        return AIdPaciente;
+        return agenIdPaciente;
     }
 
     /**
      * @return the AIdMedico
      */
     public Integer getAIdMedico() {
-        return AIdMedico;
+        return agenIdMedico;
     }
+
+    /**
+     * @return the dtNascPaciente
+     */
+    public String getDtNascPaciente() {
+        return agenDtNascPaciente;
+    }
+
+    /**
+     * @param dtNascPaciente the dtNascPaciente to set
+     */
+    public void setDtNascPaciente(String dtNascPaciente) {
+        this.agenDtNascPaciente = dtNascPaciente;
+    }
+
+//    public Integer getIdade() {
+//        return Idade;
+//    }
+//
+//    public void setIdade(Integer Idade) {
+//        this.Idade = Idade;
+//    }
     
 }

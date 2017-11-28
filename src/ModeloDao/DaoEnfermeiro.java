@@ -100,7 +100,7 @@ public class DaoEnfermeiro {
         try {
             conex.rs.first();
             mod.setECod(conex.rs.getInt("IDENFERMEIRO"));
-            mod.setENome(conex.rs.getString("NOME"));
+            mod.setENome(conex.rs.getString("NOMEENFERMEIRO"));
             mod.setELogradouro(conex.rs.getString("LOGRADOURO"));
             mod.setENumero(conex.rs.getInt("NUMERO"));
             mod.setEBairro(conex.rs.getString("BAIRRO"));

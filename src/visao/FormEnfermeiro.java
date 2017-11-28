@@ -519,21 +519,21 @@ public class FormEnfermeiro extends javax.swing.JFrame {
         jButtonEditar.setEnabled(true);
         jButtonExcluir.setEnabled(true);
 
-        jTextFieldIDEnfermeiro.setText(String.valueOf(enfel.getECod()));
-        jTextFieldNomeEnfermeiro.setText(enfel.getENome());
-        jTextFieldEndereco.setText(enfel.getELogradouro());
-        jTextFieldNumero.setText(String.valueOf(enfel.getENumero()));
-        jTextFieldBairro.setText(enfel.getEBairro());
-        jTextFieldCidade.setText(enfel.getECidade());
-        jTextFieldUF.setText(enfel.getESUf());
-        jTextFieldEmail.setText(enfel.getEEmail());
-        jFormattedTextFieldCpf.setText(enfel.getECpf());
-        jFormattedTextFieldRg.setText(enfel.getERg());
-        jFormattedTextFieldTelResidencial.setText(enfel.getETelResidencial());
-        jFormattedTextFieldTelCelular.setText(enfel.getETelCelular());
-        jFormattedTextFieldCoren.setText(enfel.getECoren());
-        jFormattedTextFieldCep.setText(enfel.getECep());
-        jTextFieldCompl.setText(enfel.getECompl());
+//        jTextFieldIDEnfermeiro.setText(String.valueOf(enfel.getECod()));
+//        jTextFieldNomeEnfermeiro.setText(enfel.getENome());
+//        jTextFieldEndereco.setText(enfel.getELogradouro());
+//        jTextFieldNumero.setText(String.valueOf(enfel.getENumero()));
+//        jTextFieldBairro.setText(enfel.getEBairro());
+//        jTextFieldCidade.setText(enfel.getECidade());
+//        jTextFieldUF.setText(enfel.getESUf());
+//        jTextFieldEmail.setText(enfel.getEEmail());
+//        jFormattedTextFieldCpf.setText(enfel.getECpf());
+//        jFormattedTextFieldRg.setText(enfel.getERg());
+//        jFormattedTextFieldTelResidencial.setText(enfel.getETelResidencial());
+//        jFormattedTextFieldTelCelular.setText(enfel.getETelCelular());
+//        jFormattedTextFieldCoren.setText(enfel.getECoren());
+//        jFormattedTextFieldCep.setText(enfel.getECep());
+//        jTextFieldCompl.setText(enfel.getECompl());
         preencherTabelaEnfermeiro("SELECT IDENFERMEIRO,NOMEENFERMEIRO, COREN FROM ENFERMEIRO WHERE NOMEENFERMEIRO like '%" + enf.getEPesquisa() + "%'");
     }//GEN-LAST:event_jButtonPesquisaActionPerformed
 
@@ -590,6 +590,7 @@ public class FormEnfermeiro extends javax.swing.JFrame {
         jButtonEditar.setEnabled(false);
         jButtonExcluir.setEnabled(false);
         jButtonPesquisa.setEnabled(true);
+        preencherTabelaEnfermeiro("SELECT IDENFERMEIRO,NOMEENFERMEIRO, COREN FROM ENFERMEIRO ORDER BY NOMEENFERMEIRO");
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed

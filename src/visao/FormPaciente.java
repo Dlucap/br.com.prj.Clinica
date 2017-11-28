@@ -587,7 +587,7 @@ public class FormPaciente extends javax.swing.JFrame {
         jButtonIncluir.setEnabled(true);
         jButtonEditar.setEnabled(false);
         jButtonExcluir.setEnabled(false);
-
+preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,EMAIL,TELCELULAR FROM PACIENTE ORDER BY NOMEPACIENTE");
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
@@ -598,7 +598,7 @@ public class FormPaciente extends javax.swing.JFrame {
         if (resposta == JOptionPane.YES_OPTION) {
             pac.setPCod(Integer.parseInt(jTextFieldPIdPaciente.getText()));
             controlP.Excluir(pac);
-            preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELRESIDENCIAL,EMAIL FROM PACIENTE ORDER BY NOMEPACIENTE ");
+            preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE ORDER BY NOMEPACIENTE ");
 
             jButtonSalvar.setEnabled(false);
             jButtonBuscarCep.setEnabled(!true);
@@ -939,7 +939,7 @@ public class FormPaciente extends javax.swing.JFrame {
                 );
             } while (conBd.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao carregar os dados da tabela." + ex);
+            JOptionPane.showMessageDialog(rootPane, "Erro ao carregar os dados da tabela." + ex.getMessage());
         }
         ModeloTabela modelo = new ModeloTabela(dados, colunas);
         jTablePaciente.setModel(modelo);

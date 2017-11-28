@@ -1,0 +1,24 @@
+<BdAlias>
+<nomeAlias>Daniel</nomeAlias>
+<servidor>localhost</servidor>
+<banco>ClinicaMedic</banco>
+<porta>1433</porta>
+</BdAlias>
+<BdAlias>
+<nomeAlias>Lucas</nomeAlias>
+<servidor>127.0.0.1</servidor>
+<banco> ClinicaMedica0</banco>
+<porta>1433</porta>
+</BdAlias>
+<BdAlias>
+<nomeAlias>Pereira</nomeAlias>
+<servidor>localhost</servidor>
+<banco> ClinicaMedica</banco>
+<porta>1433</porta>
+</BdAlias>
+<BdAlias>
+<nomeAlias>dfg</nomeAlias>
+<servidor>asd</servidor>
+<banco>qwertyu</banco>
+<porta>5555</porta>
+</BdAlias>

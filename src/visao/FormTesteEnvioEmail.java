@@ -20,13 +20,13 @@ public class FormTesteEnvioEmail extends javax.swing.JFrame {
           
     public  Integer portas;
     boolean ssl = true;
-    public String hostname, senhaEmail, emails;
+    public String hostname, senhaEmail, emails,usuario;
 
     private final String subject = "Email teste.";
     private final String msg = "Prezado, tenha um bom dia!\n\n"
-            + "\tO presente email tem a afinalidade de validar a parametrização do envio de email"
-            + "do usuário. \n\tParabéns, a sua parametrização de envio de email está correta.\n\n"
-            + "Gentileza não responder o presente email.\n\n"
+            + "\tO presente e-mail tem a afinalidade de validar a parametrização do envio de e-mail"
+            + " do usuário. \n\tParabéns, a sua parametrização de envio de e-mail está correta.\n\n"
+            + "Gentileza não responder.\n\n"
             + "\t\tEquipe Clinica Medica Software";
 /**
  *  trecho do cod para alterar icone do java na janela da aplicação
@@ -45,14 +45,13 @@ public class FormTesteEnvioEmail extends javax.swing.JFrame {
 
     public FormTesteEnvioEmail(String nome,String host,String email,Integer porta,String senha) {
      initComponents();
+
      jLabelEmail.setText(nome);
      
      this.hostname = host;
      this.emails = email;
      this.portas = porta;
      this.senhaEmail =senha;
-     
-        System.out.println(hostname+"\n"+emails+"\n"+portas+"\n"+senhaEmail);
      
     }
     /**

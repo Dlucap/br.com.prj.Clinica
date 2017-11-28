@@ -439,7 +439,6 @@ public class FormUsuario extends javax.swing.JFrame {
             jButtonTesteEnvEmailUsu.setEnabled(true);
         }
         jCheckBoxEnviaEmail.setEnabled(true);
-        //  jPanelConfigEmail.setVisible(false);
     }//GEN-LAST:event_jButtonIncluirActionPerformed
 
     /* Metodo para salvar:
@@ -482,11 +481,10 @@ public class FormUsuario extends javax.swing.JFrame {
                     mod.setUSMTP(Integer.parseInt(jTextFieldPortaSmtp.getText()));
                     mod.setUSerSaiSMTP(jTextFieldSeverEmailUsu.getText());
                     mod.setUSenhaEmail(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldSenhaEmail.getText()));
-                }
-                if (flagEmail == 0) {
-                    dao.Salvar(mod);
-                } else {
+
                     dao.SalvarComEnvioEmail(mod);
+                } else {
+                    dao.Salvar(mod);
                 }
                 // FLAG = DOIS EXECUTA O METODO PARA EDITAR UPDATE
             } else if (flag == 2) {
@@ -499,10 +497,12 @@ public class FormUsuario extends javax.swing.JFrame {
                 mod.setUAtivo(jCheckBoxUsuarioAtivo.isSelected());
                 //configuração de envio de email
                 mod.setUEnviaEmail(jCheckBoxEnviaEmail.isSelected()); // true estava 
-                if (flagEmail == 1) {
+
+                if (jCheckBoxEnviaEmail.isSelected() == true) {
                     mod.setUSMTP(Integer.parseInt(jTextFieldPortaSmtp.getText()));
                     mod.setUSerSaiSMTP(jTextFieldSeverEmailUsu.getText());
                     mod.setUSenhaEmail(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldSenhaEmail.getText()));
+
                     dao.EditarComEnvioEmail(mod);
                 } else {
                     dao.Editar(mod);
@@ -544,11 +544,11 @@ public class FormUsuario extends javax.swing.JFrame {
         mod.setUPesquisa(jTextFieldPesquisaUsuario.getText());
         BeansUsuario model = dao.buscaUsuario(mod);
 
-        jButtonIncluir.setEnabled(true);
+        jButtonIncluir.setEnabled(false);
         jButtonSalvar.setEnabled(false);
-        jButtonCancelar.setEnabled(false);
-        jButtonEditar.setEnabled(false);
-        jButtonExcluir.setEnabled(false);
+        jButtonCancelar.setEnabled(true);
+        jButtonEditar.setEnabled(true);
+        jButtonExcluir.setEnabled(true);
 
         jTextFieldIDusuario.setText(String.valueOf(model.getUCodUser()));
         jTextFieldUsuario.setText(model.getUNomeUser());
@@ -556,6 +556,8 @@ public class FormUsuario extends javax.swing.JFrame {
         jPasswordFieldSenhaLoginSistema.setText(model.getUSenhaUser());
         jPasswordFieldConfirmarSenha.setText(model.getUSenhaUser());
         jComboBoxTipoUsuario.setSelectedItem(model.getUTipo());
+        
+        
 
         //daoTabelas.preencherTabelaUsuario("select * from usuario order by nome");
         preencherTabelaUsuario("select IDUSUARIO, NOME,EMAIL, TIPO, ATIVO from usuario  WHERE nome like '%" + mod.getUPesquisa() + "%'");
@@ -587,7 +589,8 @@ public class FormUsuario extends javax.swing.JFrame {
         if (resposta == JOptionPane.YES_OPTION) {
             mod.setUCodUser(Integer.parseInt(jTextFieldIDusuario.getText()));
             dao.Excluir(mod);
-
+            
+            jPanelConfigEmail.setVisible(false);
             jButtonSalvar.setEnabled(false);
             jButtonCancelar.setEnabled(false);
             jButtonIncluir.setEnabled(true);
@@ -626,7 +629,7 @@ public class FormUsuario extends javax.swing.JFrame {
         conBd.conectarBd();
         try {
             String sql = "SELECT IDUSUARIO,NOME,EMAIL,SENHA,TIPO,UENVIAEMAIL,ATIVO,USERSAISMTP,"
-                    + "USENHAEMAIL,UPORTASMTP FROM USUARIO WHERE NOME = '" + NomeUsuario + "'";
+                    + "USENHAEMAIL,UPORTASMTP FROM USUARIO WHERE NOME = '"+ NomeUsuario + "'";
             conBd.executaSql(sql);
             conBd.rs.first();
 
@@ -659,7 +662,6 @@ public class FormUsuario extends javax.swing.JFrame {
             } else {
                 jPanelConfigEmail.setVisible(false);
             }
-
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao selecionar os dados do usuario!\n" + ex.getMessage());
         }
@@ -670,15 +672,15 @@ public class FormUsuario extends javax.swing.JFrame {
         jButtonExcluir.setEnabled(true);
         jButtonCancelar.setEnabled(true);
         jButtonEditar.setEnabled(true);
-
+ 
     }//GEN-LAST:event_jTableUsuarioMouseClicked
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         // TODO add your handling code here:
 
-        DesabilitaCampos();
         limparCampos();
-
+        DesabilitaCampos();
+       
         jButtonCancelar.setEnabled(false);
         jButtonSalvar.setEnabled(false);
         jButtonPesquisar.setEnabled(!false);

@@ -12,15 +12,19 @@
  * links para baixar icones
  *https://www.iconfinder.com/search/?q=medico
  * http://www.iconspedia.com/pack/medico-icons-3755/30.html
- * 
+ * https://www.youtube.com/playlist?list=PLDXIzdVtlj9OWro7dFDE6HE9VZ7sukYUl
+ * https://viacep.com.br/ CEP mais completo
+ * http://findicons.com/icon/193102/stock_mail_send icones 0800
  *
  */
 package visao;
 
+import ModeloBeans.BeansDadosUsuario;
 import ModeloConection.ConexaoBd;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import ModeloDao.DaoCripSenhaUser;
+
 
 /**
  * @author Daniel Lucas
@@ -121,6 +125,8 @@ public class TelaLogin extends javax.swing.JFrame {
         });
         getContentPane().add(jButtonBancoDados);
         jButtonBancoDados.setBounds(20, 260, 30, 30);
+
+        choiceBancoDados.setName(""); // NOI18N
         getContentPane().add(choiceBancoDados);
         choiceBancoDados.setBounds(20, 210, 140, 40);
 
@@ -134,6 +140,7 @@ public class TelaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAcessarActionPerformed
+       BeansDadosUsuario dadosUser = new BeansDadosUsuario();
         try {
             con.executaSql("SELECT NOME,USENHAEMAIL,EMAIL,UPORTASMTP,USERSAISMTP,"
                     + "SENHA FROM USUARIO WHERE NOME ='" + jTextFieldUsuário.getText() + "'");
@@ -149,6 +156,13 @@ public class TelaLogin extends javax.swing.JFrame {
 //                                                            con.rs.getString("EMAIL"),
 //                                                            con.rs.getInt("UPORTASMTP"),
 //                                                            con.rs.getString("USERSAISMTP"));
+
+//                dadosUser.setEmail(con.rs.getString("EMAIL"));
+//                dadosUser.setNome(con.rs.getString("NOME"));
+//                dadosUser.setPortaSmtp(con.rs.getInt("UPORTASMTP"));
+//                dadosUser.setSenhaEmail(con.rs.getString("USENHAEMAIL"));
+//                dadosUser.setSmtp( con.rs.getString("USERSAISMTP"));
+                
                 tela.setVisible(true);
                 dispose();
 
@@ -156,7 +170,7 @@ public class TelaLogin extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!");
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!\nErro:" + ex);
+            JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!\n Erro:" + ex);
         }
 
         con.DesconectarBd();

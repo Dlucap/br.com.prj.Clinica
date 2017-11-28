@@ -5,7 +5,6 @@ import ModeloBeans.ModeloTabela;
 import ModeloConection.ConexaoBd;
 import ModeloDao.DaoAgendamento;
 import java.sql.SQLException;
-//import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,30 +19,27 @@ import javax.swing.ListSelectionModel;
 public class FormAgenda extends javax.swing.JFrame {
 
     ConexaoBd conBd = new ConexaoBd();
-    BeansAgendamento agenda = new BeansAgendamento();
     BeansAgendamento agen = new BeansAgendamento();
     DaoAgendamento daoagenda = new DaoAgendamento();
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 
-    String dtHoje;
-    String status;
+    String dtHoje, status,Agenda;
 
     public void DataHoje() {
         Calendar data = Calendar.getInstance();
         Date d = data.getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-     
-        dateFormat.format(d);
+
         dtHoje = dateFormat.format(d);
         status = "Aberto";
-
+    
     }
 
     public FormAgenda() {
+       
         initComponents();
-
         DataHoje();
-
+        
     }
 
     public final void preencherTabelaAgenda(String sql) {
@@ -57,7 +53,7 @@ public class FormAgenda extends javax.swing.JFrame {
         conBd.executaSql(sql);
 
         try {
-            conBd.rs.first();
+           conBd.rs.first();
 
             do {
                 if(conBd.rs.getBoolean("RETORNO") == true){
@@ -126,9 +122,12 @@ public class FormAgenda extends javax.swing.JFrame {
         jButtonBuscarAgendamento = new javax.swing.JButton();
         jButtonHoje = new javax.swing.JButton();
         jDateChooserAgenda = new com.toedter.calendar.JDateChooser();
+        jButtonIniCancelarConsulta = new javax.swing.JButton();
+        jButtonIniCancelarConsulta1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBorder(new javax.swing.border.MatteBorder(null));
 
@@ -152,7 +151,7 @@ public class FormAgenda extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTableAgenda);
 
-        jLabelAgenHj.setText("Agendamento do dia");
+        jLabelAgenHj.setText("Agendamento do dia :");
 
         jButtonIniConusulta.setText("Iniciar Consulta");
         jButtonIniConusulta.addActionListener(new java.awt.event.ActionListener() {
@@ -181,6 +180,20 @@ public class FormAgenda extends javax.swing.JFrame {
             }
         });
 
+        jButtonIniCancelarConsulta.setText("Cancelar Consulta");
+        jButtonIniCancelarConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonIniCancelarConsultaActionPerformed(evt);
+            }
+        });
+
+        jButtonIniCancelarConsulta1.setText("Alterar Consulta");
+        jButtonIniCancelarConsulta1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonIniCancelarConsulta1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -196,15 +209,19 @@ public class FormAgenda extends javax.swing.JFrame {
                         .addComponent(jButtonBuscarAgendamento)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonHoje)
-                        .addGap(0, 346, Short.MAX_VALUE))
+                        .addGap(0, 340, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane1)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addComponent(jButtonIniCancelarConsulta1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(jButtonIniCancelarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
                 .addComponent(jButtonIniConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(344, 344, 344))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,9 +235,12 @@ public class FormAgenda extends javax.swing.JFrame {
                     .addComponent(jDateChooserAgenda, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButtonIniConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonIniCancelarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonIniConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonIniCancelarConsulta1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -242,23 +262,24 @@ public class FormAgenda extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(12, 12, 12)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(25, 25, 25))
         );
 
-        setSize(new java.awt.Dimension(980, 560));
+        setSize(new java.awt.Dimension(964, 541));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTableAgendaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAgendaMouseClicked
         // TODO add your handling code here:
-        String Agenda = "" + jTableAgenda.getValueAt(jTableAgenda.getSelectedRow(), 0); //pega o primeira coluna da tabela
+        Agenda = "" + jTableAgenda.getValueAt(jTableAgenda.getSelectedRow(), 0); //pega o primeira coluna da tabela
         conBd.conectarBd();
 
-        String sql = "select STATUSCONSULTA,IDPACIENTE, IDMEDICO, IDESPECIALIDADE, TURNO,DTAGENDAMENTO,IDAGENDAMENTO from agendamento where IDAGENDAMENTO = '" + Agenda + "'";
+        String sql = "select STATUSCONSULTA,IDPACIENTE, IDMEDICO, IDESPECIALIDADE, "
+                + "TURNO,DTAGENDAMENTO,IDAGENDAMENTO from agendamento where IDAGENDAMENTO = '" + Agenda + "'";
         conBd.executaSql(sql);
 
         try {
@@ -273,7 +294,10 @@ public class FormAgenda extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao selecionar os dados" + ex.getMessage());
+        } finally {
+           conBd.DesconectarBd();
         }
+    
     }//GEN-LAST:event_jTableAgendaMouseClicked
 
     private void jButtonIniConusultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniConusultaActionPerformed
@@ -286,11 +310,15 @@ public class FormAgenda extends javax.swing.JFrame {
                 + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
                 + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
                 + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY TURNO");
+      
+        
     }//GEN-LAST:event_jButtonIniConusultaActionPerformed
 
     private void jButtonBuscarAgendamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarAgendamentoActionPerformed
         // TODO add your handling code here:
-
+if(jDateChooserAgenda.getDate() == null){
+    JOptionPane.showMessageDialog(null, "Informe uma data!", "Atenção!!", HEIGHT);
+}else{
         preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
                 + " AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC, AGENDAMENTO.RETORNO"
                 + " FROM AGENDAMENTO"
@@ -304,6 +332,7 @@ public class FormAgenda extends javax.swing.JFrame {
             jButtonIniConusulta.setVisible(false);
             jDateChooserAgenda.setDate(null);
         }
+}
     }//GEN-LAST:event_jButtonBuscarAgendamentoActionPerformed
 
     private void jButtonHojeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHojeActionPerformed
@@ -325,6 +354,23 @@ public class FormAgenda extends javax.swing.JFrame {
 
         //	System.out.println(texto.toLowerCase().contains(procurarPor.toLowerCase()));
     }//GEN-LAST:event_jDateChooserAgendaMouseClicked
+
+    private void jButtonIniCancelarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniCancelarConsultaActionPerformed
+        // TODO add your handling code here:
+//         daoagenda.Alterar(agen);
+//         status = "Cancelado";
+//         preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
+//                + " AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC,AGENDAMENTO.RETORNO"
+//                + " FROM AGENDAMENTO"
+//                + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
+//                + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
+//                + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
+//                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY TURNO");
+    }//GEN-LAST:event_jButtonIniCancelarConsultaActionPerformed
+
+    private void jButtonIniCancelarConsulta1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniCancelarConsulta1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonIniCancelarConsulta1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -364,6 +410,8 @@ public class FormAgenda extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBuscarAgendamento;
     private javax.swing.JButton jButtonHoje;
+    private javax.swing.JButton jButtonIniCancelarConsulta;
+    private javax.swing.JButton jButtonIniCancelarConsulta1;
     private javax.swing.JButton jButtonIniConusulta;
     private com.toedter.calendar.JDateChooser jDateChooserAgenda;
     private javax.swing.JLabel jLabel1;

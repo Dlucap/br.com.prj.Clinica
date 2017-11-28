@@ -4,19 +4,35 @@
  * and open the template in the editor.
  */
 package visao;
-import ModeloConection.ModeloAlias;
+
+import java.io.File;
+import ModeloDao.DaoAlias;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Daniel Lucas
  */
 public class FormAlias extends javax.swing.JFrame {
-        String Url;
-        ModeloAlias alias ;
+
+    private static File arquivo;
+    String Url;
+    //ModeloAlias alias;
+
     /**
      * Creates new form FormBancoDados
      */
     public FormAlias() {
         initComponents();
+        percorrerAlias();
     }
 
     /**
@@ -28,41 +44,69 @@ public class FormAlias extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        jLabelServidor = new javax.swing.JLabel();
+        jLabelBd = new javax.swing.JLabel();
+        jLabelAlias = new javax.swing.JLabel();
         jTextFieldAlias = new javax.swing.JTextField();
         jTextFieldServidor = new javax.swing.JTextField();
         jTextFieldDataBaseName = new javax.swing.JTextField();
         jButtonCancelar = new javax.swing.JButton();
         jButtonSalvar = new javax.swing.JButton();
         jlistAlias = new java.awt.List();
-        jButton3 = new javax.swing.JButton();
+        jButtonTestarConexao = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jButtonSair = new javax.swing.JButton();
+        jLabelPorta = new javax.swing.JLabel();
+        jTextFieldPorta = new javax.swing.JTextField();
+        jButtonNovo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Alias");
+        setResizable(false);
 
-        jLabel1.setText("Servidor: ");
+        jLabelServidor.setText("Servidor: ");
 
-        jLabel2.setText("Banco de Dados: ");
+        jLabelBd.setText("Banco de Dados: ");
 
-        jLabel3.setText("Alias: ");
+        jLabelAlias.setText("Alias: ");
 
         jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarActionPerformed(evt);
+            }
+        });
 
         jButtonSalvar.setText("Salvar");
+        jButtonSalvar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonSalvarMouseClicked(evt);
+            }
+        });
         jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSalvarActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Testar Conexão");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jlistAlias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jlistAliasMouseClicked(evt);
+            }
+        });
+
+        jButtonTestarConexao.setText("Testar Conexão");
+        jButtonTestarConexao.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonTestarConexaoMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButtonTestarConexaoMouseEntered(evt);
+            }
+        });
+        jButtonTestarConexao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButtonTestarConexaoActionPerformed(evt);
             }
         });
 
@@ -76,6 +120,20 @@ public class FormAlias extends javax.swing.JFrame {
             }
         });
 
+        jLabelPorta.setText("Porta:");
+
+        jButtonNovo.setText("Novo");
+        jButtonNovo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonNovoMouseClicked(evt);
+            }
+        });
+        jButtonNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNovoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -83,85 +141,248 @@ public class FormAlias extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(105, 105, 105)
+                        .addGap(109, 109, 109)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jlistAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addContainerGap()
+                        .addComponent(jlistAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel2)
-                                .addComponent(jTextFieldServidor)
-                                .addComponent(jTextFieldAlias)
-                                .addComponent(jTextFieldDataBaseName, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(jButton3))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButtonCancelar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabelAlias)
+                                        .addComponent(jLabelServidor)
+                                        .addComponent(jLabelBd)
+                                        .addComponent(jTextFieldServidor)
+                                        .addComponent(jTextFieldAlias)
+                                        .addComponent(jTextFieldDataBaseName, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabelPorta)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldPorta, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addComponent(jButtonTestarConexao)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButtonNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonCancelar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlistAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jlistAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(jLabel3)
+                        .addComponent(jLabelAlias)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldAlias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1)
+                        .addComponent(jLabelServidor)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldServidor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
+                        .addComponent(jLabelBd)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldDataBaseName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButtonSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButtonCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonSair)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelPorta)
+                            .addComponent(jTextFieldPorta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonTestarConexao)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonSair)
+                    .addComponent(jButtonCancelar)
+                    .addComponent(jButtonSalvar)
+                    .addComponent(jButtonNovo))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        setSize(new java.awt.Dimension(400, 355));
+        setSize(new java.awt.Dimension(388, 361));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButtonTestarConexaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTestarConexaoActionPerformed
         // TODO add your handling code here:
-      Url = "jdbc:sqlserver://"+jTextFieldServidor.getText()+":1433;databaseName="
-           +jTextFieldDataBaseName.getText();
-       
-    }//GEN-LAST:event_jButton3ActionPerformed
+
+    }//GEN-LAST:event_jButtonTestarConexaoActionPerformed
 
     private void jButtonSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSairActionPerformed
         // TODO add your handling code here:
-         dispose();        
+        dispose();
     }//GEN-LAST:event_jButtonSairActionPerformed
 
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
         // TODO add your handling code here:
-        alias.ModeloAlias();
-        
+        DaoAlias alias = new DaoAlias();
+        alias.criaAlias();
+
+        alias.salvar(jTextFieldAlias.getText(), jTextFieldServidor.getText(), jTextFieldDataBaseName.getText(),
+                jTextFieldPorta.getText());
+        percorrerAlias();
+        limparCampos();
     }//GEN-LAST:event_jButtonSalvarActionPerformed
+
+    private void jButtonNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonNovoActionPerformed
+
+    private void jButtonNovoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonNovoMouseClicked
+        // TODO add your handling code here:
+
+        limparCampos();
+    }//GEN-LAST:event_jButtonNovoMouseClicked
+
+    private void jButtonSalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonSalvarMouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jButtonSalvarMouseClicked
+
+    private void jButtonTestarConexaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonTestarConexaoMouseClicked
+        // TODO add your handling code here:
+        Url = "jdbc:sqlserver://" + jTextFieldServidor.getText() + ":1433;databaseName="
+                + jTextFieldDataBaseName.getText();
+    }//GEN-LAST:event_jButtonTestarConexaoMouseClicked
+
+    private void jButtonTestarConexaoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonTestarConexaoMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonTestarConexaoMouseEntered
+
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
+        // TODO add your handling code here:
+//        ModeloAlias alias = new ModeloAlias();
+//        alias.percorrerAlias();
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jlistAliasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlistAliasMouseClicked
+        BufferedReader arquivo = null;
+        limparCampos();
+        try {
+            // TODO add your handling code here:
+           
+            String Nome = String.valueOf(jlistAlias.getSelectedItem());
+            DaoAlias txt = new DaoAlias();
+            arquivo = new BufferedReader(new FileReader(txt.file));
+//https://pt.stackoverflow.com/questions/89339/comparar-linhas-com-txt-java-android
+            try {
+                while (arquivo.ready()) {
+                    String linha = arquivo.readLine();
+                   
+                     if (linha.toLowerCase().contains(Nome.toLowerCase())) {
+                    System.out.println("Entrou no while: " + Nome);
+                         System.out.println(linha);
+                         System.out.println("\n");
+                         
+                    // pega a linha
+                    
+                    String[] valoresEntreVirgulas = linha.split(";");
+                   //limpar vetor
+                    //Arrays.fill (valoresEntreVirgulas, null);
+                  // valoresEntreVirgulas = null;
+                   
+                    // System.out.println("\n\n");
+                    // se achar a palavra aprovado entra no if
+                   
+                      //   System.out.println("Linha 1: " + linha.toLowerCase());
+                       //  System.out.println("\n\n");
+                      // jTextFieldAlias.setText("");
+                        jTextFieldAlias.setText(valoresEntreVirgulas[0]);
+//                        System.out.println("1 " + valoresEntreVirgulas[1]);
+//                         System.out.println("\n\n");
+//                        System.out.println("2 " + valoresEntreVirgulas[2]);
+//                        try {
+//
+//                            //cria um scanner para ler o arquivo
+//                            Scanner leitor = new Scanner(txt.file);
+//
+//                            //variavel que armazenara as linhas do arquivo
+//                            String linhasDoArquivo = new String();
+//
+//                            //percorre todo o arquivo
+//                            //while (leitor.hasNext()) {
+//
+//                                //recebe cada linha do arquivo
+//                                //linhasDoArquivo = linha.nextLine();
+//
+//                                //separa os campos entre as virgulas de cada linha
+//                                String[] valoresEntreVirgulas = linhasDoArquivo.split(";");
+//                                //imprime a coluna que quiser
+//                                jTextFieldAlias.setText(valoresEntreVirgulas[0]);
+//                                jTextFieldServidor.setText(valoresEntreVirgulas[1]);
+//                                jTextFieldDataBaseName.setText(valoresEntreVirgulas[2]);
+//                                jTextFieldPorta.setText(valoresEntreVirgulas[3]);
+//                          
+//                           // }
+//                                
+//                        } catch (FileNotFoundException ex) {
+//                            JOptionPane.showMessageDialog(null, "Erro na leitura do arquivo: " + ex.getMessage());
+//                        }
+                    }
+
+                }
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Erro na leitura do arquivo: " + ex.getMessage());
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FormAlias.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                arquivo.close();
+            } catch (IOException ex) {
+                Logger.getLogger(FormAlias.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jlistAliasMouseClicked
+    public void limparCampos() {
+        jTextFieldAlias.setText(" ");
+        jTextFieldDataBaseName.setText(" ");
+        jTextFieldServidor.setText(" ");
+        jTextFieldPorta.setText(" ");
+    }
+
+    public void percorrerAlias() {
+        DaoAlias txt = new DaoAlias();
+
+        try {
+
+            //cria um scanner para ler o arquivo
+            Scanner leitor = new Scanner(txt.file);
+
+            //variavel que armazenara as linhas do arquivo
+            String linhasDoArquivo = new String();
+
+            //ignora a primeira linha do arquivo
+            //  leitor.nextLine();
+            //percorre todo o arquivo
+            while (leitor.hasNext()) {
+
+                //recebe cada linha do arquivo
+                linhasDoArquivo = leitor.nextLine();
+
+                //separa os campos entre as virgulas de cada linha
+                String[] valoresEntreVirgulas = linhasDoArquivo.split(";");
+                //imprime a coluna que quiser
+                //System.out.println(valoresEntreVirgulas[0]);
+                jlistAlias.add(valoresEntreVirgulas[0]);
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("teste4: " + e);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -200,17 +421,29 @@ public class FormAlias extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonCancelar;
+    private javax.swing.JButton jButtonNovo;
     private javax.swing.JButton jButtonSair;
     private javax.swing.JButton jButtonSalvar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton jButtonTestarConexao;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabelAlias;
+    private javax.swing.JLabel jLabelBd;
+    private javax.swing.JLabel jLabelPorta;
+    private javax.swing.JLabel jLabelServidor;
     private javax.swing.JTextField jTextFieldAlias;
     private javax.swing.JTextField jTextFieldDataBaseName;
+    private javax.swing.JTextField jTextFieldPorta;
     private javax.swing.JTextField jTextFieldServidor;
     private java.awt.List jlistAlias;
     // End of variables declaration//GEN-END:variables
 }
+/**
+ * BufferedReader arquivo = new BufferedReader(new
+ * FileReader("caminho_do_arquivo")); while(arquivo.ready()) { * // pega a linha
+ * String linha = arquivo.readLine();
+ * System.out.println(linha.substring(linha.indexOf("<xMotivo>") +
+ * "<xMotivo>".length(), linha.indexOf("</xMotivo>"))); * }
+ * http://www.javac.com.br/jc/posts/list/215-pegar-informacao-de-um-arquivo-txt-resolvido.page
+ *
+ */

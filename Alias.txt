@@ -1,0 +1,4 @@
+ClinicaMedica;127.0.0.1;ClinicaMedica;1433
+Homo;localhost;ClinicaMedicaHomo;1433
+ClinicaMedicaHomologacao;127.0.0.2;ClinicaMedica1;1433
+Homologa;localhost;ClinicaMedicaHomologa;1433

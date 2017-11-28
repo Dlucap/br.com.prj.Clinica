@@ -1,5 +1,8 @@
 package ModeloConection;
-
+/**
+ * Hibernate 
+ * http://www.devmedia.com.br/crud-completo-com-hibernate-e-jpa/32711
+ */
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -20,7 +23,7 @@ public class ConexaoBd {
 
     public Statement stm;
     public ResultSet rs;
-    private String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+    private String driver = "com.mysql.jdbc";
     private String caminho = "jdbc:sqlserver://localhost:1433;databaseName=ClinicaMedica";
     // private String caminho = url;
     private String usuario = "Admin";
@@ -52,7 +55,7 @@ public class ConexaoBd {
             con.close();
             //JOptionPane.showMessageDialog(null, "desconectado com sucesso" + this);
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(ConexaoBd.class.getName()).log(Level.SEVERE, null, ex);
+            //java.util.logging.Logger.getLogger(ConexaoBd.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao fechar a conexão com o banco de dados:\n" + ex.getMessage());
         }
     }
