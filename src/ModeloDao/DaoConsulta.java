@@ -6,6 +6,7 @@
 package ModeloDao;
 import ModeloConection.ConexaoBd;
 import ModeloBeans.BeansConsulta;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -17,7 +18,7 @@ public class DaoConsulta {
     
     ConexaoBd conex = new ConexaoBd();
     BeansConsulta consulta = new BeansConsulta();
-    
+   
     PreparedStatement pstC;
     
     public void Salvar(BeansConsulta mod){
@@ -28,8 +29,7 @@ public class DaoConsulta {
                                               "VALUES (?,?,?,?,?,?,?,?,?,?)";
         try{
              pstC = conex.con.prepareStatement(sqlConsulta1);
-             
-             pstC.setInt(1, mod.getIdAgendamento());
+                         pstC.setInt(1, mod.getIdAgendamento());
              pstC.setInt(2, mod.getIdPaciente());
              pstC.setInt(3, mod.getIdMedico());
              pstC.setInt(4, mod.getIdEspecialidade());

@@ -4,6 +4,8 @@ import ModeloBeans.BeansAgendamento;
 import ModeloConection.ConexaoBd;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 
 public class DaoAgendamento {
@@ -14,32 +16,36 @@ public class DaoAgendamento {
     ConexaoBd conBdPaciente = new ConexaoBd();
     ConexaoBd conBdMedico = new ConexaoBd();
 
-    int codMedico, codPaciente;
-    String nomeMedico;
+     public int codMedico, codPaciente;
+     String nomeMedico;
 
     public void Salvar(BeansAgendamento agenda) {
         BuscarMedico(agenda.getNomeMedico());
         buscarPaciente(agenda.getNomePaciente());
-
+        Locale local = new Locale("br", "PT");
+        SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy", local);
         conBd.conectarBd();
-        String sql = "INSERT  INTO AGENDAMENTO (IDPACIENTE,IDMEDICO,TURNO,DTAGENDAMENTO,MOTIVO,STATUSCONSULTA,IDESPECIALIDADE,RETORNO) "
-                + "VALUES(?,?,?,?,?,?,?,?)";
+        String sql = "INSERT  INTO AGENDAMENTO (IDPACIENTE,IDMEDICO,IDHORA,DTAGENDAMENTO,MOTIVO,STATUSCONSULTA,IDESPECIALIDADE,RETORNO,IDCONSULTARETORNO) "
+                + "VALUES(?,?,?,?,?,?,?,?,?)";
 
         try {
             PreparedStatement pst = conBd.con.prepareStatement(sql);
             pst.setInt(1, codPaciente);
             pst.setInt(2, codMedico);
-            pst.setString(3, agenda.getTurno());
+            pst.setInt(3, agenda.getAgenIdHora());
             pst.setDate(4, new java.sql.Date(agenda.getData().getTime()));
             pst.setString(5, agenda.getMotivo());
             pst.setString(6, agenda.getStatus());
             pst.setInt(7, agenda.getAEspecialidade());
             pst.setString(8, agenda.getARetorno());
-
+            pst.setInt(9, agenda.getAgenIdConsultaRetorno());
+           
             pst.execute();
+            
             JOptionPane.showMessageDialog(null, "Agendamento executado com sucesso.");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao salvar o agendamento. \n Erro:\n " + ex.getMessage());
+            
         }
 
         conBd.DesconectarBd();
@@ -59,18 +65,24 @@ public class DaoAgendamento {
 
     //RETORNA O ID DO MÉDICO
     public int BuscarCodMedico(String nomeMedico) {
+           if(nomeMedico == null){
+                } else{
         conBdMedico.conectarBd();
+     
         String sql = "SELECT IDMEDICO FROM MEDICO WHERE NOMEMEDICO ='" + nomeMedico + "'";
         conBdMedico.executaSql(sql);
         try {
             conBdMedico.rs.first();
+            
             codMedico = conBdMedico.rs.getInt("IDMEDICO");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Medico não cadastrado. 1" + ex);
+            JOptionPane.showMessageDialog(null, "Medico não cadastrado. " + ex);
         } finally {
             conBdMedico.DesconectarBd();
         }
-        return codMedico;
+              
+    }
+            return codMedico;
     }
 
     /* Método tem a finalidade de buscar o Id da especialidade escolida no JcomboboxEspec e utilizar o id da especialidade 
@@ -78,7 +90,7 @@ public class DaoAgendamento {
     public String BuscarCodEspec(String nomeEspec) {
         conBdMedico.conectarBd();
         String sql = "SELECT NOMEMEDICO FROM ESPECIALIDADE "
-                + "INNER JOIN  MEDICO on MEDICO.IDESPECIALIDADE= ESPECIALIDADE.IDESPECIALIDADE "
+                + "INNER JOIN  MEDICO ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE "
                 + "WHERE ESPEC ='" + nomeEspec + "'";
         conBdMedico.executaSql(sql);
         try {
@@ -109,7 +121,7 @@ public class DaoAgendamento {
         conBd.conectarBd();
 
         String sql = "UPDATE AGENDAMENTO SET STATUSCONSULTA = ?,IDPACIENTE = ?, IDMEDICO = ?, IDESPECIALIDADE=?, "
-                + "TURNO = ?,DTAGENDAMENTO = ? WHERE IDAGENDAMENTO = ?";
+                + "IDHORA = ?,DTAGENDAMENTO = ? WHERE IDAGENDAMENTO = ?";
 
         try {
 
@@ -119,7 +131,7 @@ public class DaoAgendamento {
             pst.setInt(2, agenda.getAIdPaciente());
             pst.setInt(3, agenda.getAIdMedico());
             pst.setInt(4, agenda.getAEspecialidade());
-            pst.setString(5, agenda.getTurno());
+            pst.setInt(5, agenda.getAgenIdHora());
             pst.setDate(6, new java.sql.Date(agenda.getData().getTime()));
             pst.setInt(7, agenda.getAgendaCod());
 
@@ -163,6 +175,4 @@ public class DaoAgendamento {
         }
         return agen;
     }
-
-    // public void BeansAgendamento (int cod)
 }

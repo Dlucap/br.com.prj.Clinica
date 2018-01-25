@@ -9,7 +9,7 @@ public class BeansAgendamento {
     private Integer agendaCod;
     private String agenNomeMedico;
     private String agenNomePaciente;
-    private String agenTurno;
+    private Integer agenIdHora;
     private Date agenData;
     private String agenStatus;
     private String agenMotivo;
@@ -18,7 +18,7 @@ public class BeansAgendamento {
     private Integer agenIdMedico;
     private String agenRetorno;
     private String agenDtNascPaciente;
-   // private Integer Idade;
+    private Integer agenIdConsultaRetorno;
 
     public String getARetorno() {
         return agenRetorno;
@@ -70,12 +70,12 @@ public class BeansAgendamento {
         this.agenNomePaciente = nomePaciente;
     }
 
-    public String getTurno() {
-        return agenTurno;
+    public Integer getAgenIdHora() {
+        return agenIdHora;
     }
 
-    public void setTurno(String Turno) {
-        this.agenTurno = Turno;
+    public void setAgenIdHora(Integer agenIdHora) {
+        this.agenIdHora = agenIdHora;
     }
 
     public Date getData() {
@@ -137,5 +137,19 @@ public class BeansAgendamento {
 //    public void setIdade(Integer Idade) {
 //        this.Idade = Idade;
 //    }
+
+    /**
+     * @return the agenIdConsultaRetorno
+     */
+    public Integer getAgenIdConsultaRetorno() {
+        return agenIdConsultaRetorno;
+    }
+
+    /**
+     * @param agenIdConsultaRetorno the agenIdConsultaRetorno to set
+     */
+    public void setAgenIdConsultaRetorno(Integer agenIdConsultaRetorno) {
+        this.agenIdConsultaRetorno = agenIdConsultaRetorno;
+    }
     
 }

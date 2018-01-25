@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import ModeloBeans.BeansUsuario;
-import visao.FormUsuario;
+import Visao.FormUsuario;
 
 public class DaoUsuario {
 
