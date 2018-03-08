@@ -6,19 +6,19 @@
     3)  Envio de e-mails na tela de agendamento de consultas
     4)  Possibilitar anexar o relatório da consulta no email junto com o relatório de atestado fornecido pelo médico.
     5)  Construções de relatórios 
-    6)  Tela de buscar idconsulta de retorno tela de agendamento
+    6)  Tela de buscar idconsulta de retorno tela de agendamento OK
     7)  Adicionar o cadastro de especialidade no menu de cadastro -- OK -- 26/12/2017
     8)  Configuração do envio de email (global)
     9)  Ao logar validar se o usuáro está ativo ou não.
     10) Construir o Menu de Ajuda
-    11) Conferir os status das consultas ( deve estar em palavras e não números)
+    11) Conferir os status das consultas (deve estar em palavras e não números)
     12) Tratar a entra de caracteres (Onde e string e possível informar um número-inteiro), por exemplo nome de um usuário, 
         medico ou paciente.
     13) Criar um campo no banco para a data da ultima atualização do registro e o usuário que alterou
     14) Renomear todos os forms
     15) Adicionar uma aba de exames realizados e os seus resultados/observações medica
-    15) Criar alguma tela relacionado ao cartão de vacina do paciente mostrando todas as vacinas tomadas durante a vida d mesmo,
-        deverá conter a data da vacina, nome da vacina, lote da vacina, enfermeiro que aplicou
+    15) Criar alguma tela relacionado ao cartão de vacina do paciente mostrando todas as vacinas tomadas durante a 
+        vida d mesmo, deverá conter a data da vacina, nome da vacina, lote da vacina, enfermeiro que aplicou
     16) Estudar a possibilidade de alterar a webservices de consulta do endereço utilizando o cep - https://viacep.com.br/- 
     17) Instalador do Banco com a criação default do usuário Adm e senha Clinica@Adm e ativo
     18) Importação e Exportação de dados;
@@ -32,54 +32,61 @@
 <=========================================================================================================================================================> 
 
                                                         Agendamento do dia FormAgenda
-    1) Bloquear o agendamento de um paciente para msm espcialidade no msm dia
-    2) Conferir os id das espcialidades, pois agendei dermatologista, mas marcou coloproctologia --corrigido
+    1) Bloquear o agendamento de um paciente para msm espcialidade no msm dia -- 
+        Achei melhor não bloquera, pois na hora ja marcada não será possível marcar consulta
+    2) Conferir os id das espcialidades, pois agendei dermatologista, mas marcou coloproctologia RESOLVIDO OK 
 
 <=========================================================================================================================================================> 
                                                         Agendamento do médico
     1) Manter sequencia de id medico ao incluir, cancelar e incluir novamente
-    2) Agenda do medico - nao existe agendamentos - ao invés de "mais agendamentos"
+    2) Agenda do medico - nao existe agendamentos - ao invés de "mais agendamentos" RESOLVIDO OK 
 
 <=========================================================================================================================================================> 
                                                         Cadastro Medico FormCadMedico
-    1)Limitar caracteres do crm - colocar formatação no campo
+    1)Limitar caracteres do crm - colocar formatação no campo  RESOLVIDO OK 
     CRM é formado somente por números seguido da Sigla do Estado 
     ex: 0000/SP minímo 4 dígitos ou 0000000000/SP máximo 10 dígitos  
     
 <=========================================================================================================================================================> 
                                                         Cadastro Enfermeira FormCadEnfermeira
-    1)Limitar caracteres do Coren - colocar formatação no campo                                                 
-                                                        
+    1)Limitar caracteres do Coren - colocar formatação no campo     RESOLVIDO OK                                              
+    José da Silva. COREN-SC-6769680-AE 
+linha: COREN-SP – nº de inscrição – sigla da categoria   
+sigla “COREN”, acompanhada de hífen e da sigla da Unidade da Federação onde está sediado o Conselho Regional, seguida do número de inscrição e da categoria 
+profissional. Exemplo: COREN-SP-6258020                                                 
 <=========================================================================================================================================================> 
                                                         Cadastro Gerais:
-    1) Mostrar quais campos são obrigatorios - ver se dá erroo ao deixar campos importantes em branco
+    1) Mostrar quais campos são obrigatorios - ver se dá erro  ao deixar campos importantes em branco
     2) Apagar o cep
     3) Mostrar msg de erro ao salvar
-    4) Ao cadastrar um médico, enfermeira e secretária cadastrar automaticamente um usuario, com primeiro e ultimo nome conferindo se já existe algum igual no banco. 
+    4) Ao cadastrar um médico, enfermeira e secretária cadastrar automaticamente um usuario, 
+       com primeiro e ultimo nome conferindo se já existe algum igual no banco. 
     5) Caso exista, pegar a 1a letra do nome do meio. Por exemplo bruna.batista e bruna.d.batista
 
 <=========================================================================================================================================================> 
                                                          Cadastro Especialidade - FormEspecialidade
-    1) Atualizar erro ao não localizar especialidade - não localizada ao inves de erro no banco...
-    2) Desabilitar busca de especialidade ao incluir/editar nova
-    3) Colocar nova especialidade em ordem alfabetica e nao em sequencial de id
-    4) Especialidade alteradA com sucesso - ao editar uma especialidade - está no masculino, tem que ser feminino
+    1) Atualizar erro ao não localizar especialidade - não localizada ao inves de erro no banco...  RESOLVIDO OK 
+    2) Desabilitar busca de especialidade ao incluir/editar nova   RESOLVIDO OK 
+    3) Colocar nova especialidade em ordem alfabetica e nao em sequencial de id   RESOLVIDO OK 
+    4) Especialidade alteradA com sucesso - ao editar uma especialidade - está no masculino, tem que ser feminino RESOLVIDO OK 
     5) Criar botao para que o adm exclua as especialidades nunk usadas
-    6) Criar um check pra dar erro ao cadatsrar especialidade repetidan ou parecidadas, por exemplo nutrição e nutriçao
+    6) Criar um check pra dar erro ao cadatsrar especialidade repetidas ou parecidadas, por exemplo nutrição e nutriçao
+    7) Ajustar o id pois ao tentar ajustar para o item 6 acabou pulando para o id 35
 
 <=========================================================================================================================================================> 
                                                          Cadastro Usuário FormUsuaario
-    1) Fazer padrao de nome de usuario tipo primeiro.segundo
-    2) No campo "tipo" do cadastro de usuario, corrigir "médico" e "secretária" para ficar com acento
+    1) Fazer padrao de nome de usuario tipo primeiro.segundo 
+    2) No campo "tipo" do cadastro de usuario, corrigir "médico" e "secretária" para ficar com acento  RESOLVIDO OK 
     3) Corrigir erro ao salvar - tirar os dois pontos
     4) Tipo não e limpo após editar e salvar 
 
 <=========================================================================================================================================================> 
                                                          FormTelaPrincipal
-    1) Agenda do médico - form principal menu - colok acento   
+    1) Agenda do médico - form principal menu - RESOLVIDO OK    
 <=========================================================================================================================================================> 
-                                                         Agendamento consulta FormAgendamento
-    1) Limpar id do retorno no campo ao cadastrar novo agendamento  
+                                                         FormAgendamento consulta FormAgendamento
+    1) Limpar id do retorno no campo ao cadastrar novo agendamento   RESOLVIDO OK 
+    2) Melhorar a mensagem quando for informado q a consulta e de retorno e não for de retorno.
                                        
 <=========================================================================================================================================================> 
                                                             Bugs
@@ -90,8 +97,9 @@
     4) FormAgenda - rever a função do botão Buscar informando a data pois não e possível  -- OK -- 26/12/2017
        alterar o status e ele atualmente so mostra as consultas que estão com o status aberto
     5) Mostrar apenas as especialidades que estão ativas ao realizar o agendamento do médico -- OK -- 28/12/2017
-    6) Quando troca a especialidade medica o combobox do medico não e renovado
-    7) Telad e especialidade ao clicar em incluir e depois selecionar uma especialidade no jTable ele fica com os campos habilitados
+    6) Quando troca a especialidade medica o combobox do medico não e renovado RESOLVIDO OK 
+    7) Tela de especialidade ao clicar em incluir e depois selecionar uma especialidade no  RESOLVIDO OK 
+       jTable ele fica com os campos habilitados 
 
 <=========================================================================================================================================================> 
                                                     Versões futuras
@@ -125,7 +133,8 @@
     Mvc - http://www.dsc.ufcg.edu.br/~jacques/cursos/map/html/arqu/mvc/mvc.htm
     MVC 2 - http://www.miscelaneadoconhecimento.com.br/java/bd/mvc.html
     Tabelas com JTable + JFrame + JPanel - http://www.miscelaneadoconhecimento.com.br/java/jtable/jtable.html
+        Gerar cadastros  https://www.4devs.com.br/gerador_de_pessoas
     
-
+ http://formaticabit.com/tratamento-de-excecoes-no-java/
 <=========================================================================================================================================================> 
 

@@ -16,14 +16,13 @@ public class DaoAgendamento {
     ConexaoBd conBdPaciente = new ConexaoBd();
     ConexaoBd conBdMedico = new ConexaoBd();
 
-     public int codMedico, codPaciente;
-     String nomeMedico;
+    public int codMedico, codPaciente, codEspecialidade;
+    String nomeMedico;
 
     public void Salvar(BeansAgendamento agenda) {
         BuscarMedico(agenda.getNomeMedico());
         buscarPaciente(agenda.getNomePaciente());
-        Locale local = new Locale("br", "PT");
-        SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy", local);
+
         conBd.conectarBd();
         String sql = "INSERT  INTO AGENDAMENTO (IDPACIENTE,IDMEDICO,IDHORA,DTAGENDAMENTO,MOTIVO,STATUSCONSULTA,IDESPECIALIDADE,RETORNO,IDCONSULTARETORNO) "
                 + "VALUES(?,?,?,?,?,?,?,?,?)";
@@ -39,13 +38,13 @@ public class DaoAgendamento {
             pst.setInt(7, agenda.getAEspecialidade());
             pst.setString(8, agenda.getARetorno());
             pst.setInt(9, agenda.getAgenIdConsultaRetorno());
-           
+
             pst.execute();
-            
+
             JOptionPane.showMessageDialog(null, "Agendamento executado com sucesso.");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao salvar o agendamento. \n Erro:\n " + ex.getMessage());
-            
+
         }
 
         conBd.DesconectarBd();
@@ -65,26 +64,26 @@ public class DaoAgendamento {
 
     //RETORNA O ID DO MÉDICO
     public int BuscarCodMedico(String nomeMedico) {
-           if(nomeMedico == null){
-                } else{
-        conBdMedico.conectarBd();
-     
-        String sql = "SELECT IDMEDICO FROM MEDICO WHERE NOMEMEDICO ='" + nomeMedico + "'";
-        conBdMedico.executaSql(sql);
-        try {
-            conBdMedico.rs.first();
-            
-            codMedico = conBdMedico.rs.getInt("IDMEDICO");
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Medico não cadastrado. " + ex);
-        } finally {
-            conBdMedico.DesconectarBd();
-        }
-              
-    }
-            return codMedico;
-    }
+        if (nomeMedico == null) {
+        } else {
+            conBdMedico.conectarBd();
 
+            String sql = "SELECT IDMEDICO FROM MEDICO WHERE NOMEMEDICO ='" + nomeMedico + "'";
+            conBdMedico.executaSql(sql);
+            try {
+                conBdMedico.rs.first();
+
+                codMedico = conBdMedico.rs.getInt("IDMEDICO");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Medico não cadastrado. " + ex);
+            } finally {
+                conBdMedico.DesconectarBd();
+            }
+
+        }
+        return codMedico;
+    }
+     
     /* Método tem a finalidade de buscar o Id da especialidade escolida no JcomboboxEspec e utilizar o id da especialidade 
        * para retornar ao jcomboboxMedico todos os médicos que possui tal especialidade, */
     public String BuscarCodEspec(String nomeEspec) {
@@ -102,6 +101,21 @@ public class DaoAgendamento {
             conBdMedico.DesconectarBd();
         }
         return nomeEspec;
+    }
+
+    public Integer BuscarCodEspecEmNumero(String nomeEspec) {
+        conBdMedico.conectarBd();
+        String sql = "SELECT IDESPECIALIDADE FROM ESPECIALIDADE WHERE ESPEC ='" + nomeEspec + "'";
+        conBdMedico.executaSql(sql);
+        try {
+            conBdMedico.rs.first();
+            codEspecialidade = conBdMedico.rs.getInt("IDESPECIALIDADE");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao buscar a especialidade. Erro: \n" + ex.getMessage());
+        } finally {
+            conBdMedico.DesconectarBd();
+        }
+        return codEspecialidade;
     }
 
     public void buscarPaciente(String nomePaciente) {
@@ -137,7 +151,7 @@ public class DaoAgendamento {
 
             pst.execute();
 
-            JOptionPane.showMessageDialog(null, "Agendamento em atendimento.");
+            JOptionPane.showMessageDialog(null, "Agendamento atualizado com sucesso.");
 
             conBd.DesconectarBd();
         } catch (SQLException ex) {
@@ -164,12 +178,33 @@ public class DaoAgendamento {
             agen.setMotivo(conBd.rs.getString("MOTIVO"));
             agen.setDtNascPaciente(conBd.rs.getString("DATANASCIMENTO"));
             retorno = conBd.rs.getBoolean("RETORNO");
-           if (retorno == true ){
-               agen.setARetorno("Sim");
-           }else{
-               agen.setARetorno("Não");
-           }
-            
+            if (retorno == true) {
+                agen.setARetorno("Sim");
+            } else {
+                agen.setARetorno("Não");
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro  ao carregar os dados do paciente: \n" + ex);
+        }
+        return agen;
+    }
+
+    public BeansAgendamento buscaAgendamentoPorCodigo(int cod) {
+        Boolean retorno;
+        BeansAgendamento agen = new BeansAgendamento();
+        conBd.conectarBd();
+        conBd.executaSql("SELECT IDPACIENTE,IDMEDICO,IDESPECIALIDADE,IDHORA,DTAGENDAMENTO "
+                + "FROM AGENDAMENTO "
+                + "WHERE IDAGENDAMENTO ='" + cod + "'");
+        try {
+            conBd.rs.first();
+            agen.setAIdPaciente(conBd.rs.getInt("IDPACIENTE"));
+            agen.setAIdMedico(conBd.rs.getInt("IDMEDICO"));
+            agen.setAEspecialidade(conBd.rs.getInt("IDESPECIALIDADE"));
+            agen.setAgenIdHora(conBd.rs.getInt("IDHORA"));
+            agen.setData(conBd.rs.getDate("DTAGENDAMENTO"));
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro  ao carregar os dados do paciente: \n" + ex);
         }

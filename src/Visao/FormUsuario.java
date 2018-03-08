@@ -550,15 +550,6 @@ public class FormUsuario extends javax.swing.JFrame {
         jButtonEditar.setEnabled(true);
         jButtonExcluir.setEnabled(true);
 
-        jTextFieldIDusuario.setText(String.valueOf(model.getUCodUser()));
-        jTextFieldUsuario.setText(model.getUNomeUser());
-        jTextFieldEmail.setText(model.getUEmaiUser());
-        jPasswordFieldSenhaLoginSistema.setText(model.getUSenhaUser());
-        jPasswordFieldConfirmarSenha.setText(model.getUSenhaUser());
-        jComboBoxTipoUsuario.setSelectedItem(model.getUTipo());
-       
-        
-
         //daoTabelas.preencherTabelaUsuario("select * from usuario order by nome");
         preencherTabelaUsuario("select IDUSUARIO, NOME,EMAIL, TIPO, ATIVO from usuario  WHERE nome like '%" + mod.getUPesquisa() + "%'");
     }//GEN-LAST:event_jButtonPesquisarActionPerformed

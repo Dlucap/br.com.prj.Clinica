@@ -31,7 +31,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
      */
     public FormEspecialidade() {
         initComponents();
-        preencherEspecialidade("SELECT * FROM ESPECIALIDADE");
+        preencherEspecialidade("SELECT * FROM ESPECIALIDADE ORDER BY ESPEC");
     }
 
     public void preencherEspecialidade(String sql) {
@@ -54,7 +54,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
                 );
             } while (conBd.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao carregar os dados da tabela." + ex);
+            JOptionPane.showMessageDialog(rootPane, "Erro ao carregar os dados da tabela especialidade. \n" + ex);
         }
 
         ModeloTabela beansEspecelo = new ModeloTabela(dados, colunas);
@@ -330,8 +330,13 @@ public class FormEspecialidade extends javax.swing.JFrame {
         jButtonIncluir.setEnabled(false);
         jButtonSalvar.setEnabled(false);
         jButtonEditar.setEnabled(true);
+        jButtonPesquisar.setEnabled(true);
+        jTextFieldPesquisaEspecialidade.setEnabled(true);
+        
+        
         String sql = "SELECT * FROM ESPECIALIDADE WHERE ESPEC = '" + nomeEspecialidade + "'";
         conBd.conectarBd();
+      
         try {
             conBd.executaSql(sql);
             conBd.rs.first();
@@ -341,7 +346,8 @@ public class FormEspecialidade extends javax.swing.JFrame {
             jCheckBoxAtivo.setSelected(conBd.rs.getBoolean("ATIVO"));
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao selecionar os dados do usuario!\n" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao selecionar a especialidade! Especialidade: "+nomeEspecialidade
+                    +"\n" + ex.getMessage());
         }
         conBd.DesconectarBd();
 
@@ -354,10 +360,12 @@ public class FormEspecialidade extends javax.swing.JFrame {
         jButtonSalvar.setEnabled(true);
         jButtonCancelar.setEnabled(true);
         jButtonEditar.setEnabled(false);
+        jButtonPesquisar.setEnabled(false);
 
         jTextFieldIdEspec.setEnabled(false);
         jTextFieldEspecialidade.setEnabled(true);
         jCheckBoxAtivo.setEnabled(true);
+        jTextFieldPesquisaEspecialidade.setEnabled(false);
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
@@ -384,7 +392,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
 
             daoEspec.salvar(beansEspec);
 
-            preencherEspecialidade("SELECT * FROM ESPECIALIDADE ");
+            preencherEspecialidade("SELECT * FROM ESPECIALIDADE ORDER BY ESPEC");
             //Limpar os campos
             limparCampos();
             desabilitarCampos();
@@ -396,7 +404,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
             beansEspec.setAtivo(jCheckBoxAtivo.isSelected());
             daoEspec.Editar(beansEspec);
 
-            preencherEspecialidade("SELECT * FROM ESPECIALIDADE ");
+            preencherEspecialidade("SELECT * FROM ESPECIALIDADE ORDER BY ESPEC");
             //Limpar os campos
             //limparCampos();
             desabilitarCampos();
@@ -411,9 +419,11 @@ public class FormEspecialidade extends javax.swing.JFrame {
         jButtonCancelar.setEnabled(true);
         jButtonSalvar.setEnabled(true);
         jButtonIncluir.setEnabled(false);
+        jButtonPesquisar.setEnabled(false);
 
         jTextFieldIdEspec.setEnabled(false);
         jCheckBoxAtivo.setSelected(true);
+        jTextFieldPesquisaEspecialidade.setEnabled(false);
 
         this.limparCampos();
         this.habilitarCampos();
@@ -427,10 +437,12 @@ public class FormEspecialidade extends javax.swing.JFrame {
         jButtonSalvar.setEnabled(false);
         jButtonIncluir.setEnabled(true);
         jButtonEditar.setEnabled(false);
-
+        jButtonPesquisar.setEnabled(true);
+        
         jTextFieldIdEspec.setEnabled(false);
+        jTextFieldPesquisaEspecialidade.setEnabled(true);
 
-        preencherEspecialidade("SELECT * FROM ESPECIALIDADE ");
+        preencherEspecialidade("SELECT * FROM ESPECIALIDADE ORDER BY ESPEC");
         this.limparCampos();
         this.desabilitarCampos();
 
@@ -438,7 +450,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        preencherEspecialidade("SELECT * FROM ESPECIALIDADE ");
+        preencherEspecialidade("SELECT * FROM ESPECIALIDADE ORDER BY ESPEC");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public void desabilitarCampos() {
@@ -471,7 +483,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
             jTextFieldIdEspec.setText(String.valueOf(conBd.rs.getInt("PROXID")));
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID do usuário! " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID da especialidade! " + ex.getMessage());
         }
         conBd.DesconectarBd();
     }

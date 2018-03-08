@@ -770,26 +770,6 @@ preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,EMAIL,TEL
         jButtonEditar.setEnabled(true);
         jButtonExcluir.setEnabled(true);
 
-        jTextFieldPIdPaciente.setText(String.valueOf(pacien.getPCod()));
-        jTextFieldPNome.setText(pacien.getPNome());
-        jFormattedTextFieldPRg.setText(pacien.getPRg());
-        jFormattedTextFieldPCpf.setText(pacien.getPCpf());
-        jTextFieldPBairro.setText(pacien.getPBairro());
-        jTextFieldPUf.setText(pacien.getPUf());
-        jTextFieldPCidade.setText(pacien.getPCidade());
-        jTextFieldPendereco.setText(pacien.getPLogradouro());
-        jTextFieldPNumero.setText(String.valueOf(pacien.getPNumero()));
-        jTextFieldPComplemento.setText(pacien.getPCompl());
-        jFormattedTextFieldPCep.setText(pacien.getPCep());
-        jTextFieldPEmail.setText(pacien.getPEmail());
-        jFormattedTextFieldPDtNascimento.setText(pacien.getPDtNascimento());
-        jFormattedTextFieldPTelRes.setText(pacien.getPTelResidencial());
-        jFormattedTextFieldPTelCel.setText(pacien.getPTelCelular());
-        jTextFieldPEmail.setText(pacien.getPEmail());
-        jTextFieldPEmerNome.setText(pacien.getPEmerNome());
-        jFormattedTextFieldPEmerTelCel.setText(pacien.getPEmerTelCelular());
-        jFormattedTextFieldPEmerTelRes1.setText(pacien.getPEmerTelResidencial());
-
         preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE WHERE NOMEPACIENTE LIKE '%" + pac.getPesquisa() + "%'");
 
     }//GEN-LAST:event_jButtonPPesquisarActionPerformed

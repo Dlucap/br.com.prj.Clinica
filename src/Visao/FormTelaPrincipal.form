@@ -189,7 +189,6 @@
     </Component>
     <Container class="javax.swing.JInternalFrame" name="TelaBemVindo">
       <Properties>
-        <Property name="closable" type="boolean" value="true"/>
         <Property name="resizable" type="boolean" value="true"/>
         <Property name="title" type="java.lang.String" value="Seja Bem-Vindo"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -384,6 +383,10 @@
         </Property>
         <Property name="weekOfYearVisible" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jCalendarTelaPrincipalMouseClicked"/>
+        <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="jCalendarTelaPrincipalPropertyChange"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="890" y="0" width="-1" height="-1"/>

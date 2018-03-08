@@ -6,6 +6,7 @@ import ModeloConection.ConexaoBd;
 import ModeloDao.DaoAgendamento;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,13 +24,14 @@ public class FormAgenda extends javax.swing.JFrame {
     DaoAgendamento daoagenda = new DaoAgendamento();
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 
-    String dtHoje, status,Agenda;
+    String dtHoje, dthoje, status,Agenda;
 
     public void DataHoje() {
         Calendar data = Calendar.getInstance();
         Date d = data.getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
+        
+        
         dtHoje = dateFormat.format(d);
         status = "Aberto";
     
@@ -126,16 +128,15 @@ public class FormAgenda extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableAgenda = new javax.swing.JTable();
         jLabelAgenHj = new javax.swing.JLabel();
-        jButtonIniConusulta = new javax.swing.JButton();
+        jButtonIniciarConusulta = new javax.swing.JButton();
         jButtonBuscarAgendamento = new javax.swing.JButton();
         jButtonHoje = new javax.swing.JButton();
         jDateChooserAgenda = new com.toedter.calendar.JDateChooser();
-        jButtonIniCancelarConsulta = new javax.swing.JButton();
-        jButtonIniCancelarConsulta1 = new javax.swing.JButton();
+        jButtonCancelarConsulta = new javax.swing.JButton();
+        jButtonAlterarConsulta = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
 
         jPanel1.setBorder(new javax.swing.border.MatteBorder(null));
 
@@ -161,10 +162,10 @@ public class FormAgenda extends javax.swing.JFrame {
 
         jLabelAgenHj.setText("Agendamento do dia :");
 
-        jButtonIniConusulta.setText("Iniciar Consulta");
-        jButtonIniConusulta.addActionListener(new java.awt.event.ActionListener() {
+        jButtonIniciarConusulta.setText("Iniciar Consulta");
+        jButtonIniciarConusulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonIniConusultaActionPerformed(evt);
+                jButtonIniciarConusultaActionPerformed(evt);
             }
         });
 
@@ -187,18 +188,23 @@ public class FormAgenda extends javax.swing.JFrame {
                 jDateChooserAgendaMouseClicked(evt);
             }
         });
-
-        jButtonIniCancelarConsulta.setText("Cancelar Consulta");
-        jButtonIniCancelarConsulta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonIniCancelarConsultaActionPerformed(evt);
+        jDateChooserAgenda.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jDateChooserAgendaPropertyChange(evt);
             }
         });
 
-        jButtonIniCancelarConsulta1.setText("Alterar Consulta");
-        jButtonIniCancelarConsulta1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCancelarConsulta.setText("Cancelar Consulta");
+        jButtonCancelarConsulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonIniCancelarConsulta1ActionPerformed(evt);
+                jButtonCancelarConsultaActionPerformed(evt);
+            }
+        });
+
+        jButtonAlterarConsulta.setText("Alterar Consulta");
+        jButtonAlterarConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAlterarConsultaActionPerformed(evt);
             }
         });
 
@@ -224,11 +230,11 @@ public class FormAgenda extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(54, 54, 54)
-                .addComponent(jButtonIniCancelarConsulta1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonAlterarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addComponent(jButtonIniCancelarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonCancelarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addComponent(jButtonIniConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonIniciarConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -245,9 +251,9 @@ public class FormAgenda extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonIniCancelarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonIniConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonIniCancelarConsulta1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonCancelarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonIniciarConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonAlterarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -277,7 +283,7 @@ public class FormAgenda extends javax.swing.JFrame {
                 .addGap(25, 25, 25))
         );
 
-        setSize(new java.awt.Dimension(1000, 541));
+        setSize(new java.awt.Dimension(1016, 580));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -309,7 +315,7 @@ public class FormAgenda extends javax.swing.JFrame {
     
     }//GEN-LAST:event_jTableAgendaMouseClicked
 
-    private void jButtonIniConusultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniConusultaActionPerformed
+    private void jButtonIniciarConusultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniciarConusultaActionPerformed
         // TODO add your handling code here:
         daoagenda.Alterar(agen);
        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
@@ -322,28 +328,47 @@ public class FormAgenda extends javax.swing.JFrame {
                 + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status +"' ORDER BY HORARIO.HORA");
       
         
-    }//GEN-LAST:event_jButtonIniConusultaActionPerformed
+    }//GEN-LAST:event_jButtonIniciarConusultaActionPerformed
 
     private void jButtonBuscarAgendamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarAgendamentoActionPerformed
         // TODO add your handling code here:
-if(jDateChooserAgenda.getDate() == null){
-    JOptionPane.showMessageDialog(null, "Informe uma data!", "Atenção!!", HEIGHT);
-}else{
-        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
-                + " HORARIO.HORA, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC, AGENDAMENTO.RETORNO"
-                + " FROM AGENDAMENTO"
-                + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
-                + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
-                + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
-                 + " INNER JOIN HORARIO ON AGENDAMENTO.IDHORA = HORARIO.IDHORA"
-                + " WHERE DTAGENDAMENTO ='" + date.format(jDateChooserAgenda.getDate()) + "' ORDER BY HORARIO.HORA");
-        if (jDateChooserAgenda.getDate().equals(dtHoje)) {
-            jButtonIniConusulta.setVisible(true);
-        } else {
-            jButtonIniConusulta.setVisible(false);
-            jDateChooserAgenda.setDate(null);
+        Calendar data = Calendar.getInstance();
+        Date d = data.getTime();
+        
+        if(jDateChooserAgenda.getDate() == null){
+            
+            JOptionPane.showMessageDialog(null, "Informe uma data!", "Atenção!!", HEIGHT);
+            
+        }else{  
+            
+                if (date.format(jDateChooserAgenda.getDate()).equals(dtHoje)) {
+                    
+                    jButtonIniciarConusulta.setVisible(true);
+
+                }else if(jDateChooserAgenda.getDate().after(d)){
+                    jButtonCancelarConsulta.setVisible(true);
+                    jButtonIniciarConusulta.setVisible(false);
+                    jButtonAlterarConsulta.setVisible(true);
+
+                }else if(jDateChooserAgenda.getDate().before(d)){
+
+                    jButtonCancelarConsulta.setVisible(false);
+                    jButtonIniciarConusulta.setVisible(false);
+                    jButtonAlterarConsulta.setVisible(false);
+                }
+                else {
+                    jButtonIniciarConusulta.setVisible(false);
+                    jDateChooserAgenda.setDate(null);
+                }
+                preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
+                        + " HORARIO.HORA, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC, AGENDAMENTO.RETORNO"
+                        + " FROM AGENDAMENTO"
+                        + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
+                        + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
+                        + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
+                        + " INNER JOIN HORARIO ON AGENDAMENTO.IDHORA = HORARIO.IDHORA"
+                        + " WHERE DTAGENDAMENTO ='" + date.format(jDateChooserAgenda.getDate()) + "' ORDER BY HORARIO.HORA");
         }
-}
     }//GEN-LAST:event_jButtonBuscarAgendamentoActionPerformed
 
     private void jButtonHojeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHojeActionPerformed
@@ -356,7 +381,7 @@ if(jDateChooserAgenda.getDate() == null){
                 + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
                 + " INNER JOIN HORARIO ON AGENDAMENTO.IDHORA = HORARIO.IDHORA"
                 + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY HORARIO.HORA");
-        jButtonIniConusulta.setVisible(true);
+        jButtonIniciarConusulta.setVisible(true);
         jDateChooserAgenda.setDate(null);
 
     }//GEN-LAST:event_jButtonHojeActionPerformed
@@ -364,11 +389,15 @@ if(jDateChooserAgenda.getDate() == null){
     private void jDateChooserAgendaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jDateChooserAgendaMouseClicked
         // TODO add your handling code here:
 
-        //	System.out.println(texto.toLowerCase().contains(procurarPor.toLowerCase()));
+       jDateChooserAgenda.setDate(null);
+        System.out.println("Mouse Click");
     }//GEN-LAST:event_jDateChooserAgendaMouseClicked
 
-    private void jButtonIniCancelarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniCancelarConsultaActionPerformed
+    private void jButtonCancelarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarConsultaActionPerformed
         // TODO add your handling code here:
+       
+                
+                //"Deseja realmente cancelar a consulta?");
 //         daoagenda.Alterar(agen);
 //         status = "Cancelado";
 //         preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
@@ -378,13 +407,22 @@ if(jDateChooserAgenda.getDate() == null){
 //                + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
 //                + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
 //                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY TURNO");
-    }//GEN-LAST:event_jButtonIniCancelarConsultaActionPerformed
+    }//GEN-LAST:event_jButtonCancelarConsultaActionPerformed
 
-    private void jButtonIniCancelarConsulta1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniCancelarConsulta1ActionPerformed
+    private void jButtonAlterarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlterarConsultaActionPerformed
         // TODO add your handling code here:
-        
-        FormAgendamento agendamento = new FormAgendamento();
-    }//GEN-LAST:event_jButtonIniCancelarConsulta1ActionPerformed
+         
+          Agenda = "" + jTableAgenda.getValueAt(jTableAgenda.getSelectedRow(), 0); //pega o primeira coluna da tabela
+      
+           FormAgendamento agendamento = new FormAgendamento(Agenda);
+            agendamento.setVisible(true);
+           
+
+    }//GEN-LAST:event_jButtonAlterarConsultaActionPerformed
+
+    private void jDateChooserAgendaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooserAgendaPropertyChange
+
+    }//GEN-LAST:event_jDateChooserAgendaPropertyChange
 
     /**
      * @param args the command line arguments
@@ -422,11 +460,11 @@ if(jDateChooserAgenda.getDate() == null){
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAlterarConsulta;
     private javax.swing.JButton jButtonBuscarAgendamento;
+    private javax.swing.JButton jButtonCancelarConsulta;
     private javax.swing.JButton jButtonHoje;
-    private javax.swing.JButton jButtonIniCancelarConsulta;
-    private javax.swing.JButton jButtonIniCancelarConsulta1;
-    private javax.swing.JButton jButtonIniConusulta;
+    private javax.swing.JButton jButtonIniciarConusulta;
     private com.toedter.calendar.JDateChooser jDateChooserAgenda;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelAgenHj;

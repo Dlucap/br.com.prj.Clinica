@@ -24,6 +24,15 @@ public class DaoEspecialidade {
     public void salvar(BeansEspecialidade beansEspec) {
         conex.conectarBd();
         String sql = "INSERT INTO ESPECIALIDADE (ESPEC ,ATIVO) VALUES (?,?)";
+//        String sql = "IF EXISTS (SELECT * FROM ESPECIALIDADE WHERE ESPEC = '"+beansEspec.getEspecialidade()+"' ) " +
+//                     "BEGIN " +
+//                     "PRINT ('JÁ EXISTE UM VALOR CADASTRADO') " +
+//                     "END " +
+//                     "ELSE " +
+//                     "BEGIN " +
+//                     "INSERT INTO ESPECIALIDADE (ESPEC ,ATIVO) VALUES (?,?) " +
+//                     "END";
+        
         try {
             pstEspec = conex.con.prepareStatement(sql);
 
@@ -35,7 +44,7 @@ public class DaoEspecialidade {
             JOptionPane.showMessageDialog(null, "Especialidade " + beansEspec.getEspecialidade() + " inserida com sucesso!!!");
         } catch (SQLException ex) {
             // med.HabilitarCampos();
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar a beansEspecialidade: " + beansEspec.getEspecialidade() + "\n\n" + ex.getMessage() + "\n");
+            JOptionPane.showMessageDialog(null, "Erro ao cadastrar a especialidade: " + beansEspec.getEspecialidade() + "\n\n" + ex.getMessage() + "\n");
         }
         conex.DesconectarBd();
     }
@@ -75,7 +84,7 @@ public class DaoEspecialidade {
 
             pstEspec.execute();
 
-            JOptionPane.showMessageDialog(null, "Especialidade alterado com sucesso.");
+            JOptionPane.showMessageDialog(null, "Especialidade alterada com sucesso.");
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro na alteração da especialidade:\nErro: " + ex.getMessage());

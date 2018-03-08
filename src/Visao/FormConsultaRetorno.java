@@ -16,30 +16,30 @@ import javax.swing.ListSelectionModel;
  *
  * @author Daniel Lucas
  */
-public class FormConsultaRetorno extends javax.swing.JFrame {
+public final class FormConsultaRetorno extends javax.swing.JFrame {
 
-     ConexaoBd conBd = new ConexaoBd();
-     
-    public String idConsultaRetorno;
-    
+    ConexaoBd conBd = new ConexaoBd();
+
+    public String idConsultaRetorno, nomePaciente, nomeMedico, nomeEspecialidade;
+
     public FormConsultaRetorno() {
-      
-  }
-     
+
+    }
+
     /**
      * Creates new form FormConsultaRetorno
      */
-    public FormConsultaRetorno(Integer idPaciente) {
+    public FormConsultaRetorno(Integer idPaciente, Integer idMedico) {
         initComponents();
-        
+
         preencherTabelaAgendamento(
-        "SELECT AGENDAMENTO.IDAGENDAMENTO,PACIENTE.NOMEPACIENTE,MEDICO.NOMEMEDICO,ESPECIALIDADE.ESPEC,AGENDAMENTO.DTAGENDAMENTO "+
-        "FROM AGENDAMENTO " +
-        "INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE " +
-        "INNER JOIN MEDICO ON MEDICO.IDMEDICO = AGENDAMENTO.IDMEDICO " +
-        "INNER JOIN PACIENTE ON PACIENTE.IDPACIENTE =  AGENDAMENTO.IDPACIENTE "+        
-        "WHERE DTAGENDAMENTO BETWEEN DATEADD(DAY, -30 , GETDATE()) "+
-        "AND getdate() AND PACIENTE.IDPACIENTE = "+idPaciente);
+                "SELECT AGENDAMENTO.IDAGENDAMENTO,PACIENTE.NOMEPACIENTE,MEDICO.NOMEMEDICO,ESPECIALIDADE.ESPEC,AGENDAMENTO.DTAGENDAMENTO "
+                + "FROM AGENDAMENTO "
+                + "INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE "
+                + "INNER JOIN MEDICO ON MEDICO.IDMEDICO = AGENDAMENTO.IDMEDICO "
+                + "INNER JOIN PACIENTE ON PACIENTE.IDPACIENTE =  AGENDAMENTO.IDPACIENTE "
+                + "WHERE DTAGENDAMENTO BETWEEN DATEADD(DAY, -30 , GETDATE()) "
+                + "AND GETDATE() AND PACIENTE.IDPACIENTE = " + idPaciente + " AND AGENDAMENTO.IDMEDICO = " + idMedico);
     }
 
     /**
@@ -55,6 +55,15 @@ public class FormConsultaRetorno extends javax.swing.JFrame {
         jTableConsultaRetorno = new javax.swing.JTable();
         jToggleButton1 = new javax.swing.JToggleButton();
         jToggleButton2 = new javax.swing.JToggleButton();
+        jTextFieldNomePaciente = new javax.swing.JTextField();
+        jTextFieldEspecialidade = new javax.swing.JTextField();
+        jTextFieldNomeMedico = new javax.swing.JTextField();
+        jTextFieldNConsulta = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Filtro de consulta.");
@@ -89,34 +98,102 @@ public class FormConsultaRetorno extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldNConsulta.setEditable(false);
+
+        jLabel1.setText("Dados da Consulta Anterior");
+
+        jLabel2.setText("Nome do Paciente :");
+
+        jLabel3.setText("Nome do Médico :");
+
+        jLabel4.setText("Especialidade :");
+
+        jLabel6.setText("Nº Consulta :");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jToggleButton1)
-                .addGap(18, 18, 18)
-                .addComponent(jToggleButton2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 6, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(139, 139, 139))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextFieldNomePaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(149, 149, 149))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jTextFieldNomeMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(85, 85, 85))
+                                    .addComponent(jTextFieldEspecialidade, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(23, Short.MAX_VALUE))
+                            .addComponent(jLabel1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 679, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(144, 144, 144)
+                                .addComponent(jToggleButton1)
+                                .addGap(18, 18, 18)
+                                .addComponent(jToggleButton2)))
+                        .addContainerGap(9, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 682, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextFieldNConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(82, 82, 82)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(3, 3, 3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jTextFieldNConsulta))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(34, 34, 34)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(6, 6, 6)
+                        .addComponent(jTextFieldNomePaciente))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(6, 6, 6)
+                        .addComponent(jTextFieldNomeMedico))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(6, 6, 6)
+                        .addComponent(jTextFieldEspecialidade)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jToggleButton1)
                     .addComponent(jToggleButton2))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(710, 337));
+        setSize(new java.awt.Dimension(710, 303));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -127,63 +204,74 @@ public class FormConsultaRetorno extends javax.swing.JFrame {
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         // TODO add your handling code here:
-         FormAgendamento formAgendamento = new FormAgendamento();
-         
-         formAgendamento.IdConsultaRetorno(String.valueOf(idConsultaRetorno));
-       
-         dispose();
+        FormAgendamento formAgendamento = new FormAgendamento();
+
+        formAgendamento.IdConsultaRetorno(String.valueOf(idConsultaRetorno));
+
+        dispose();
 
     }//GEN-LAST:event_jToggleButton1ActionPerformed
-    
+
     private void jTableConsultaRetornoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableConsultaRetornoMouseClicked
         // TODO add your handling code here:
-       
-         idConsultaRetorno = "" + jTableConsultaRetorno.getValueAt(jTableConsultaRetorno.getSelectedRow(), 0);
-       
+
+        idConsultaRetorno = "" + jTableConsultaRetorno.getValueAt(jTableConsultaRetorno.getSelectedRow(), 0);
+        jTextFieldNConsulta.setText(idConsultaRetorno);
+        nomePaciente = "" + jTableConsultaRetorno.getValueAt(jTableConsultaRetorno.getSelectedRow(), 1);
+        jTextFieldNomePaciente.setText(nomePaciente);
+        nomeMedico = "" + jTableConsultaRetorno.getValueAt(jTableConsultaRetorno.getSelectedRow(), 2);
+        jTextFieldNomeMedico.setText(nomeMedico);
+        nomeEspecialidade = "" + jTableConsultaRetorno.getValueAt(jTableConsultaRetorno.getSelectedRow(), 3);
+        jTextFieldEspecialidade.setText(nomeEspecialidade);
     }//GEN-LAST:event_jTableConsultaRetornoMouseClicked
 
-    
-    
-    
-      public void preencherTabelaAgendamento(String sql) {
+    public void preencherTabelaAgendamento(String sql) {
 
         ArrayList dados = new ArrayList();
-        String[] colunas = new String[]{"NUM","NOME PACIENTE" ,"NOME DO MEDICO", "ESPECIALIDADE", "CONSULTA"};
+        String[] colunas = new String[]{"NUM", "NOME PACIENTE", "NOME DO MEDICO", "ESPECIALIDADE", "CONSULTA"};
 
         conBd.conectarBd();
 
         conBd.executaSql(sql);
         try {
             conBd.rs.first();
-            do {
-                dados.add(new Object[]{
-                    conBd.rs.getInt("IDAGENDAMENTO"), conBd.rs.getString("NOMEPACIENTE"), conBd.rs.getString("NOMEMEDICO"), conBd.rs.getString("ESPEC"),
-                    conBd.rs.getString("DTAGENDAMENTO")}
-                );
-            } while (conBd.rs.next());
+            if (!conBd.rs.next()) {
+              
+                JOptionPane.showMessageDialog(rootPane, "O paciente não possui consulta anteriior.");
+                dispose();
+            } else {
+                do {
+                    dados.add(new Object[]{
+                        conBd.rs.getInt("IDAGENDAMENTO"), conBd.rs.getString("NOMEPACIENTE"), conBd.rs.getString("NOMEMEDICO"), conBd.rs.getString("ESPEC"),
+                        conBd.rs.getString("DTAGENDAMENTO")}
+                    );
+                } while (conBd.rs.next());
+            }
         } catch (SQLException ex) {
+            {
+                // resultSet vazio
+            }
             JOptionPane.showMessageDialog(rootPane, "Erro ao carregar os dados da consulta anterior." + ex);
         }
- 
-          ModeloTabela modelo = new ModeloTabela(dados, colunas);
-          jTableConsultaRetorno.setModel(modelo);
 
-          //jTableConsultaRetorno.getColumnModel().getColumn(0).setPreferredWidth(110);//Tamanho da tabela
-          jTableConsultaRetorno.getColumnModel().getColumn(0).setPreferredWidth(45);
-          jTableConsultaRetorno.getColumnModel().getColumn(0).setResizable(false);
+        ModeloTabela modelo = new ModeloTabela(dados, colunas);
+        jTableConsultaRetorno.setModel(modelo);
 
-          jTableConsultaRetorno.getColumnModel().getColumn(1).setPreferredWidth(225);
-          jTableConsultaRetorno.getColumnModel().getColumn(1).setResizable(false);
-          
-           jTableConsultaRetorno.getColumnModel().getColumn(2).setPreferredWidth(225);
-          jTableConsultaRetorno.getColumnModel().getColumn(2).setResizable(false);
+        //jTableConsultaRetorno.getColumnModel().getColumn(0).setPreferredWidth(110);//Tamanho da tabela
+        jTableConsultaRetorno.getColumnModel().getColumn(0).setPreferredWidth(45);
+        jTableConsultaRetorno.getColumnModel().getColumn(0).setResizable(false);
 
-          jTableConsultaRetorno.getColumnModel().getColumn(3).setPreferredWidth(105);
-          jTableConsultaRetorno.getColumnModel().getColumn(3).setResizable(false);
+        jTableConsultaRetorno.getColumnModel().getColumn(1).setPreferredWidth(225);
+        jTableConsultaRetorno.getColumnModel().getColumn(1).setResizable(false);
 
-          jTableConsultaRetorno.getColumnModel().getColumn(4).setPreferredWidth(78);
-          jTableConsultaRetorno.getColumnModel().getColumn(4).setResizable(false);
-      
+        jTableConsultaRetorno.getColumnModel().getColumn(2).setPreferredWidth(225);
+        jTableConsultaRetorno.getColumnModel().getColumn(2).setResizable(false);
+
+        jTableConsultaRetorno.getColumnModel().getColumn(3).setPreferredWidth(105);
+        jTableConsultaRetorno.getColumnModel().getColumn(3).setResizable(false);
+
+        jTableConsultaRetorno.getColumnModel().getColumn(4).setPreferredWidth(78);
+        jTableConsultaRetorno.getColumnModel().getColumn(4).setResizable(false);
 
         jTableConsultaRetorno.getTableHeader().setReorderingAllowed(false);//reorganizar o cabeçalho
         jTableConsultaRetorno.setAutoResizeMode(jTableConsultaRetorno.AUTO_RESIZE_OFF); //NÃO VAI PODER REDIMENCIONAR A TABELA
@@ -191,6 +279,7 @@ public class FormConsultaRetorno extends javax.swing.JFrame {
         //total do tamanho dos campos = 38 + 237 + 110 + 65 = 450
         conBd.DesconectarBd();
     }
+
     /**
      * @param args the command line arguments
      */
@@ -227,8 +316,17 @@ public class FormConsultaRetorno extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableConsultaRetorno;
+    private javax.swing.JTextField jTextFieldEspecialidade;
+    private javax.swing.JTextField jTextFieldNConsulta;
+    private javax.swing.JTextField jTextFieldNomeMedico;
+    private javax.swing.JTextField jTextFieldNomePaciente;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     // End of variables declaration//GEN-END:variables

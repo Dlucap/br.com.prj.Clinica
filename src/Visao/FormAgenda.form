@@ -3,10 +3,9 @@
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
-    <Property name="undecorated" type="boolean" value="true"/>
   </Properties>
   <SyntheticProperties>
-    <SyntheticProperty name="formSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,29,0,0,3,-24"/>
+    <SyntheticProperty name="formSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,68,0,0,3,-8"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="0"/>
     <SyntheticProperty name="generateSize" type="boolean" value="true"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
@@ -85,11 +84,11 @@
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
-                  <Component id="jButtonIniCancelarConsulta1" min="-2" pref="259" max="-2" attributes="0"/>
+                  <Component id="jButtonAlterarConsulta" min="-2" pref="259" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                  <Component id="jButtonIniCancelarConsulta" min="-2" pref="259" max="-2" attributes="0"/>
+                  <Component id="jButtonCancelarConsulta" min="-2" pref="259" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                  <Component id="jButtonIniConusulta" min="-2" pref="259" max="-2" attributes="0"/>
+                  <Component id="jButtonIniciarConusulta" min="-2" pref="259" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -110,9 +109,9 @@
                   <Component id="jScrollPane1" min="-2" pref="371" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jButtonIniCancelarConsulta" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
-                      <Component id="jButtonIniConusulta" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
-                      <Component id="jButtonIniCancelarConsulta1" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                      <Component id="jButtonCancelarConsulta" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                      <Component id="jButtonIniciarConusulta" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                      <Component id="jButtonAlterarConsulta" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="19" max="32767" attributes="0"/>
               </Group>
@@ -150,12 +149,12 @@
             <Property name="text" type="java.lang.String" value="Agendamento do dia :"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonIniConusulta">
+        <Component class="javax.swing.JButton" name="jButtonIniciarConusulta">
           <Properties>
             <Property name="text" type="java.lang.String" value="Iniciar Consulta"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonIniConusultaActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonIniciarConusultaActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButtonBuscarAgendamento">
@@ -177,22 +176,23 @@
         <Component class="com.toedter.calendar.JDateChooser" name="jDateChooserAgenda">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jDateChooserAgendaMouseClicked"/>
+            <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="jDateChooserAgendaPropertyChange"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonIniCancelarConsulta">
+        <Component class="javax.swing.JButton" name="jButtonCancelarConsulta">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cancelar Consulta"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonIniCancelarConsultaActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCancelarConsultaActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonIniCancelarConsulta1">
+        <Component class="javax.swing.JButton" name="jButtonAlterarConsulta">
           <Properties>
             <Property name="text" type="java.lang.String" value="Alterar Consulta"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonIniCancelarConsulta1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAlterarConsultaActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

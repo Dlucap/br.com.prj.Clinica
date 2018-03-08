@@ -93,6 +93,7 @@ public class FormMedico extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jTextFieldEmail = new javax.swing.JTextField();
         jFormattedTextFieldCEP = new javax.swing.JFormattedTextField();
+        jCheckBoxMedicoAtivo = new javax.swing.JCheckBox();
         jLabelCadMedicos = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -315,6 +316,8 @@ public class FormMedico extends javax.swing.JFrame {
         }
         jFormattedTextFieldCEP.setEnabled(false);
 
+        jCheckBoxMedicoAtivo.setText("Ativo");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -421,7 +424,9 @@ public class FormMedico extends javax.swing.JFrame {
                 .addComponent(jButtonExcluir)
                 .addGap(12, 12, 12)
                 .addComponent(jButtonCancelar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jCheckBoxMedicoAtivo, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -431,7 +436,8 @@ public class FormMedico extends javax.swing.JFrame {
                     .addComponent(jButtonEditar)
                     .addComponent(jButtonSalvar)
                     .addComponent(jButtonExcluir)
-                    .addComponent(jButtonCancelar))
+                    .addComponent(jButtonCancelar)
+                    .addComponent(jCheckBoxMedicoAtivo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -571,23 +577,7 @@ public class FormMedico extends javax.swing.JFrame {
         jButtonCancelar.setEnabled(true);
         jButtonEditar.setEnabled(true);
         jButtonExcluir.setEnabled(true);
-
-        jTextFieldIDMedico.setText(String.valueOf(model.getMcod()));
-        jTextFieldNomeMed.setText(model.getMnome());
-        jTextFieldEndereco.setText(model.getMlogradouro());
-        jTextFieldNumero.setText(String.valueOf(model.getMnumero()));
-        jTextFieldBairro.setText(model.getMbairro());
-        jTextFieldCidade.setText(model.getMSCidade());
-        jTextFieldUF.setText(model.getMSUf());
-        jTextFieldEmail.setText(model.getMEmail());
-        jFormattedTextFieldCpf.setText(model.getMcpf());
-        jFormattedTextFieldRg.setText(model.getMrg());
-        jFormattedTextFieldTelRes.setText(model.getMtelresidencial());
-        jFormattedTextFieldTelCel.setText(model.getMtelcelular());
-        jFormattedTextFieldCrm.setText(model.getMcrm());
-        jFormattedTextFieldCEP.setText(model.getMcep());
-        jTextFieldCompl.setText(model.getMcompl());
-        jComboBoxEspecializacao.setSelectedItem(model.getMSespecialidade());
+    
         preencherTabelaMedico("select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE "
                 + "where medico.nomemedico like '%" + mod.getMPesquisa() + "%'");
 
@@ -614,6 +604,7 @@ public class FormMedico extends javax.swing.JFrame {
             conBd.rs.first();
             LimparCampos();
             DesabilitarCampos();
+            
             jTextFieldIDMedico.setText(String.valueOf(conBd.rs.getInt("IDMEDICO")));
             jTextFieldNomeMed.setText(conBd.rs.getString("NOMEMEDICO"));
             jTextFieldEndereco.setText(conBd.rs.getString("LOGRADOURO"));
@@ -757,7 +748,7 @@ public class FormMedico extends javax.swing.JFrame {
             jTextFieldIDMedico.setText(String.valueOf(conBd.rs.getInt("PROXID")));
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID do usuário! " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID do médico! " + ex.getMessage());
         }
         conBd.DesconectarBd();
     }
@@ -825,7 +816,7 @@ public class FormMedico extends javax.swing.JFrame {
         try {
 
             jComboBoxEspecializacao.addItem("Selecione");
-            String sql = "SELECT ESPEC FROM ESPECIALIDADE";
+            String sql = "SELECT ESPEC FROM ESPECIALIDADE WHERE ATIVO = 1 ORDER BY ESPEC";
 
             pstM = conBd.con.prepareStatement(sql);
             rs = pstM.executeQuery();
@@ -988,6 +979,7 @@ public class FormMedico extends javax.swing.JFrame {
     private javax.swing.JButton jButtonIncluir;
     private javax.swing.JButton jButtonPesquisa;
     private javax.swing.JButton jButtonSalvar;
+    private javax.swing.JCheckBox jCheckBoxMedicoAtivo;
     private javax.swing.JComboBox<String> jComboBoxEspecializacao;
     private javax.swing.JFormattedTextField jFormattedTextFieldCEP;
     private javax.swing.JFormattedTextField jFormattedTextFieldCpf;

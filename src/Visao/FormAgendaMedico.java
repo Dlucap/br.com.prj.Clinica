@@ -43,9 +43,11 @@ public class FormAgendaMedico extends javax.swing.JFrame {
 
     public FormAgendaMedico() {
         initComponents();
-
+        
+        jComboBoxAgendaMedico.removeAll();
         preencherMedico();
         DataHoje();
+       
  
     }
 
@@ -55,7 +57,7 @@ public class FormAgendaMedico extends javax.swing.JFrame {
         try {
 
            jComboBoxAgendaMedico.addItem("Selecione");
-            String sql = "SELECT NOMEMEDICO FROM MEDICO ";
+           String sql = "SELECT NOMEMEDICO FROM MEDICO ORDER BY NOMEMEDICO"; // mostrar apenas os medicos ativos 
 
             pstAM = conBd.con.prepareStatement(sql);
             rs = pstAM.executeQuery();
@@ -73,7 +75,7 @@ public class FormAgendaMedico extends javax.swing.JFrame {
 
         conBd.DesconectarBd();
     }
-// vai dar erro pq o status foi trocado para numérico e no preencher tabela não foi arrumado
+
     public final void preencherTabelaAgenda(String sql) {
 
         ArrayList dados = new ArrayList();
@@ -92,7 +94,7 @@ public class FormAgendaMedico extends javax.swing.JFrame {
             } while (conBd.rs.next());
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Não existe mais agendamentos para o médico selecionado!");
+            JOptionPane.showMessageDialog(null, "Não existe agendamentos para o médico selecionado!");
         }
 
         ModeloTabela modelo = new ModeloTabela(dados,colunas);
@@ -262,26 +264,7 @@ public class FormAgendaMedico extends javax.swing.JFrame {
     private void jTableAgendaMedicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAgendaMedicaMouseClicked
         // TODO add your handling code here:
       Agenda = "" + jTableAgendaMedica.getValueAt(jTableAgendaMedica.getSelectedRow(), 0); //pega o primeira coluna da tabela
-//        conBd.conectarBd();
-//
-//        String sql = "select STATUSCONSULTA,IDPACIENTE, IDMEDICO, IDESPECIALIDADE, TURNO, DTAGENDAMENTO,IDAGENDAMENTO from agendamento where IDAGENDAMENTO = '" + Agenda + "'";
-//        conBd.executaSql(sql);
-//
-//        try {
-//            conBd.rs.first();
-//            agen.setStatus("Em Atendimento"); //em atendimento
-//            agen.setAIdPaciente(conBd.rs.getInt("IDPACIENTE"));
-//            agen.setAIdMedico(conBd.rs.getInt("IDMEDICO"));
-//            agen.setAEspecialidade(conBd.rs.getInt("IDESPECIALIDADE"));
-//            agen.setTurno(conBd.rs.getString("TURNO"));
-//            agen.setData(conBd.rs.getDate("DTAGENDAMENTO"));
-//        
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "É necessário selecionar um médico para continuar. " + ex.getMessage());
-//        } finally {
-//           conBd.DesconectarBd();
-//        }
-//    
+ 
     }//GEN-LAST:event_jTableAgendaMedicaMouseClicked
 
     private void jButtonIniAtenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniAtenderActionPerformed
@@ -289,15 +272,14 @@ public class FormAgendaMedico extends javax.swing.JFrame {
         if(Agenda == null){
              JOptionPane.showMessageDialog(null, "Selecione a consulta a ser realziada. ");
         } else {
-            
-        FormConsulta consulta = new FormConsulta(Agenda);
+        FormConsulta consulta = new FormConsulta(Agenda,0);
        consulta.setVisible(true);
         }
     }//GEN-LAST:event_jButtonIniAtenderActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if(jComboBoxAgendaMedico.getSelectedItem() !="Selecione"){
+        if(jComboBoxAgendaMedico.getSelectedItem() != "Selecione" ){//|| jComboBoxAgendaMedico.getSelectedItem() != "Todos"  ){
         int cod = daoagenda.BuscarCodMedico((String)jComboBoxAgendaMedico.getSelectedItem());
        
         codigo = String.valueOf(cod);
@@ -311,7 +293,19 @@ public class FormAgendaMedico extends javax.swing.JFrame {
                 "INNER JOIN HORARIO ON AGENDAMENTO.IDHORA = HORARIO.IDHORA " + 
                 "WHERE AGENDAMENTO.IDMEDICO  = '" + codigo + "'AND AGENDAMENTO.DTAGENDAMENTO  = '" + dtHoje + "' AND " +
                 "AGENDAMENTO.STATUSCONSULTA = '" + status + "' ORDER BY PACIENTE.NOMEPACIENTE"); 
-        } else{
+//       
+////        } else if(jComboBoxAgendaMedico.getSelectedItem() == "Todos" ){
+//            preencherTabelaAgenda(
+//                "SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE, " +
+//                "HORARIO.HORA, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC FROM AGENDAMENTO " +
+//                "INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE " +
+//                "INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO " +
+//                "INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE " +
+//                "INNER JOIN HORARIO ON AGENDAMENTO.IDHORA = HORARIO.IDHORA " + 
+//                "WHERE AGENDAMENTO.IDMEDICO IS NOT NULL AND AGENDAMENTO.DTAGENDAMENTO  = '" + dtHoje + "' AND " +
+//                "AGENDAMENTO.STATUSCONSULTA = '" + status + "' ORDER BY PACIENTE.NOMEPACIENTE");
+            
+        }else{
             JOptionPane.showMessageDialog(rootPane, "Selecione o nome do médico!");
         }
     }//GEN-LAST:event_jButton1ActionPerformed

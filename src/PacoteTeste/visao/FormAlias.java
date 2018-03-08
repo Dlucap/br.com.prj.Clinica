@@ -5,6 +5,7 @@
  */
 package PacoteTeste.visao;
 
+import ModeloConection.ConexaoBd;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -16,7 +17,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -256,6 +256,8 @@ public class FormAlias extends javax.swing.JFrame {
         // TODO add your handling code here:
         Url = "jdbc:sqlserver://" + jTextFieldServidor.getText() + ":1433;databaseName="
                 + jTextFieldDataBaseName.getText();
+        ConexaoBd  conexaoBD = new ConexaoBd();
+        conexaoBD.conectarBd(Url,1);
     }//GEN-LAST:event_jButtonTestarConexaoMouseClicked
 
     private void jButtonTestarConexaoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonTestarConexaoMouseEntered
@@ -275,6 +277,8 @@ public class FormAlias extends javax.swing.JFrame {
             // TODO add your handling code here:
             jTextFieldAlias.setText("");
             String Nome = String.valueOf(jlistAlias.getSelectedItem());
+            System.out.println("Linha selecionada: "+jlistAlias.getSelectedItem());
+            System.out.println("Index selecionado: "+jlistAlias.getSelectedIndex());
             DaoAlias txt = new DaoAlias();
             arquivo = new BufferedReader(new FileReader(txt.file));
 //https://pt.stackoverflow.com/questions/89339/comparar-linhas-com-txt-java-android
@@ -283,10 +287,7 @@ public class FormAlias extends javax.swing.JFrame {
                     String linha = arquivo.readLine();
                    
                      if (linha.toLowerCase().contains(Nome.toLowerCase())) {
-                    System.out.println("Entrou no while: " + Nome);
-                         System.out.println(linha);
-                         System.out.println("\n");
-                         
+                                         
                     // pega a linha
                     
                     String[] valoresEntreVirgulas = linha.split(";");
@@ -340,11 +341,11 @@ public class FormAlias extends javax.swing.JFrame {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FormAlias.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            try {
-                arquivo.close();
-            } catch (IOException ex) {
-                Logger.getLogger(FormAlias.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            try {
+//                arquivo.close();
+//            } catch (IOException ex) {
+//                Logger.getLogger(FormAlias.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
     }//GEN-LAST:event_jlistAliasMouseClicked
     public void limparCampos() {
@@ -376,7 +377,11 @@ public class FormAlias extends javax.swing.JFrame {
                 //separa os campos entre as virgulas de cada linha
                 String[] valoresEntreVirgulas = linhasDoArquivo.split(";");
                 //imprime a coluna que quiser
-                //System.out.println(valoresEntreVirgulas[0]);
+//                System.out.println("\n");
+//                System.out.println(valoresEntreVirgulas[3]);
+//                System.out.println(valoresEntreVirgulas[2]);
+//                System.out.println(valoresEntreVirgulas[1]);
+//                System.out.println(valoresEntreVirgulas[0]);
                 jlistAlias.add(valoresEntreVirgulas[0]);
             }
 
@@ -384,7 +389,8 @@ public class FormAlias extends javax.swing.JFrame {
             System.out.println("teste4: " + e);
         }
     }
-
+//https://commons.apache.org/proper/commons-io/javadocs/api-2.5/org/apache/commons/io/FilenameUtils.html#method_detail
+    //http://www.guj.com.br/t/como-ler-apenas-a-linha-20-de-um-txt/136542/5
     /**
      * @param args the command line arguments
      */

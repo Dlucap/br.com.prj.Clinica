@@ -7,6 +7,7 @@ package Visao;
 
 import Visao.FormAgendamento;
 import ModeloConection.ConexaoBd;
+import com.toedter.calendar.JCalendar;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
@@ -98,7 +99,6 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
         getContentPane().add(jLabelVesao);
         jLabelVesao.setBounds(1160, 650, 70, 16);
 
-        TelaBemVindo.setClosable(true);
         TelaBemVindo.setResizable(true);
         TelaBemVindo.setTitle("Seja Bem-Vindo");
         TelaBemVindo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -192,6 +192,16 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
         jCalendarTelaPrincipal.setBackground(new java.awt.Color(102, 102, 102));
         jCalendarTelaPrincipal.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jCalendarTelaPrincipal.setWeekOfYearVisible(false);
+        jCalendarTelaPrincipal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCalendarTelaPrincipalMouseClicked(evt);
+            }
+        });
+        jCalendarTelaPrincipal.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jCalendarTelaPrincipalPropertyChange(evt);
+            }
+        });
         getContentPane().add(jCalendarTelaPrincipal);
         jCalendarTelaPrincipal.setBounds(890, 0, 347, 221);
         getContentPane().add(jLabelUsuario);
@@ -574,6 +584,21 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         espec.setVisible(true);
     }//GEN-LAST:event_jMenuCadUsuario1ActionPerformed
+
+    private void jCalendarTelaPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCalendarTelaPrincipalMouseClicked
+        // TODO add your handling code here:
+        System.out.println("button"+ evt.getButton());
+         System.out.println("id"+ evt.getID());
+         System.out.println("String param"+ evt.paramString());
+         System.out.println("is consumed"+ evt.isConsumed());
+         
+        
+    }//GEN-LAST:event_jCalendarTelaPrincipalMouseClicked
+    
+    private void jCalendarTelaPrincipalPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCalendarTelaPrincipalPropertyChange
+        // TODO add your handling code here:
+    System.out.println(evt.getPropertyName()+ ": " + evt.getNewValue()); //getNewValue()
+    }//GEN-LAST:event_jCalendarTelaPrincipalPropertyChange
 
     /**
      * @param args the command line arguments

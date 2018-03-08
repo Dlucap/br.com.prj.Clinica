@@ -7,8 +7,10 @@ package Visao;
 
 import ModeloConection.ConexaoBd;
 import ModeloBeans.BeansAgendamento;
+import ModeloBeans.BeansConsulta;
 import ModeloBeans.ModeloTabela;
 import ModeloDao.DaoAgendamento;
+import ModeloDao.DaoConsulta;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -27,51 +29,81 @@ import javax.swing.ListSelectionModel;
  */
 public class FormConsulta extends javax.swing.JFrame {
 
-    BeansAgendamento agen = new BeansAgendamento();
+    BeansAgendamento beansAgendamento = new BeansAgendamento();
+    BeansConsulta beansConsulta = new BeansConsulta();
+
     DaoAgendamento daoAgenda = new DaoAgendamento();
+    DaoConsulta daoConsulta = new DaoConsulta();
+
     ConexaoBd conBd = new ConexaoBd();
 
     JTabbedPane tabbedPane = new JTabbedPane();
 
     String codAgenda;
+    Integer idAgendamento,idPaciente,idMedico,idEspecialidade,idHora;
+    Date dtAgendamento;
     Integer Idade;
 
     /**
-     * Creates new form FormConsult
+     * Creates new form FormConsult tipo 0 e 1.
+     * indica se será uma nova consulta(0) ou se será apenas uma consulta 
+     * em atendimento já realizado (1) os campos da tela não serão editados.
      *
-     * @param Codigo direto tela FormAgenda
+     * @param Codigo direto tela FormAgendaMedico
+     * @param tipo
      */
-    public FormConsulta(String Codigo) {
+    public FormConsulta(String Codigo, Integer tipo) {
         initComponents();
         codAgenda = Codigo;
-        int cod = Integer.parseInt(codAgenda);
-        agen = daoAgenda.buscaAgendaPorCodigo(cod);
-        HabilitaCampos();
-        jTextFieldNomePacienteConsulta.setText(agen.getNomePaciente());
-        jLabelNomeMedico.setText(agen.getNomeMedico());
-        jFormattedTextFieldDtNAscimento.setText(agen.getDtNascPaciente());
-        jTextAreaMotivoCosulta.setText(agen.getMotivo());
-        //pensar em como retornar na label "sim ou não"
-        jLabelRespRetorno.setText(agen.getARetorno());
-        if(agen.getARetorno()=="Sim"){
-            jLabelConsultaRetorno.setText(String.valueOf(agen.getAgenIdConsultaRetorno()));
-        } else{
-            jLabelConsultaRetorno.show(false);
-        }
-        jTextFieldNumeroConsulta.setText(codAgenda);
-        jTextFieldIdadePacienteConsulta.setText(String.valueOf(Idade));
-        String dtNasc = agen.getDtNascPaciente();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        if (tipo == 0) {
+            
+            //nova consulta
+            jButtonSairConsulta.setVisible(false);
+            preencherIdConsultaIncluir();
+            int cod = Integer.parseInt(codAgenda);
+            beansAgendamento = daoAgenda.buscaAgendaPorCodigo(cod);
+            
+            HabilitaCampos();
+            jTextFieldNomePacienteConsulta.setText(beansAgendamento.getNomePaciente());
+            jLabelNomeMedico.setText(beansAgendamento.getNomeMedico());
+            jFormattedTextFieldDtNAscimento.setText(beansAgendamento.getDtNascPaciente());
+            jTextAreaMotivoCosulta.setText(beansAgendamento.getMotivo());
+            //pensar em como retornar na label "sim ou não"
+                      
+            if (beansAgendamento.getARetorno() == "Sim") {
+                jLabelConsultaRetorno.setText(String.valueOf(beansAgendamento.getAgenIdConsultaRetorno()));
+                jLabelRespRetorno.setText(beansAgendamento.getARetorno());
+            } else {
+                jLabelConsultaRetorno.show(false);
+                jLabelRespRetorno.setText("");
+            }
+            
+            jTextFieldIdadePacienteConsulta.setText(String.valueOf(Idade));
+            
+            String dtNasc = beansAgendamento.getDtNascPaciente();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        try {
-            Date dataNascimento = sdf.parse(dtNasc);
-            int idade = calculaIdade(dataNascimento);
-            //A idade é:
-            jTextFieldIdadePacienteConsulta.setText(Integer.toString(idade));
-        } catch (ParseException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao calcular a idade do paciente.");
-            jTextFieldIdadePacienteConsulta.setText(" ");
+            try {
+                Date dataNascimento = sdf.parse(dtNasc);
+                int idade = calculaIdade(dataNascimento);
+                //A idade é:
+                jTextFieldIdadePacienteConsulta.setText(Integer.toString(idade));
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(rootPane, "Erro ao calcular a idade do paciente.");
+                jTextFieldIdadePacienteConsulta.setText(" ");
+            }
+        } else if (tipo == 1) {
+            //consultando uma consulta ja finalizado
+            
+            jButtonSairConsulta.setVisible(true);
+            
+           /*
+            *
+            *
+            *
+            */
         }
+
     }
 
     /**
@@ -100,7 +132,7 @@ public class FormConsulta extends javax.swing.JFrame {
         return idade;
     }
 
-    /* criar um metodo que calcule de forma automática o imc al inserir o peso e a altura
+    /* criar um metodo que calcule de forma automática o imc ao inserir o peso e a altura
      */
     public void actionPerformed(ActionEvent e) {
         String res;
@@ -214,7 +246,8 @@ public class FormConsulta extends javax.swing.JFrame {
         jButtonFimConsulta = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
         jButtonAtestado = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jButtonImprimirReceita = new javax.swing.JButton();
+        jButtonSairConsulta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -276,7 +309,11 @@ public class FormConsulta extends javax.swing.JFrame {
 
         jLabelConsultaRetorno.setText("Núm Consul retor");
 
-        jFormattedTextFieldAlturaPaciente.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("##,##"))));
+        try {
+            jFormattedTextFieldAlturaPaciente.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#.##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         jFormattedTextFieldAlturaPaciente.setEnabled(false);
 
         jFormattedTextFieldPesoPaciente.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("##,##"))));
@@ -293,7 +330,7 @@ public class FormConsulta extends javax.swing.JFrame {
                         .addComponent(jScrollPane2)
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabelNome)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -315,7 +352,7 @@ public class FormConsulta extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabelRetorno)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabelRespRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabelRespRetorno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelConsultaRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -355,18 +392,18 @@ public class FormConsulta extends javax.swing.JFrame {
                     .addComponent(jFormattedTextFieldAlturaPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jFormattedTextFieldPesoPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelMotivo)
-                    .addComponent(jLabelIMC)
-                    .addComponent(jTextFieldIMC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonCalcularIMC)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabelPressaoArterial)
                         .addComponent(jTextFieldPaPacienteConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelRetorno)
-                            .addComponent(jLabelRespRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabelConsultaRetorno))
+                        .addComponent(jLabelRetorno))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabelMotivo)
+                        .addComponent(jLabelIMC)
+                        .addComponent(jTextFieldIMC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonCalcularIMC)
+                        .addComponent(jLabelConsultaRetorno))
+                    .addComponent(jLabelRespRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(12, Short.MAX_VALUE))
@@ -632,7 +669,9 @@ public class FormConsulta extends javax.swing.JFrame {
 
         jButtonAtestado.setText("Gerar Atestado");
 
-        jButton1.setText("Imprimir Receita");
+        jButtonImprimirReceita.setText("Imprimir Receita");
+
+        jButtonSairConsulta.setText("Sair Da Consulta");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -640,14 +679,16 @@ public class FormConsulta extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(231, 231, 231)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonImprimirReceita, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonAtestado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonFimConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(385, 385, 385))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonSairConsulta)
+                .addGap(306, 306, 306))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -667,11 +708,12 @@ public class FormConsulta extends javax.swing.JFrame {
                 .addComponent(jTabbedPaneConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 621, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonImprimirReceita, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonAtestado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButtonFimConsulta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jButtonCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonSairConsulta)))
                 .addContainerGap())
         );
 
@@ -681,29 +723,36 @@ public class FormConsulta extends javax.swing.JFrame {
 
     private void jButtonFimConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFimConsultaActionPerformed
         // TODO add your handling code here:
-        String sqlFimConsulta = "SELECT * FROM AGENDAMENTO WHERE IDAGENDAMENTO = '"+codAgenda+"'";
-        System.out.println("consulta "+sqlFimConsulta);
-        
-        conBd.executaSql(sqlFimConsulta);
-        try {
-
-            conBd.rs.first();
-            agen.setStatus("Finalizado");//finalizado
-            agen.setAIdPaciente(conBd.rs.getInt("IDPACIENTE"));
-            agen.setAIdMedico(conBd.rs.getInt("IDMEDICO"));
-            agen.setAEspecialidade(conBd.rs.getInt("IDESPECIALIDADE"));
-            agen.setAgenIdHora(conBd.rs.getInt("IDHORA"));
-            agen.setData(conBd.rs.getDate("DTAGENDAMENTO"));
-            agen.setAgendaCod(conBd.rs.getInt("IDAGENDAMENTO"));
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao selecionar os dados" + ex.getMessage());
-        } finally {
-
-            // conBd.DesconectarBd();
-        }
-        daoAgenda.Alterar(agen);
-
+                 
+             int cod = Integer.parseInt(codAgenda);
+             beansAgendamento = daoAgenda.buscaAgendamentoPorCodigo(cod);     
+                 
+             beansAgendamento.setStatus("Finalizado");//finalizado
+             beansAgendamento.setAIdPaciente(beansAgendamento.getAIdPaciente());
+             beansAgendamento.setAIdMedico(beansAgendamento.getAIdMedico());
+             beansAgendamento.setAEspecialidade(beansAgendamento.getAEspecialidade());
+             beansAgendamento.setAgenIdHora(beansAgendamento.getAgenIdHora());
+             beansAgendamento.setData(beansAgendamento.getData());
+             beansAgendamento.setAgendaCod(cod);
+           
+             daoAgenda.Alterar(beansAgendamento); 
+            
+             beansConsulta.setIdAgendamento(cod);
+             beansConsulta.setAltura(Float.parseFloat(jFormattedTextFieldAlturaPaciente.getText()));
+             beansConsulta.setPeso(Float.parseFloat(jFormattedTextFieldPesoPaciente.getText()));
+             beansConsulta.setPressaoArterial(jTextFieldPaPacienteConsulta.getText());
+             beansConsulta.setReceita(jTextAreaReceitaConsulta.getText());
+             beansConsulta.setDiagnostico(jTextAreaDiagnosticoConsulta.getText());
+            
+             daoConsulta.Salvar(beansConsulta);
+             
+             jFormattedTextFieldAlturaPaciente.enable(false);
+             jFormattedTextFieldPesoPaciente.enable(false);
+             jTextFieldPaPacienteConsulta.enable(false);
+             jTextAreaReceitaConsulta.enable(false);
+             jTextAreaDiagnosticoConsulta.enable(false);
+             jButtonSairConsulta.setVisible(true);
+             jButtonCalcularIMC.setEnabled(false);
     }//GEN-LAST:event_jButtonFimConsultaActionPerformed
 
     private void jTabbedPaneConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPaneConsultaMouseClicked
@@ -712,10 +761,9 @@ public class FormConsulta extends javax.swing.JFrame {
         if (i == 1) {
             //  jTabbedPaneConsulta.setSelectedIndex(jTabbedPaneConsulta.getComponentCount()-1);
 
-            preencherTabelaAgenda("SELECT * FROM AGENDAMENTO WHERE IDAGENDAMENTO = '" + codAgenda + "'");
+            preencherTabelaAgenda("SELECT * FROM AGENDAMENTO WHERE STATUSCONSULTA = 'FINALIZADO' AND  IDPACIENTE = 12");
 
         }
-
 
     }//GEN-LAST:event_jTabbedPaneConsultaMouseClicked
 
@@ -726,14 +774,14 @@ public class FormConsulta extends javax.swing.JFrame {
 
     private void jButtonCalcularIMCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalcularIMCActionPerformed
         // TODO add your handling code here:
-        double IMC, altura, peso;
-        altura = Float.parseFloat(jFormattedTextFieldPesoPaciente.getText());
+        double IMC = 0, altura = 0, peso = 0;
+        altura = Float.parseFloat(jFormattedTextFieldAlturaPaciente.getText());
         peso = Float.parseFloat(jFormattedTextFieldPesoPaciente.getText());
         //IMC = Peso ÷ altura x altura.
         DecimalFormat decimal = new DecimalFormat("0.00");
         IMC = peso / Math.pow(altura, 2);
         jTextFieldIMC.setText(String.valueOf(decimal.format(IMC)));
-        
+
 
         /*
 *   Classificação               IMC                             O que pode acontecer 
@@ -774,7 +822,12 @@ public class FormConsulta extends javax.swing.JFrame {
             } while (conBd.rs.next());
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Nenhuma consulta localizada para hoje.");
+            if (jTabbedPaneConsulta.getSelectedIndex() == 1) {
+                JOptionPane.showMessageDialog(null, "Paciente não possui histórico de consultas cadastrada!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Nenhuma consulta localizada para hoje.");
+            }
+
         }
 
         ModeloTabela modelo = new ModeloTabela(dados, colunas);
@@ -811,7 +864,27 @@ public class FormConsulta extends javax.swing.JFrame {
         conBd.DesconectarBd();
     }
 
-    public void HabilitaCampos() {
+    public void preencherIdConsultaIncluir() {
+        try {
+            conBd.conectarBd();
+            String sql = "SELECT MAX(IDCONSULTA+1) AS PROXID FROM CONSULTA";
+            conBd.executaSql(sql);
+
+            conBd.rs.first();
+
+            if(String.valueOf(conBd.rs.getInt("PROXID")).equals("0")){
+                jTextFieldNumeroConsulta.setText("1");
+            }else {
+               jTextFieldNumeroConsulta.setText(String.valueOf(conBd.rs.getInt("PROXID")));
+            }
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID do usuário! " + ex.getMessage());
+        }
+        conBd.DesconectarBd();
+    }
+     
+     public void HabilitaCampos() {
 
         jFormattedTextFieldAlturaPaciente.setEnabled(true);
         jTextFieldPaPacienteConsulta.setEnabled(true);
@@ -870,11 +943,12 @@ public class FormConsulta extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAtestado;
     private javax.swing.JButton jButtonCalcularIMC;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonFimConsulta;
+    private javax.swing.JButton jButtonImprimirReceita;
+    private javax.swing.JButton jButtonSairConsulta;
     private javax.swing.JFormattedTextField jFormattedTextFieldAlturaPaciente;
     private javax.swing.JFormattedTextField jFormattedTextFieldDtNAscimento;
     private javax.swing.JFormattedTextField jFormattedTextFieldPesoPaciente;

@@ -8,10 +8,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import visao.FormAlias;
 
 /**
  * A classe ConexaoBd tem como objetivo conectar ao banco de dados MsSql sempre
@@ -25,13 +22,18 @@ public class ConexaoBd {
     public ResultSet rs;
     private String driver = "com.mysql.jdbc";
     private String caminho = "jdbc:sqlserver://localhost:1433;databaseName=ClinicaMedica";
+    //private String caminho = "jdbc:sqlserver://localhost:1433;databaseName=ClinicaMedicaMSSQL";
+  
     // private String caminho = url;
+    /**
+    * Usuário utilizado para acesso no banco, o mesmo deve estar ativo e com permissões de acesso.
+    */
     private String usuario = "Admin";
-    private String senha = "12345";
+    private String senha = "123456";
     public Connection con;
 
     /**
-     * Método usado para conectar ao bancod e dados
+     * Método usado para conectar ao banco de dados
      * http://ftp.unicamp.br/pub/apoio/treinamentos/linguagens/curso_java_III.pdf
      */
     public void conectarBd() {
@@ -39,14 +41,32 @@ public class ConexaoBd {
         try {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver()); //Essa linha foi a diferença
             System.setProperty("jdbc.Drivers", driver);
+           
             con = DriverManager.getConnection(caminho, usuario, senha);
             // con = DriverManager.getConnection(url, usuario, senha);
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(ConexaoBd.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao se conectar ao banco de dados:\n" + ex.getMessage());
+             JOptionPane.showMessageDialog(null, "Erro ao se conectar ao banco de dados:\n" + ex.getMessage());
         }
     }
 
+      public void conectarBd(String url, Integer tipo) {
+
+        try {
+            DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver()); //Essa linha foi a diferença
+            System.setProperty("jdbc.Drivers", driver);
+           
+            con = DriverManager.getConnection(url, usuario, senha);
+            if(tipo==1){
+             JOptionPane.showMessageDialog(null, "Conectado com sucesso!","Teste de conexão.",JOptionPane.INFORMATION_MESSAGE);
+            }
+            // con = DriverManager.getConnection(url, usuario, senha);
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, "Erro ao se conectar ao banco de dados:\n" + ex.getMessage());
+        }
+        finally{
+          DesconectarBd();
+      }
+    }
     /**
      * Método utilizado para desconectar.
      */

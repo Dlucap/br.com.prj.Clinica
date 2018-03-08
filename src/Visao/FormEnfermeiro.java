@@ -114,6 +114,11 @@ public class FormEnfermeiro extends javax.swing.JFrame {
 
         jLabelMRg.setText("RG:");
 
+        try {
+            jFormattedTextFieldCoren.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("COREN-UU-#######")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         jFormattedTextFieldCoren.setEnabled(false);
         jFormattedTextFieldCoren.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -294,8 +299,8 @@ public class FormEnfermeiro extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextFieldEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
-                    .addComponent(jFormattedTextFieldCoren, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldCompl))
+                    .addComponent(jTextFieldCompl)
+                    .addComponent(jFormattedTextFieldCoren, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -304,7 +309,7 @@ public class FormEnfermeiro extends javax.swing.JFrame {
                         .addComponent(jButtonPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(64, 64, 64))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -519,21 +524,6 @@ public class FormEnfermeiro extends javax.swing.JFrame {
         jButtonEditar.setEnabled(true);
         jButtonExcluir.setEnabled(true);
 
-//        jTextFieldIDEnfermeiro.setText(String.valueOf(enfel.getECod()));
-//        jTextFieldNomeEnfermeiro.setText(enfel.getENome());
-//        jTextFieldEndereco.setText(enfel.getELogradouro());
-//        jTextFieldNumero.setText(String.valueOf(enfel.getENumero()));
-//        jTextFieldBairro.setText(enfel.getEBairro());
-//        jTextFieldCidade.setText(enfel.getECidade());
-//        jTextFieldUF.setText(enfel.getESUf());
-//        jTextFieldEmail.setText(enfel.getEEmail());
-//        jFormattedTextFieldCpf.setText(enfel.getECpf());
-//        jFormattedTextFieldRg.setText(enfel.getERg());
-//        jFormattedTextFieldTelResidencial.setText(enfel.getETelResidencial());
-//        jFormattedTextFieldTelCelular.setText(enfel.getETelCelular());
-//        jFormattedTextFieldCoren.setText(enfel.getECoren());
-//        jFormattedTextFieldCep.setText(enfel.getECep());
-//        jTextFieldCompl.setText(enfel.getECompl());
         preencherTabelaEnfermeiro("SELECT IDENFERMEIRO,NOMEENFERMEIRO, COREN FROM ENFERMEIRO WHERE NOMEENFERMEIRO like '%" + enf.getEPesquisa() + "%'");
     }//GEN-LAST:event_jButtonPesquisaActionPerformed
 
@@ -797,7 +787,7 @@ public class FormEnfermeiro extends javax.swing.JFrame {
         try {
             conBd.rs.first();
             do {
-                dados.add(new Object[]{conBd.rs.getInt("IDENFERMEIRO"), conBd.rs.getString("NOMEENFERMEIRO"), conBd.rs.getInt("COREN")});
+                dados.add(new Object[]{conBd.rs.getInt("IDENFERMEIRO"), conBd.rs.getString("NOMEENFERMEIRO"), conBd.rs.getString("COREN")});
 
             } while (conBd.rs.next());
 
@@ -814,7 +804,7 @@ public class FormEnfermeiro extends javax.swing.JFrame {
         jTableEnfermeiro.getColumnModel().getColumn(1).setPreferredWidth(220);
         jTableEnfermeiro.getColumnModel().getColumn(1).setResizable(false);
 
-        jTableEnfermeiro.getColumnModel().getColumn(2).setPreferredWidth(70);
+        jTableEnfermeiro.getColumnModel().getColumn(2).setPreferredWidth(130);
         jTableEnfermeiro.getColumnModel().getColumn(2).setResizable(false);
 
         jTableEnfermeiro.getTableHeader().setReorderingAllowed(false);//reorganizar o cabeçalho

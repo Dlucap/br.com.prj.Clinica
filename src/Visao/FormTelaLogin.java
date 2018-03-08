@@ -10,7 +10,7 @@
  * Pesquisa
  * Relatório
  * links para baixar icones
- *https://www.iconfinder.com/search/?q=medico
+ *https://www.iconfinder.com/search/?q=medico 
  * http://www.iconspedia.com/pack/medico-icons-3755/30.html
  * https://www.youtube.com/playlist?list=PLDXIzdVtlj9OWro7dFDE6HE9VZ7sukYUl
  * https://viacep.com.br/ CEP mais completo
@@ -55,10 +55,10 @@ public class FormTelaLogin extends javax.swing.JFrame {
 
         BtnAcessar = new javax.swing.JButton();
         BtnSair = new javax.swing.JButton();
-        jLabelSenha = new javax.swing.JLabel();
-        jLabelUsuário = new javax.swing.JLabel();
-        jTextFieldUsuário = new javax.swing.JTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        jLabelSenhaUsuario = new javax.swing.JLabel();
+        jLabelUsuario = new javax.swing.JLabel();
+        jTextFieldUsuario = new javax.swing.JTextField();
+        jPasswordFieldUsuario = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
         jButtonBancoDados = new javax.swing.JButton();
         choiceBancoDados = new java.awt.Choice();
@@ -66,6 +66,7 @@ public class FormTelaLogin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Clinica Medica");
+        setUndecorated(true);
         getContentPane().setLayout(null);
 
         BtnAcessar.setText("Acessar");
@@ -80,7 +81,7 @@ public class FormTelaLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(BtnAcessar);
-        BtnAcessar.setBounds(300, 270, 80, 30);
+        BtnAcessar.setBounds(270, 260, 80, 30);
 
         BtnSair.setText("Sair");
         BtnSair.setMaximumSize(new java.awt.Dimension(73, 28));
@@ -91,27 +92,27 @@ public class FormTelaLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(BtnSair);
-        BtnSair.setBounds(390, 270, 80, 30);
+        BtnSair.setBounds(360, 260, 80, 30);
 
-        jLabelSenha.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
-        jLabelSenha.setText("Senha");
-        getContentPane().add(jLabelSenha);
-        jLabelSenha.setBounds(20, 110, 50, 30);
+        jLabelSenhaUsuario.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
+        jLabelSenhaUsuario.setText("Senha");
+        getContentPane().add(jLabelSenhaUsuario);
+        jLabelSenhaUsuario.setBounds(20, 110, 50, 30);
 
-        jLabelUsuário.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
-        jLabelUsuário.setText("Usuário");
-        getContentPane().add(jLabelUsuário);
-        jLabelUsuário.setBounds(20, 60, 54, 21);
-        getContentPane().add(jTextFieldUsuário);
-        jTextFieldUsuário.setBounds(20, 80, 140, 28);
+        jLabelUsuario.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
+        jLabelUsuario.setText("Usuário");
+        getContentPane().add(jLabelUsuario);
+        jLabelUsuario.setBounds(20, 60, 54, 21);
+        getContentPane().add(jTextFieldUsuario);
+        jTextFieldUsuario.setBounds(20, 80, 140, 28);
 
-        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+        jPasswordFieldUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField1ActionPerformed(evt);
+                jPasswordFieldUsuarioActionPerformed(evt);
             }
         });
-        getContentPane().add(jPasswordField1);
-        jPasswordField1.setBounds(20, 140, 140, 28);
+        getContentPane().add(jPasswordFieldUsuario);
+        jPasswordFieldUsuario.setBounds(20, 140, 140, 28);
 
         jLabel1.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
         jLabel1.setText("Banco de Dados");
@@ -125,7 +126,7 @@ public class FormTelaLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButtonBancoDados);
-        jButtonBancoDados.setBounds(20, 260, 30, 30);
+        jButtonBancoDados.setBounds(170, 200, 30, 30);
 
         choiceBancoDados.setName(""); // NOI18N
         getContentPane().add(choiceBancoDados);
@@ -134,9 +135,9 @@ public class FormTelaLogin extends javax.swing.JFrame {
         JLTelaLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/fundotelaLogin.png"))); // NOI18N
         JLTelaLogin.setName(""); // NOI18N
         getContentPane().add(JLTelaLogin);
-        JLTelaLogin.setBounds(0, 0, 500, 320);
+        JLTelaLogin.setBounds(0, 0, 490, 300);
 
-        setSize(new java.awt.Dimension(514, 355));
+        setSize(new java.awt.Dimension(488, 298));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -144,10 +145,10 @@ public class FormTelaLogin extends javax.swing.JFrame {
        BeansDadosUsuario dadosUser = new BeansDadosUsuario();
         try {
             con.executaSql("SELECT NOME,USENHAEMAIL,EMAIL,UPORTASMTP,USERSAISMTP,"
-                    + "SENHA FROM USUARIO WHERE NOME ='" + jTextFieldUsuário.getText() + "'");
+                    + "SENHA FROM USUARIO WHERE NOME ='" + jTextFieldUsuario.getText() + "' AND ATIVO = 1");
             con.rs.first();
 
-            if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(jPasswordField1.getText()))) {
+            if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldUsuario.getText()))) {
                 FormTelaPrincipal tela = new FormTelaPrincipal(con.rs.getString("NOME"));
 /**
  * Busca os dados de login do usuário
@@ -182,18 +183,18 @@ public class FormTelaLogin extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_BtnSairActionPerformed
 
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
+    private void jPasswordFieldUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldUsuarioActionPerformed
+    }//GEN-LAST:event_jPasswordFieldUsuarioActionPerformed
 
     private void BtnAcessarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnAcessarKeyPressed
         // TODO add your handling code here:
         if (evt.getKeyCode() == evt.VK_ENTER) {
             try {
-                con.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jTextFieldUsuário.getText() + "'");
+                con.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jTextFieldUsuario.getText() + "'");
                 con.rs.first();
 
-                if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(jPasswordField1.getText()))) {
-                    FormTelaPrincipal tela = new FormTelaPrincipal(jTextFieldUsuário.getText());
+                if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldUsuario.getText()))) {
+                    FormTelaPrincipal tela = new FormTelaPrincipal(jTextFieldUsuario.getText());
 
                     tela.setVisible(true);
                     dispose();
@@ -262,9 +263,9 @@ public class FormTelaLogin extends javax.swing.JFrame {
     private java.awt.Choice choiceBancoDados;
     private javax.swing.JButton jButtonBancoDados;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabelSenha;
-    private javax.swing.JLabel jLabelUsuário;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextFieldUsuário;
+    private javax.swing.JLabel jLabelSenhaUsuario;
+    private javax.swing.JLabel jLabelUsuario;
+    private javax.swing.JPasswordField jPasswordFieldUsuario;
+    private javax.swing.JTextField jTextFieldUsuario;
     // End of variables declaration//GEN-END:variables
 }

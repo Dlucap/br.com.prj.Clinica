@@ -60,7 +60,46 @@ public class FormAgendamento extends javax.swing.JFrame {
                 + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
     }
 
-    
+    public FormAgendamento(String agenda){
+        initComponents(); 
+        preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,"
+                + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
+        HabilitarCampos();
+        HabilitarBtn();
+        conBd.conectarBd();
+        
+        String sql = "SELECT STATUSCONSULTA, ESPECIALIDADE.ESPEC, PACIENTE.NOMEPACIENTE, MEDICO.NOMEMEDICO, " +
+                     "HORARIO.IDHORA, DTAGENDAMENTO, IDAGENDAMENTO, HORARIO.HORA  FROM AGENDAMENTO " +
+                     "INNER JOIN PACIENTE ON PACIENTE.IDPACIENTE = AGENDAMENTO.IDPACIENTE "+
+                     "INNER JOIN MEDICO ON MEDICO.IDMEDICO = AGENDAMENTO.IDMEDICO " +
+                     "INNER JOIN ESPECIALIDADE ON ESPECIALIDADE.IDESPECIALIDADE= AGENDAMENTO.IDESPECIALIDADE " +
+                     "INNER JOIN HORARIO ON HORARIO.IDHORA = AGENDAMENTO.IDHORA "+
+                     "WHERE IDAGENDAMENTO = '" + agenda + "'";
+        conBd.executaSql(sql);
+
+        try {
+            conBd.rs.first();
+           
+            jTextFieldPaciente.setText(conBd.rs.getString("NOMEPACIENTE"));
+            preencherMedico();
+            jComboBoxMedico.setSelectedItem(conBd.rs.getString("NOMEMEDICO"));
+            jComboBoxEspecMedica.setSelectedItem(conBd.rs.getString("ESPEC"));
+            preencherEspecMedica(); 
+            jComboBoxHorario.setSelectedItem(conBd.rs.getString("HORA"));
+            preencherHorario();
+            jDateChooserAgendamento.setDate(conBd.rs.getDate("DTAGENDAMENTO"));
+            preencherHorario();
+            agen.setAgendaCod(conBd.rs.getInt("IDAGENDAMENTO"));
+            System.out.println("agenda "+agenda);
+            System.out.println(conBd.rs.getInt("IDAGENDAMENTO"));
+                      
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao selecionar os dados" + ex.getMessage());
+        } finally {
+           conBd.DesconectarBd();
+      
+        }
+    }
     /**
      * consulta ao informar que e retorno, deverá apresnetar uma unica consulta
      * em um prazo menor ou igual a 30 dias e salvar o id da conuslta inicial
@@ -96,7 +135,7 @@ public class FormAgendamento extends javax.swing.JFrame {
 
         try {
             jComboBoxEspecMedica.addItem("Selecione");
-            String sql = "SELECT ESPEC FROM ESPECIALIDADE"; //  WHERE ATIVO = 1
+           String sql = "SELECT ESPEC FROM ESPECIALIDADE WHERE ATIVO = 1 ORDER BY ESPEC";
 
             pstA = conBd.con.prepareStatement(sql);
             rs = pstA.executeQuery();
@@ -185,7 +224,7 @@ public class FormAgendamento extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             // Logger.getLogger(FormMedico.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados do quadro de horario no banco de dados " + ex + "\n" + ex.getErrorCode() + "\n" + ex.getSQLState());
+            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados do quadro de horario no banco de dados " +"\n"+ex.getMessage()+"\n"+ ex + "\n" + ex.getErrorCode() + "\n" + ex.getSQLState());
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados do quadro de horario NullPointerException " + ex.getMessage() + "\n" + ex);
         }
@@ -365,6 +404,11 @@ public class FormAgendamento extends javax.swing.JFrame {
         jFormattedTextFieldIdRetorno.setEnabled(false);
         jFormattedTextFieldIdRetorno.setInheritsPopupMenu(true);
         jFormattedTextFieldIdRetorno.setKeymap(null);
+        jFormattedTextFieldIdRetorno.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jFormattedTextFieldIdRetornoMouseClicked(evt);
+            }
+        });
 
         jButtonAtualizaConsultaRetorno.setText("Atualiza Consuta de Retorno.");
         jButtonAtualizaConsultaRetorno.setEnabled(false);
@@ -525,6 +569,7 @@ public class FormAgendamento extends javax.swing.JFrame {
             
             jButtonBuscarConsulta.setEnabled(false);
              jButtonAtualizaConsultaRetorno.setEnabled(false);
+             jFormattedTextFieldIdRetorno.setText("");
          
         }
     }//GEN-LAST:event_jComboBoxRetornoActionPerformed
@@ -622,15 +667,17 @@ public class FormAgendamento extends javax.swing.JFrame {
 
     private void jButtonConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConcluirActionPerformed
         // TODO add your handling code here:
+     
         DaoAgendamento dao = new DaoAgendamento();
-
+       
+         
         agen.setNomePaciente(jTextFieldPaciente.getText());
         agen.setNomeMedico((String) jComboBoxMedico.getSelectedItem());
         int soma = jComboBoxHorario.getSelectedIndex() + 1;
         agen.setAgenIdHora(soma);
         agen.setMotivo(jTextAreaMotivo.getText());
         agen.setData(jDateChooserAgendamento.getDate());//dt.format(jDateChooserAgendamento.getDate()) String convertido em Date
-        agen.setAEspecialidade(jComboBoxEspecMedica.getSelectedIndex());
+        agen.setAEspecialidade(dao.BuscarCodEspecEmNumero(String.valueOf(jComboBoxEspecMedica.getSelectedItem())));
         agen.setStatus("Aberto"); //status aberto
         agen.setARetorno((String) jComboBoxRetorno.getSelectedItem());
 
@@ -645,7 +692,6 @@ public class FormAgendamento extends javax.swing.JFrame {
             agen.setAgenIdConsultaRetorno(0);
         }
         
-
         dao.Salvar(agen);
         LimparCampos();
         DesabilitarCampos();
@@ -671,9 +717,9 @@ public class FormAgendamento extends javax.swing.JFrame {
 
     private void jComboBoxHorarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBoxHorarioMouseClicked
         // TODO add your handling code here:
-//        if (jDateChooserAgendamento.getDate() != null || idMedico != null) {
-//            preencherHorario();
-//        }
+        if (jDateChooserAgendamento.getDate() != null || idMedico != null) {
+           preencherHorario();
+        }
     }//GEN-LAST:event_jComboBoxHorarioMouseClicked
 
     private void jComboBoxHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxHorarioActionPerformed
@@ -683,17 +729,17 @@ public class FormAgendamento extends javax.swing.JFrame {
 
     private void jDateChooserAgendamentoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooserAgendamentoPropertyChange
         // TODO add your handling code here:
-        horario();
     }//GEN-LAST:event_jDateChooserAgendamentoPropertyChange
 
     private void jButtonBuscarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarConsultaActionPerformed
         // TODO add your handling code here:
         DaoAgendamento daoAgendamento = new DaoAgendamento();
         daoAgendamento.buscarPaciente(jTextFieldPaciente.getText());
-
-        FormConsultaRetorno formConsultaRetorno = new FormConsultaRetorno(daoAgendamento.codPaciente);
+        daoAgendamento.BuscarCodMedico(String.valueOf(jComboBoxMedico.getSelectedItem()));
+        
+        FormConsultaRetorno formConsultaRetorno = new FormConsultaRetorno(daoAgendamento.codPaciente,daoAgendamento.codMedico);
         formConsultaRetorno.setVisible(true);
-      
+        
     }//GEN-LAST:event_jButtonBuscarConsultaActionPerformed
 
     private void jButtonAtualizaConsultaRetornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizaConsultaRetornoActionPerformed
@@ -701,6 +747,21 @@ public class FormAgendamento extends javax.swing.JFrame {
           jFormattedTextFieldIdRetorno.setText(cRetorno);
     }//GEN-LAST:event_jButtonAtualizaConsultaRetornoActionPerformed
 
+    private void jFormattedTextFieldIdRetornoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFormattedTextFieldIdRetornoMouseClicked
+        // TODO add your handling code here:
+       if(jFormattedTextFieldIdRetorno.getText().isEmpty() == true){
+            String consultaRetorno = jFormattedTextFieldIdRetorno.getText().trim();
+           
+           FormConsulta formConsulta = new FormConsulta(consultaRetorno,1);
+           formConsulta.setVisible(true);
+        }
+    }//GEN-LAST:event_jFormattedTextFieldIdRetornoMouseClicked
+
+  public void verificarAgendamento(){
+          
+//        conBd.DesconectarBd();
+     }
+  
     public void preencherTabelaAgendamento(String sql) {
 
         ArrayList dados = new ArrayList();
@@ -762,8 +823,8 @@ public class FormAgendamento extends javax.swing.JFrame {
         jTextFieldPaciente.setText(" ");
         jComboBoxRetorno.setSelectedItem("Não");
         jDateChooserAgendamento.setDate(null);
-        jComboBoxHorario.setSelectedItem("Selecione");
         jComboBoxHorario.removeAllItems();
+        jComboBoxHorario.setSelectedItem("Selecione");
         jFormattedTextFieldIdRetorno.setText(null);
      
     }

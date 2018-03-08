@@ -10,16 +10,18 @@ public class BeansAgendamento {
     private String agenNomeMedico;
     private String agenNomePaciente;
     private Integer agenIdHora;
+    private String agenHora;
     private Date agenData;
     private String agenStatus;
     private String agenMotivo;
     private Integer agenEspecialidade;
+    private String agenNomeEspecialidade;
     private Integer agenIdPaciente;
     private Integer agenIdMedico;
-    private String agenRetorno;
+    private String agenRetorno; 
     private String agenDtNascPaciente;
     private Integer agenIdConsultaRetorno;
-
+    
     public String getARetorno() {
         return agenRetorno;
     }
@@ -130,14 +132,6 @@ public class BeansAgendamento {
         this.agenDtNascPaciente = dtNascPaciente;
     }
 
-//    public Integer getIdade() {
-//        return Idade;
-//    }
-//
-//    public void setIdade(Integer Idade) {
-//        this.Idade = Idade;
-//    }
-
     /**
      * @return the agenIdConsultaRetorno
      */
@@ -150,6 +144,34 @@ public class BeansAgendamento {
      */
     public void setAgenIdConsultaRetorno(Integer agenIdConsultaRetorno) {
         this.agenIdConsultaRetorno = agenIdConsultaRetorno;
+    }
+
+    /**
+     * @return the agenHora
+     */
+    public String getAgenHora() {
+        return agenHora;
+    }
+
+    /**
+     * @param agenHora the agenHora to set
+     */
+    public void setAgenHora(String agenHora) {
+        this.agenHora = agenHora;
+    }
+
+    /**
+     * @return the agenNomeEspecialidade
+     */
+    public String getAgenNomeEspecialidade() {
+        return agenNomeEspecialidade;
+    }
+
+    /**
+     * @param agenNomeEspecialidade the agenNomeEspecialidade to set
+     */
+    public void setAgenNomeEspecialidade(String agenNomeEspecialidade) {
+        this.agenNomeEspecialidade = agenNomeEspecialidade;
     }
     
 }
