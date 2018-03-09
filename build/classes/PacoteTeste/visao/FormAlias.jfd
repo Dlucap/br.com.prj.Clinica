@@ -1,0 +1,86 @@
+JFDML JFormDesigner: "6.0.2.0.116" Java: "1.8.0_141" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {par l {seq l {space :p:109:p, comp jLabel4:::p:175:p}, seq l {space :::p, comp jlistAlias:::p:171:p, par l {seq {space :::p, par l {par l:l::p {comp jLabelAlias:::p::p, comp jLabelServidor::l:p::p, comp jLabelBd::l:p::p, comp jTextFieldServidor::l:::x, comp jTextFieldAlias::l:::x, comp jTextFieldDataBaseName::l:p:175:p}, seq l {comp jLabelPorta:::p::p, space :::p, comp jTextFieldPorta:::p:59:p}}}, seq l {space :p:39:p, comp jButtonTestarConexao:::p::p}}}}, space :::x}, seq t {space :0:0:x, comp jButtonNovo:::p:72:p, space :::p, comp jButtonSalvar:::p:72:p, space :::p, comp jButtonCancelar:::p::p, space :::p, comp jButtonSair:::p:82:p, space :p:21:p}}"
+			"$verticalGroup": "par l {seq l {space :::p, comp jLabel4:::p:32:p, space :::x, par l {comp jlistAlias::l:p:208:p, seq l {comp jLabelAlias:::p::p, space :::p, comp jTextFieldAlias:::p::p, space :::p, comp jLabelServidor:::p::p, space :::p, comp jTextFieldServidor:::p::p, space :::p, comp jLabelBd:::p::p, space :::p, comp jTextFieldDataBaseName:::p::p, space :::p, par b {comp jLabelPorta::b:p::p, comp jTextFieldPorta::b:p::p}, space :::p, comp jButtonTestarConexao:::p::p}}, space :::p, par b {comp jButtonSair::b:p::p, comp jButtonCancelar::b:p::p, comp jButtonSalvar::b:p::p, comp jButtonNovo::b:p::p}, space :::x}}"
+		} ) {
+			name: "this"
+			"defaultCloseOperation": 0
+			"title": "Alias"
+			"resizable": false
+			"$sizePolicy": 1
+			"$locationPolicy": 1
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "jLabelServidor"
+				"text": "Servidor: "
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "jLabelBd"
+				"text": "Banco de Dados: "
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "jLabelAlias"
+				"text": "Alias: "
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "jTextFieldAlias"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "jTextFieldServidor"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "jTextFieldDataBaseName"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "jButtonCancelar"
+				"text": "Cancelar"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "jButtonCancelarActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "jButtonSalvar"
+				"text": "Salvar"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "jButtonSalvarMouseClicked", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "jButtonSalvarActionPerformed", true ) )
+			} )
+			add( new FormComponent( "java.awt.List" ) {
+				name: "jlistAlias"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "jlistAliasMouseClicked", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "jButtonTestarConexao"
+				"text": "Testar Conexão"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "jButtonTestarConexaoMouseClicked", true ) )
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseEntered", "jButtonTestarConexaoMouseEntered", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "jButtonTestarConexaoActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "jLabel4"
+				"font": new java.awt.Font( "sansserif", 1, 14 )
+				"text": "Gerenciamento de alias"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "jButtonSair"
+				"text": "Sair"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "jButtonSairActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "jLabelPorta"
+				"text": "Porta:"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "jTextFieldPorta"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "jButtonNovo"
+				"text": "Novo"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "jButtonNovoMouseClicked", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "jButtonNovoActionPerformed", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"size": new java.awt.Dimension( 388, 361 )
+		} )
+	}
+}
