@@ -6,26 +6,26 @@
  */
 package ModeloDao;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
- 
+
 /**
  *
  * @author Daniel Lucas
  */
 public class DaoAlias {
 
- public final File file = new File("Alias.txt");
+    public final File file = new File("Alias.txt");
     private String Alias, Servidor, Banco, Porta;
 
-    public void criaAlias() {
+    public void CriaAlias() {
 
         try {
             // Se o arquivo nao existir, ele gera
@@ -44,35 +44,33 @@ public class DaoAlias {
         this.Banco = banco;
         this.Porta = porta;
 
-        String caminho = Alias+";"+Servidor+";"+Banco +";"+Porta+"\r\n";
-//                String caminho = "<BdAlias>\r\n<nomeAlias>" + alias + "</nomeAlias>\r\n<servidor>" + Servidor + "</servidor>\r\n"
-//                + "<banco>" + Banco + "</banco>\r\n<porta>" + Porta + "</porta>\r\n</BdAlias>\r\n";
-        //"jdbc:sqlserver://" + Servidor + ":" + Porta + ";databaseName=" + Banco;
+        String caminho = Alias.trim() + ";" + Servidor.trim() + ";" + Banco.trim() + ";" + Porta.trim();
 
         try {
-            FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            try {
+            FileWriter fileWriter = new FileWriter(file.getAbsoluteFile(), true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-                bw.write(caminho);
+            try {
+                bufferedWriter.write(caminho.trim());
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+
                 try {
-                    bw.close();
+                    bufferedWriter.close();
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(null, "Erro ao fechar o arquivo alias." + ex.getMessage());
                 }
             } catch (IOException ex) {
-                Logger.getLogger(DaoAlias.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, "Erro ao gravar o alias." + ex.getMessage());
             }
             JOptionPane.showMessageDialog(null, "Alias cadastrado com sucesso.");
         } catch (IOException ex) {
-            Logger.getLogger(DaoAlias.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao salvar o alias cadastrado." + ex.getMessage());
         }
     }
 
-    public void percorrerAlias(){
-       
+    public String percorrerAlias() {
+
         try {
 
             //cria um scanner para ler o arquivo
@@ -82,7 +80,7 @@ public class DaoAlias {
             String linhasDoArquivo = new String();
 
             //ignora a primeira linha do arquivo
-          //  leitor.nextLine();
+            //  leitor.nextLine();
             //percorre todo o arquivo
             while (leitor.hasNext()) {
 
@@ -93,12 +91,34 @@ public class DaoAlias {
                 String[] valoresEntreVirgulas = linhasDoArquivo.split(";");
                 //imprime a coluna que quiser
                 System.out.println(valoresEntreVirgulas[0]);
-                 System.out.println(valoresEntreVirgulas);
+                return valoresEntreVirgulas[0];
             }
 
         } catch (FileNotFoundException e) {
-            System.out.println("teste4: "+e);
+            System.out.println("teste4: " + e);
         }
+        return null;
     }
-        
+
+    public void alteraLinha(String linhaAntiga, String linhaNova) throws IOException {
+        String arquivo = "Alias";
+        String arquivoTmp = "Alias-tmp";
+
+        BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoTmp));
+        BufferedReader reader = new BufferedReader(new FileReader(arquivo));
+
+        String linha;
+        while ((linha = reader.readLine()) != null) {
+            if (linha.contains(linhaAntiga)) {
+                linha = linha.replace(linhaAntiga, linhaNova);
+            }
+            writer.write(linha + "\n");
+        }
+
+        writer.close();
+        reader.close();
+
+        new File(arquivo).delete();
+        new File(arquivoTmp).renameTo(new File(arquivo));
+    }
 }

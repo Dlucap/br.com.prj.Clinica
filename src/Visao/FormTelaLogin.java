@@ -1,31 +1,14 @@
-//https://www.youtube.com/watch?v=OfsCClnnY6U&list=PLyQ9CRKOzOWqVZ5nDspGFVgybs3zRGPUL video 13
-/**
- *    ANDAMENTO DO PROJETO
- *https://cachina.wordpress.com/2008/03/17/muito-material-sobre-java-mega-post/
- * ferramentas / tela de bemvindos ok
- * tela Cadastro medio ok
- * Acesso ao banco de dados ok
- * Cadastro enfermeira
- * cadastro paciente
- * Pesquisa
- * Relatório
- * links para baixar icones
- *https://www.iconfinder.com/search/?q=medico 
- * http://www.iconspedia.com/pack/medico-icons-3755/30.html
- * https://www.youtube.com/playlist?list=PLDXIzdVtlj9OWro7dFDE6HE9VZ7sukYUl
- * https://viacep.com.br/ CEP mais completo
- * http://findicons.com/icon/193102/stock_mail_send icones 0800
- *
- */
 package Visao;
 
-import PacoteTeste.visao.FormAlias;
 import ModeloBeans.BeansDadosUsuario;
 import ModeloConection.ConexaoBd;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import ModeloDao.DaoCripSenhaUser;
-
+import ModeloDao.DaoAlias;
+import ModeloDao.DaoProfilerBancoDados;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 /**
  * @author Daniel Lucas
@@ -41,7 +24,8 @@ public class FormTelaLogin extends javax.swing.JFrame {
      */
     public FormTelaLogin() {
         initComponents();
-        con.conectarBd();
+        preencherAliasBD();
+        // con.conectarBd();
     }
 
     /**
@@ -55,13 +39,14 @@ public class FormTelaLogin extends javax.swing.JFrame {
 
         BtnAcessar = new javax.swing.JButton();
         BtnSair = new javax.swing.JButton();
+        BtnLoginAutomatico = new javax.swing.JToggleButton();
         jLabelSenhaUsuario = new javax.swing.JLabel();
         jLabelUsuario = new javax.swing.JLabel();
         jTextFieldUsuario = new javax.swing.JTextField();
         jPasswordFieldUsuario = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
         jButtonBancoDados = new javax.swing.JButton();
-        choiceBancoDados = new java.awt.Choice();
+        jchoiceBancoDados = new java.awt.Choice();
         JLTelaLogin = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -81,7 +66,7 @@ public class FormTelaLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(BtnAcessar);
-        BtnAcessar.setBounds(270, 260, 80, 30);
+        BtnAcessar.setBounds(250, 180, 80, 30);
 
         BtnSair.setText("Sair");
         BtnSair.setMaximumSize(new java.awt.Dimension(73, 28));
@@ -92,7 +77,16 @@ public class FormTelaLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(BtnSair);
-        BtnSair.setBounds(360, 260, 80, 30);
+        BtnSair.setBounds(340, 180, 80, 30);
+
+        BtnLoginAutomatico.setText("Login Automático");
+        BtnLoginAutomatico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnLoginAutomaticoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(BtnLoginAutomatico);
+        BtnLoginAutomatico.setBounds(250, 220, 170, 28);
 
         jLabelSenhaUsuario.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
         jLabelSenhaUsuario.setText("Senha");
@@ -102,9 +96,9 @@ public class FormTelaLogin extends javax.swing.JFrame {
         jLabelUsuario.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
         jLabelUsuario.setText("Usuário");
         getContentPane().add(jLabelUsuario);
-        jLabelUsuario.setBounds(20, 60, 54, 21);
+        jLabelUsuario.setBounds(20, 60, 110, 21);
         getContentPane().add(jTextFieldUsuario);
-        jTextFieldUsuario.setBounds(20, 80, 140, 28);
+        jTextFieldUsuario.setBounds(20, 80, 170, 28);
 
         jPasswordFieldUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,7 +106,7 @@ public class FormTelaLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jPasswordFieldUsuario);
-        jPasswordFieldUsuario.setBounds(20, 140, 140, 28);
+        jPasswordFieldUsuario.setBounds(20, 140, 170, 28);
 
         jLabel1.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
         jLabel1.setText("Banco de Dados");
@@ -126,56 +120,61 @@ public class FormTelaLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButtonBancoDados);
-        jButtonBancoDados.setBounds(170, 200, 30, 30);
+        jButtonBancoDados.setBounds(170, 210, 30, 30);
 
-        choiceBancoDados.setName(""); // NOI18N
-        getContentPane().add(choiceBancoDados);
-        choiceBancoDados.setBounds(20, 210, 140, 40);
+        jchoiceBancoDados.setName(""); // NOI18N
+        jchoiceBancoDados.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jchoiceBancoDadosPropertyChange(evt);
+            }
+        });
+        getContentPane().add(jchoiceBancoDados);
+        jchoiceBancoDados.setBounds(20, 210, 140, 40);
 
         JLTelaLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/fundotelaLogin.png"))); // NOI18N
         JLTelaLogin.setName(""); // NOI18N
         getContentPane().add(JLTelaLogin);
-        JLTelaLogin.setBounds(0, 0, 490, 300);
+        JLTelaLogin.setBounds(-50, 0, 500, 270);
 
-        setSize(new java.awt.Dimension(488, 298));
+        setSize(new java.awt.Dimension(443, 264));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAcessarActionPerformed
-       BeansDadosUsuario dadosUser = new BeansDadosUsuario();
+    private void ConectaSistema() {
+        BeansDadosUsuario beansDadosUsuario = new BeansDadosUsuario();
         try {
+            con.conectarBd();
             con.executaSql("SELECT NOME,USENHAEMAIL,EMAIL,UPORTASMTP,USERSAISMTP,"
-                    + "SENHA FROM USUARIO WHERE NOME ='" + jTextFieldUsuario.getText() + "' AND ATIVO = 1");
+                    + "SENHA FROM  USUARIO (NOLOCK) WHERE NOME ='"
+                    + jTextFieldUsuario.getText() + "' AND ATIVO = 1");
             con.rs.first();
+            String senha = new String(jPasswordFieldUsuario.getPassword());
+            if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(senha))) {
 
-            if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldUsuario.getText()))) {
-                FormTelaPrincipal tela = new FormTelaPrincipal(con.rs.getString("NOME"));
-/**
- * Busca os dados de login do usuário
- */
-//                DaoDadosUsuario dados = new DaoDadosUsuario(con.rs.getString("NOME"),
-//                                                         con.rs.getString("USENHAEMAIL"),
-//                                                            con.rs.getString("EMAIL"),
-//                                                            con.rs.getInt("UPORTASMTP"),
-//                                                            con.rs.getString("USERSAISMTP"));
+                beansDadosUsuario.setEmail(con.rs.getString("EMAIL"));
+                beansDadosUsuario.setNome(con.rs.getString("NOME"));
+                beansDadosUsuario.setPortaSmtp(con.rs.getInt("UPORTASMTP"));
+                beansDadosUsuario.setSenhaEmail(con.rs.getString("USENHAEMAIL"));
+                beansDadosUsuario.setSmtp(con.rs.getString("USERSAISMTP"));
 
-//                dadosUser.setEmail(con.rs.getString("EMAIL"));
-//                dadosUser.setNome(con.rs.getString("NOME"));
-//                dadosUser.setPortaSmtp(con.rs.getInt("UPORTASMTP"));
-//                dadosUser.setSenhaEmail(con.rs.getString("USENHAEMAIL"));
-//                dadosUser.setSmtp( con.rs.getString("USERSAISMTP"));
-                
+                FormTelaPrincipal tela = new FormTelaPrincipal(beansDadosUsuario);
+
                 tela.setVisible(true);
                 dispose();
-
             } else {
-                JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!");
+                JOptionPane.showMessageDialog(rootPane, "Senha não confere", nome, JOptionPane.WARNING_MESSAGE);
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!\n Erro:" + ex);
+            JOptionPane.showMessageDialog(rootPane, "Erro ao realizar o login no sistema!\n"
+                    + "Usuário/Senha inválido ou não cadastrado no sistema! \n Erro:" + ex, "Falha Inesperada.",
+                    JOptionPane.ERROR_MESSAGE);
+            jPasswordFieldUsuario.setText("");
         }
+    }
 
-        con.DesconectarBd();
+    private void BtnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAcessarActionPerformed
+
+        ConectaSistema();
 
     }//GEN-LAST:event_BtnAcessarActionPerformed
 
@@ -188,31 +187,72 @@ public class FormTelaLogin extends javax.swing.JFrame {
 
     private void BtnAcessarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnAcessarKeyPressed
         // TODO add your handling code here:
-        if (evt.getKeyCode() == evt.VK_ENTER) {
-            try {
-                con.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jTextFieldUsuario.getText() + "'");
-                con.rs.first();
-
-                if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldUsuario.getText()))) {
-                    FormTelaPrincipal tela = new FormTelaPrincipal(jTextFieldUsuario.getText());
-
-                    tela.setVisible(true);
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!");
-                }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!\nErro:" + ex);
-            }
-            con.DesconectarBd();
-        }
+//        if (evt.getKeyCode() == evt.VK_ENTER) {
+//            try {
+//                con.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jTextFieldUsuario.getText() + "'");
+//                con.rs.first();
+//
+//                if (con.rs.getString("SENHA").equals(DaoCripSenhaUser.codificaBase64Encoder(jPasswordFieldUsuario.getText()))) {
+//                    //  FormTelaPrincipal tela = new FormTelaPrincipal(jTextFieldUsuario.getText());
+//
+//                    // tela.setVisible(true);
+//                    dispose();
+//                } else {
+//                    JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!");
+//                }
+//            } catch (SQLException ex) {
+//                JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido ou não cadastrado no sistema!\nErro:" + ex);
+//            }
+//            con.DesconectarBd();
+//        }
     }//GEN-LAST:event_BtnAcessarKeyPressed
 
     private void jButtonBancoDadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBancoDadosActionPerformed
-        // TODO add your handling code here:
-        FormAlias bd = new FormAlias();
+        //FormAlias bd = new FormAlias();
+        FormAliasAlterado bd = new FormAliasAlterado();
         bd.setVisible(true);
     }//GEN-LAST:event_jButtonBancoDadosActionPerformed
+
+    private void jchoiceBancoDadosPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jchoiceBancoDadosPropertyChange
+        preencherAliasBD();
+    }//GEN-LAST:event_jchoiceBancoDadosPropertyChange
+
+    private void BtnLoginAutomaticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLoginAutomaticoActionPerformed
+
+        jTextFieldUsuario.setText("Adm");
+        jPasswordFieldUsuario.setText("12345");
+        
+        ConectaSistema();
+    }//GEN-LAST:event_BtnLoginAutomaticoActionPerformed
+    public final void preencherAliasBD() {
+        DaoAlias daoAlias = new DaoAlias();
+
+        try {
+
+            //cria um scanner para ler o arquivo
+            Scanner leitor = new Scanner(daoAlias.file);
+            //variavel que armazenara as linhas do arquivo
+            String linhasDoArquivo = new String();
+            //ignora a primeira linha do arquivo
+            //  leitor.nextLine();
+            //percorre todo o arquivo
+            while (leitor.hasNext()) {
+                //recebe cada linha do arquivo
+                linhasDoArquivo = leitor.nextLine();
+                //separa os campos entre as virgulas de cada linha
+                String[] valoresEntreVirgulas = linhasDoArquivo.split(";");
+                //imprime a coluna que quiser
+                jchoiceBancoDados.add(valoresEntreVirgulas[0]);
+            }
+        } catch (FileNotFoundException fileNotFoundException) {
+            System.out.println("teste4: " + fileNotFoundException.getMessage());
+        }
+    }
+    
+    public void HabilitaProfilerBD(boolean profiler){
+        DaoProfilerBancoDados dados = new DaoProfilerBancoDados();
+         dados.setProfilerBancoDados(profiler);
+    }
 
     /**
      * @param args the command line arguments
@@ -228,16 +268,24 @@ public class FormTelaLogin extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormTelaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormTelaLogin.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormTelaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormTelaLogin.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormTelaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormTelaLogin.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormTelaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormTelaLogin.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -258,14 +306,15 @@ public class FormTelaLogin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAcessar;
+    private javax.swing.JToggleButton BtnLoginAutomatico;
     private javax.swing.JButton BtnSair;
     private javax.swing.JLabel JLTelaLogin;
-    private java.awt.Choice choiceBancoDados;
     private javax.swing.JButton jButtonBancoDados;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelSenhaUsuario;
     private javax.swing.JLabel jLabelUsuario;
     private javax.swing.JPasswordField jPasswordFieldUsuario;
     private javax.swing.JTextField jTextFieldUsuario;
+    private java.awt.Choice jchoiceBancoDados;
     // End of variables declaration//GEN-END:variables
 }

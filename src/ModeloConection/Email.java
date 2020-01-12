@@ -76,10 +76,11 @@ public class Email {
 
             email.send();// envio do email
             email.setDebug(true);
+
             JOptionPane.showMessageDialog(null, "Teste de envio de email concluido com sucesso.\n");
+
         } catch (EmailException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao realizar o envio do email!\n" + ex.getMessage());
-
         }
     }
 }

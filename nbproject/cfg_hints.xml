@@ -9,7 +9,7 @@
             <attribute name="enabled" value="true"/>
         </node>
         <node name="org.netbeans.modules.java.hints.AssignmentIssues.assignmentToMethodParam">
-            <attribute name="enabled" value="true"/>
+            <attribute name="enabled" value="false"/>
         </node>
         <node name="Javac_OVERRIDES">
             <attribute name="enabled" value="true"/>
@@ -109,6 +109,9 @@
         </node>
         <node name="org.netbeans.modules.java.hints.encapsulation.FieldEncapsulation.packageField">
             <attribute name="enabled" value="true"/>
+        </node>
+        <node name="org.netbeans.modules.java.hints.HideFieldByVar">
+            <attribute name="enabled" value="false"/>
         </node>
     </tool>
 </configuration>

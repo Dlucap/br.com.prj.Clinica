@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Visao;
+package PacoteTeste.visao;
 
+import Visao.*;
 import ModeloBeans.ModeloTabela;
 import ModeloConection.ConexaoBd;
 import java.sql.SQLException;
@@ -120,6 +121,7 @@ public class FormHorarioMedico extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FormHorarioMedico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

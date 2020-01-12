@@ -62,8 +62,6 @@ public class FormAlias2 extends javax.swing.JFrame {
         jTextFieldPorta = new javax.swing.JTextField();
         jButtonNovo = new javax.swing.JButton();
 
-        entityManager1.setFlushMode(javax.persistence.FlushModeType.COMMIT);
-
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Alias");
         setResizable(false);
@@ -180,7 +178,7 @@ public class FormAlias2 extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(15, 15, 15)))))
-                .addContainerGap(415, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,7 +214,7 @@ public class FormAlias2 extends javax.swing.JFrame {
                     .addComponent(jButtonNovo)))
         );
 
-        setSize(new java.awt.Dimension(797, 355));
+        setSize(new java.awt.Dimension(388, 355));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -233,7 +231,7 @@ public class FormAlias2 extends javax.swing.JFrame {
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
         // TODO add your handling code here:
         DaoAlias alias = new DaoAlias();
-        alias.criaAlias();
+        alias.CriaAlias();
 
         alias.salvar(jTextFieldAlias.getText(), jTextFieldServidor.getText(), jTextFieldDataBaseName.getText(),
                 jTextFieldPorta.getText());

@@ -25,7 +25,7 @@ public class FormTesteEnvioEmail extends javax.swing.JFrame {
     private final String subject = "Email teste.";
     private final String msg = "Prezado, tenha um bom dia!\n\n"
             + "\tO presente e-mail tem a afinalidade de validar a parametrização do envio de e-mail"
-            + " do usuário. \n\tParabéns, a sua parametrização de envio de e-mail está correta.\n\n"
+            + " do usuário. Parabéns, a sua parametrização de envio de e-mail está correta.\n\n"
             + "Gentileza não responder.\n\n"
             + "\t\tEquipe Clinica Medica Software";
 /**
@@ -76,7 +76,6 @@ public class FormTesteEnvioEmail extends javax.swing.JFrame {
         jTextFieldTesteEnvioemailRemetente = new javax.swing.JTextField();
         jToggleButtonTesteEnvioEmail = new javax.swing.JToggleButton();
         jButtonVoltar = new javax.swing.JButton();
-        jProgressBar1 = new javax.swing.JProgressBar();
 
         jButton1.setText("jButton1");
 
@@ -142,8 +141,6 @@ public class FormTesteEnvioEmail extends javax.swing.JFrame {
             }
         });
 
-        jProgressBar1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -153,11 +150,9 @@ public class FormTesteEnvioEmail extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jToggleButtonTesteEnvioEmail)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToggleButtonTesteEnvioEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonVoltar)
+                .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -165,11 +160,10 @@ public class FormTesteEnvioEmail extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jToggleButtonTesteEnvioEmail)
-                    .addComponent(jButtonVoltar)
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonVoltar))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -262,7 +256,6 @@ public class FormTesteEnvioEmail extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelEmail;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JTextField jTextFieldTesteEnvioemailRemetente;
     private javax.swing.JToggleButton jToggleButtonTesteEnvioEmail;
     // End of variables declaration//GEN-END:variables

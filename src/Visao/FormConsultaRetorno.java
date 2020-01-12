@@ -27,6 +27,23 @@ public final class FormConsultaRetorno extends javax.swing.JFrame {
     }
 
     /**
+     * consulta ao informar que e retorno, deverá apresnetar uma unica consulta
+     * em um prazo menor ou igual a 30 dias e salvar o id da conuslta inicial
+     *
+     * SELECT campo1, campo2, campo3, campodata *
+     *
+     * FROM tabela
+     *
+     *
+     * WHERE campodata between getdate() and DATEADD(DAY, -30 , GETDATE())
+     * ORDER BY campo1DESC Buscar os dados dos últimos 7 dias a partir da data
+     * actual ( SELECT * FROM sua_tabela WHERE seu_campo BETWEEN
+     * TIMESTAMP(DATE_SUB(NOW(), INTERVAL 7 day)) AND NOW();
+     */
+    
+    
+    
+    /**
      * Creates new form FormConsultaRetorno
      */
     public FormConsultaRetorno(Integer idPaciente, Integer idMedico) {

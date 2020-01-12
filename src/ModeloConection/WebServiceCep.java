@@ -249,7 +249,7 @@ public final class WebServiceCep {
 				loadCep.setResultText("Site não encontrado.");
 				loadCep.setResulCode(-14);
 			} else {
-				loadCep.setResultText("N�o foi possivel ler o documento xml.");
+				loadCep.setResultText("Não foi possivel ler o documento xml.");
 				loadCep.setResulCode(-15);
 			}
 			loadCep.setExceptio(ex);

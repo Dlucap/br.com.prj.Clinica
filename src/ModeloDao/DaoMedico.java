@@ -13,15 +13,17 @@ import ModeloBeans.BeansMedico;
 public class DaoMedico {
 
     ConexaoBd conex = new ConexaoBd();
-    BeansMedico mod = new BeansMedico();
-  
+    // BeansMedico mod = new BeansMedico();
+
     PreparedStatement pstM;
 
     public void salvar(BeansMedico mod) {
         conex.conectarBd();
         String sql = "INSERT INTO MEDICO (NOMEMEDICO ,CPF ,RG ,TELRESIDENCIAL ,TELCELULAR ,LOGRADOURO ,BAIRRO ,"
-                + "NUMERO ,CEP ,COMPL ,CRM ,IDESPECIALIDADE ,CIDADE ,ESTADO,EMAIL) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "NUMERO ,CEP ,COMPL ,CRM ,IDESPECIALIDADE ,CIDADE ,ESTADO,EMAIL,ATIVO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
+
+            // conex.con.setAutoCommit(false);
             pstM = conex.con.prepareStatement(sql);
 
             pstM.setString(1, mod.getMnome());
@@ -39,14 +41,16 @@ public class DaoMedico {
             pstM.setString(13, mod.getMSCidade());
             pstM.setString(14, mod.getMSUf());
             pstM.setString(15, mod.getMEmail());
+            pstM.setBoolean(16, mod.getMAtivo());
 
             pstM.execute();
+            //conex.con.commit();
 
             JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!!!");
         } catch (SQLException ex) {
-           // med.HabilitarCampos();
+
             JOptionPane.showMessageDialog(null, "\n Não foi possível realizar a inserção dos dados. \n\n" + ex.getMessage() + "\n");
-         }
+        }
         conex.DesconectarBd();
     }
 
@@ -54,7 +58,7 @@ public class DaoMedico {
         conex.conectarBd();
 
         String sql = "UPDATE MEDICO SET NOMEMEDICO = ?,CPF = ?, RG = ?, TELRESIDENCIAL = ?,TELCELULAR = ?,LOGRADOURO = ?, BAIRRO = ?,"
-                + "NUMERO = ?,CEP = ?,COMPL = ?,CRM = ?,IDESPECIALIDADE = ?,ESTADO = ?,CIDADE = ? ,EMAIL=? WHERE IDMEDICO = ?";
+                + "NUMERO = ?,CEP = ?,COMPL = ?,CRM = ?,IDESPECIALIDADE = ?,ESTADO = ?,CIDADE = ? ,EMAIL = ?,ATIVO = ? WHERE IDMEDICO = ?";
 
         try {
             //PreparedStatement pst = conex.con.prepareStatement(sql);    
@@ -75,7 +79,8 @@ public class DaoMedico {
             pstM.setString(13, (mod.getMSUf()));
             pstM.setString(14, (mod.getMSCidade()));
             pstM.setString(15, mod.getMEmail());
-            pstM.setInt(16, mod.getMcod());
+            pstM.setBoolean(16, mod.getMAtivo());
+            pstM.setInt(17, mod.getMcod());
 
             pstM.execute();
 
@@ -92,8 +97,13 @@ public class DaoMedico {
 
         conex.conectarBd();
 
-        String sql1 = "select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE "
-                + "where medico.NOMEMEDICO like '%" + mod.getMPesquisa() + "%'";
+        String sql1 = "SELECT MEDICO.IDMEDICO, MEDICO.NOMEMEDICO, MEDICO.CPF, MEDICO.RG, MEDICO.TELRESIDENCIAL,"
+                + "MEDICO.TELCELULAR, MEDICO.LOGRADOURO,MEDICO.BAIRRO, MEDICO.NUMERO, MEDICO.CEP,MEDICO.COMPL,"
+                + "MEDICO.EMAIL, MEDICO.CRM, ESPECIALIDADE.IDESPECIALIDADE,ESPECIALIDADE.ESPEC,MEDICO.ESTADO,"
+                + "MEDICO.CIDADE, MEDICO.ATIVO "
+                + "FROM MEDICO (NOLOCK) "
+                + "INNER JOIN ESPECIALIDADE (NOLOCK) ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE "
+                + "WHERE MEDICO.NOMEMEDICO LIKE '%" + mod.getMPesquisa() + "%'";
 
         conex.executaSql(sql1);
 
@@ -115,6 +125,7 @@ public class DaoMedico {
             mod.setMSUf(conex.rs.getString("ESTADO"));
             mod.setMSespecialidade(conex.rs.getString("ESPEC"));
             mod.setMEmail(conex.rs.getString("EMAIL"));
+            mod.setMAtivo(conex.rs.getBoolean("ATIVO"));
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao carregar os dados do medico!\nErro: " + ex.getMessage());

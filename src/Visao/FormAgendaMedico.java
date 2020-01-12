@@ -1,6 +1,7 @@
 package Visao;
 
 import ModeloBeans.BeansAgendamento;
+import ModeloBeans.BeansDadosUsuario;
 import ModeloBeans.ModeloTabela;
 import ModeloConection.ConexaoBd;
 import ModeloDao.DaoAgendamento;
@@ -30,7 +31,20 @@ public class FormAgendaMedico extends javax.swing.JFrame {
 
     String dtHoje,codigo,Agenda,status;
 
-    public void DataHoje() {
+    public FormAgendaMedico(){
+        
+    }
+     
+    public FormAgendaMedico(BeansDadosUsuario beansDadosUsuario) {
+        initComponents();
+        
+        jComboBoxAgendaMedico.removeAll();
+        preencherMedico();
+        DataHoje();
+        
+    }
+
+     public void DataHoje() {
 
         Calendar data = Calendar.getInstance();
         Date d = data.getTime();
@@ -40,17 +54,7 @@ public class FormAgendaMedico extends javax.swing.JFrame {
         dtHoje = dateFormat.format(d);
         status = "Em Atendimento";
     }
-
-    public FormAgendaMedico() {
-        initComponents();
-        
-        jComboBoxAgendaMedico.removeAll();
-        preencherMedico();
-        DataHoje();
-       
- 
-    }
-
+    
     public void preencherMedico() {
         conBd.conectarBd();
 
@@ -68,9 +72,9 @@ public class FormAgendaMedico extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             // Logger.getLogger(FormMedico.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados da especialidade" + ex);
+            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher as informações do medico" + ex);
         } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados da especialidade" + ex.getMessage());
+            JOptionPane.showMessageDialog(rootPane, "Não existem ou não foram encontrado médicos cadastrados." + ex.getMessage());
         }
 
         conBd.DesconectarBd();
@@ -225,8 +229,8 @@ public class FormAgendaMedico extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addComponent(jLabelAgenHj))
                 .addGap(7, 7, 7)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonIniAtender, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(100, 100, 100))
         );
@@ -270,7 +274,7 @@ public class FormAgendaMedico extends javax.swing.JFrame {
     private void jButtonIniAtenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniAtenderActionPerformed
        
         if(Agenda == null){
-             JOptionPane.showMessageDialog(null, "Selecione a consulta a ser realziada. ");
+             JOptionPane.showMessageDialog(null, "Selecione a consulta a ser realizada. ");
         } else {
         FormConsulta consulta = new FormConsulta(Agenda,0);
        consulta.setVisible(true);

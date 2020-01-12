@@ -92,8 +92,9 @@ public class DaoEnfermeiro {
 
         conex.conectarBd();
 
-        String sql1 = "select IDENFERMEIRO,NOMEENFERMEIRO,LOGRADOURO,NUMERO,BAIRRO,CPF,RG,TELRESIDENCIAL,TELCELULAR,"
-                + "COREN,CEP,COMPL,CIDADE,ESTADO,EMAIL from ENFERMEIRO where NOMEENFERMEIRO like '%" + mod.getEPesquisa() + "%'";
+        String sql1 = "SELECT IDENFERMEIRO,NOMEENFERMEIRO,LOGRADOURO,NUMERO,BAIRRO,CPF,RG,TELRESIDENCIAL,TELCELULAR,"
+                + "COREN,CEP,COMPL,CIDADE,ESTADO,EMAIL FROM ENFERMEIRO (NOLOCK) WHERE NOMEENFERMEIRO LIKE '%" +
+                mod.getEPesquisa() + "%'";
 
         conex.executaSql(sql1);
 

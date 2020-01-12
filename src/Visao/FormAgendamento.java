@@ -8,19 +8,22 @@
  */
 package Visao;
 
+//import Visao.*;
 import ModeloBeans.BeansAgendamento;
 import ModeloBeans.BeansDadosUsuario;
 import ModeloBeans.ModeloTabela;
 import ModeloConection.ConexaoBd;
 import ModeloConection.Email;
 import ModeloDao.DaoAgendamento;
+import ModeloDao.DaoCheckDate;
+import ModeloDao.DateAndCalendar;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import javax.swing.JOptionPane;
@@ -44,98 +47,98 @@ public class FormAgendamento extends javax.swing.JFrame {
     private String codigo;
     private String resposta;
     private Integer idMedico;
-    public  static String cRetorno;
-    
+    public static String cRetorno;
+    private Integer idCodigoAgendamento;
+
     Locale local = new Locale("br", "PT");
     SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy", local);
+
+    int flag = 0;
 
     /**
      * Creates new form FormAgenda
      */
-    public FormAgendamento() {
+    FormAgendamento() {
         initComponents();
-        
+
         preencherEspecMedica();
         preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,"
-                + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
+                + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE (NOLOCK) WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
+
     }
 
-    public FormAgendamento(String agenda){
-        initComponents(); 
+    public FormAgendamento(BeansDadosUsuario beansDadosUsuario) {
+        initComponents();
+
+        preencherEspecMedica();
         preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,"
-                + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
+                + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE (NOLOCK) WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
+
+    }
+
+    public FormAgendamento(String agenda, int flag) {
+
+        initComponents();
+        this.flag = flag;
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        Date dt = null;
+
+        preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,"
+                + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE (NOLOCK) WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
+        jComboBoxMedico.removeAll();
+
         HabilitarCampos();
         HabilitarBtn();
         conBd.conectarBd();
-        
-        String sql = "SELECT STATUSCONSULTA, ESPECIALIDADE.ESPEC, PACIENTE.NOMEPACIENTE, MEDICO.NOMEMEDICO, " +
-                     "HORARIO.IDHORA, DTAGENDAMENTO, IDAGENDAMENTO, HORARIO.HORA  FROM AGENDAMENTO " +
-                     "INNER JOIN PACIENTE ON PACIENTE.IDPACIENTE = AGENDAMENTO.IDPACIENTE "+
-                     "INNER JOIN MEDICO ON MEDICO.IDMEDICO = AGENDAMENTO.IDMEDICO " +
-                     "INNER JOIN ESPECIALIDADE ON ESPECIALIDADE.IDESPECIALIDADE= AGENDAMENTO.IDESPECIALIDADE " +
-                     "INNER JOIN HORARIO ON HORARIO.IDHORA = AGENDAMENTO.IDHORA "+
-                     "WHERE IDAGENDAMENTO = '" + agenda + "'";
-        conBd.executaSql(sql);
 
+        String sql = "SELECT AGENDAMENTO.IDAGENDAMENTO, STATUSCONSULTA, ESPECIALIDADE.ESPEC, PACIENTE.NOMEPACIENTE, "
+                + "MEDICO.NOMEMEDICO, HORARIO.IDHORA, DTAGENDAMENTO, HORARIO.HORA  FROM AGENDAMENTO (NOLOCK) "
+                + "INNER JOIN PACIENTE (NOLOCK) ON PACIENTE.IDPACIENTE = AGENDAMENTO.IDPACIENTE "
+                + "INNER JOIN MEDICO (NOLOCK) ON MEDICO.IDMEDICO = AGENDAMENTO.IDMEDICO "
+                + "INNER JOIN ESPECIALIDADE (NOLOCK) ON ESPECIALIDADE.IDESPECIALIDADE= AGENDAMENTO.IDESPECIALIDADE "
+                + "INNER JOIN HORARIO (NOLOCK) ON HORARIO.IDHORA = AGENDAMENTO.IDHORA "
+                + "WHERE IDAGENDAMENTO = '" + agenda + "'";
         try {
+            conBd.executaSql(sql);
+
             conBd.rs.first();
-           
+            idCodigoAgendamento = conBd.rs.getInt("IDAGENDAMENTO");
             jTextFieldPaciente.setText(conBd.rs.getString("NOMEPACIENTE"));
-            preencherMedico();
-            jComboBoxMedico.setSelectedItem(conBd.rs.getString("NOMEMEDICO"));
-            jComboBoxEspecMedica.setSelectedItem(conBd.rs.getString("ESPEC"));
-            preencherEspecMedica(); 
-            jComboBoxHorario.setSelectedItem(conBd.rs.getString("HORA"));
-            preencherHorario();
+            jComboBoxEspecMedica.addItem(conBd.rs.getString("ESPEC"));
+            jComboBoxMedico.addItem(conBd.rs.getString("NOMEMEDICO"));
+            String input = conBd.rs.getString("HORA");
+            try {
+                dt = sdf.parse(input);
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(rootPane, "Erro ao converter a hora. " + ex);
+            }
+
+            SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
+            String strDate = sdf2.format(dt);
+
             jDateChooserAgendamento.setDate(conBd.rs.getDate("DTAGENDAMENTO"));
-            preencherHorario();
-            agen.setAgendaCod(conBd.rs.getInt("IDAGENDAMENTO"));
-            System.out.println("agenda "+agenda);
-            System.out.println(conBd.rs.getInt("IDAGENDAMENTO"));
-                      
+            jComboBoxHorario.addItem(strDate);
+            // jComboBoxHorario.setEnabled(true);
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao selecionar os dados" + ex.getMessage());
         } finally {
-           conBd.DesconectarBd();
-      
+            conBd.DesconectarBd();
         }
     }
-    /**
-     * consulta ao informar que e retorno, deverá apresnetar uma unica consulta
-     * em um prazo menor ou igual a 30 dias e salvar o id da conuslta inicial
-     *
-     * SELECT campo1, campo2, campo3, campodata *
-     *
-     * FROM tabela
-     *
-     *
-     * WHERE campodata between getdate() and DATEADD(DAY, -30 , GETDATE())
-     *
-     *
-     * ORDER BY campo1DESC Buscar os dados dos últimos 7 dias a partir da data
-     * actual ( SELECT * FROM sua_tabela WHERE seu_campo BETWEEN
-     * TIMESTAMP(DATE_SUB(NOW(), INTERVAL 7 day)) AND NOW();
-     */
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      * http://findicons.com/icon/193102/stock_mail_send
      */
-    //preenchimento  Jcombobox Especialidade Medica
-    /* ao colocar para retornar todas as especialidades ativas, quando e escolhido a especialidade
-    * e salvo o id errado. exempo:
-    *SELECT ESPEC FROM ESPECIALIDADE WHERE ATIVO = 1
-    * Dermatologia = 6
-    *SELECT ESPEC FROM ESPECIALIDADE
-    *Dermatologia = 7
-     */
-    public final void preencherEspecMedica() { 
+    public final void preencherEspecMedica() {
         conBd.conectarBd();
 
         try {
             jComboBoxEspecMedica.addItem("Selecione");
-           String sql = "SELECT ESPEC FROM ESPECIALIDADE WHERE ATIVO = 1 ORDER BY ESPEC";
+            String sql = "SELECT ESPEC FROM ESPECIALIDADE (NOLOCK) WHERE ATIVO = 1 ORDER BY ESPEC";
 
             pstA = conBd.con.prepareStatement(sql);
             rs = pstA.executeQuery();
@@ -146,9 +149,9 @@ public class FormAgendamento extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             // Logger.getLogger(FormMedico.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados da especialidade " + ex);
+            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados da especialidade  sql" + ex);
         } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados da especialidade " + ex.getMessage());
+            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados da especialidade null" + ex.getMessage());
         }
         conBd.DesconectarBd();
     }
@@ -165,8 +168,8 @@ public class FormAgendamento extends javax.swing.JFrame {
         } else {
 
             try {
-                String sql = "SELECT MEDICO.NOMEMEDICO FROM MEDICO "
-                        + "INNER JOIN ESPECIALIDADE ON ESPECIALIDADE.IDESPECIALIDADE = MEDICO.IDESPECIALIDADE "
+                String sql = "SELECT MEDICO.NOMEMEDICO FROM MEDICO (NOLOCK)"
+                        + "INNER JOIN ESPECIALIDADE (NOLOCK)ON ESPECIALIDADE.IDESPECIALIDADE = MEDICO.IDESPECIALIDADE "
                         + "WHERE ESPEC = '" + resposta + "'";
 
                 pstA = conBd.con.prepareStatement(sql);
@@ -184,20 +187,14 @@ public class FormAgendamento extends javax.swing.JFrame {
         }
         conBd.DesconectarBd();
     }
-//
-//            String sql = "SELECT IDHORA,HORA FROM HORARIO";
-////                        + "LEFT JOIN AGENDAMENTO ON HORARIO.IDHORA = AGENDAMENTO.IDHORA"
-////                        + "AND AGENDAMENTO.DTAGENDAMENTO = ('"+ jDateChooserAgendamento.getDate()+ "')"
-////                        + "AND AGENDAMENTO.IDMEDICO = '" + idMedico + "' WHERE"
-////                        + "AGENDAMENTO.DTAGENDAMENTO IS NULL";
 
     public void preencherHorario() {
         conBd.conectarBd();
         Integer nomeEspec;
 
         try {
-            String sql = "SELECT HORARIO.IDHORA,HORARIO.HORA FROM HORARIO "
-                    + "LEFT JOIN AGENDAMENTO ON HORARIO.IDHORA = AGENDAMENTO.IDHORA "
+            String sql = "SELECT HORARIO.IDHORA,HORARIO.HORA FROM HORARIO (NOLOCK)"
+                    + "LEFT JOIN AGENDAMENTO (NOLOCK)ON HORARIO.IDHORA = AGENDAMENTO.IDHORA "
                     + "AND AGENDAMENTO.DTAGENDAMENTO = ('" + dt.format(jDateChooserAgendamento.getDate()) + "') "
                     + "AND AGENDAMENTO.IDMEDICO = '" + idMedico + "' WHERE "
                     + "AGENDAMENTO.DTAGENDAMENTO IS NULL";
@@ -208,7 +205,6 @@ public class FormAgendamento extends javax.swing.JFrame {
             Date dt = null;
             while (rs.next()) {
                 // String inputText = rs.getString("HORA");
-
                 String input = rs.getString("HORA");
 
                 try {
@@ -224,11 +220,10 @@ public class FormAgendamento extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             // Logger.getLogger(FormMedico.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados do quadro de horario no banco de dados " +"\n"+ex.getMessage()+"\n"+ ex + "\n" + ex.getErrorCode() + "\n" + ex.getSQLState());
+            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados do quadro de horario no banco de dados " + "\n" + ex.getMessage() + "\n" + ex + "\n" + ex.getErrorCode() + "\n" + ex.getSQLState());
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(rootPane, "Erro ao preencher os dados do quadro de horario NullPointerException " + ex.getMessage() + "\n" + ex);
         }
-
         conBd.DesconectarBd();
     }
 
@@ -288,6 +283,11 @@ public class FormAgendamento extends javax.swing.JFrame {
         jComboBoxMedico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxMedicoActionPerformed(evt);
+            }
+        });
+        jComboBoxMedico.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jComboBoxMedicoPropertyChange(evt);
             }
         });
 
@@ -362,12 +362,8 @@ public class FormAgendamento extends javax.swing.JFrame {
             }
         });
 
+        jDateChooserAgendamento.setDateFormatString("dd/MM/yyyy");
         jDateChooserAgendamento.setEnabled(false);
-        jDateChooserAgendamento.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jDateChooserAgendamentoMouseClicked(evt);
-            }
-        });
         jDateChooserAgendamento.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 jDateChooserAgendamentoPropertyChange(evt);
@@ -383,16 +379,6 @@ public class FormAgendamento extends javax.swing.JFrame {
         });
 
         jComboBoxHorario.setEnabled(false);
-        jComboBoxHorario.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jComboBoxHorarioMouseClicked(evt);
-            }
-        });
-        jComboBoxHorario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxHorarioActionPerformed(evt);
-            }
-        });
 
         jLabelHorario.setText("Horários disponíveis:");
 
@@ -409,8 +395,13 @@ public class FormAgendamento extends javax.swing.JFrame {
                 jFormattedTextFieldIdRetornoMouseClicked(evt);
             }
         });
+        jFormattedTextFieldIdRetorno.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jFormattedTextFieldIdRetornoPropertyChange(evt);
+            }
+        });
 
-        jButtonAtualizaConsultaRetorno.setText("Atualiza Consuta de Retorno.");
+        jButtonAtualizaConsultaRetorno.setText("Atualiza Consuta de Retorno");
         jButtonAtualizaConsultaRetorno.setEnabled(false);
         jButtonAtualizaConsultaRetorno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -552,29 +543,23 @@ public class FormAgendamento extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jDateChooserAgendamentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jDateChooserAgendamentoMouseClicked
-        // TODO add your handling code here:
-
-        //	System.out.println(texto.toLowerCase().contains(procurarPor.toLowerCase()));
-    }//GEN-LAST:event_jDateChooserAgendamentoMouseClicked
-
     private void jComboBoxRetornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxRetornoActionPerformed
         // TODO add your handling code here:
         if (jComboBoxRetorno.getSelectedItem().equals("Sim")) {
-            
+
             jButtonBuscarConsulta.setEnabled(true);
             jButtonAtualizaConsultaRetorno.setEnabled(true);
-            
+
         } else if (jComboBoxRetorno.getSelectedItem().equals("Não")) {
-            
+
             jButtonBuscarConsulta.setEnabled(false);
-             jButtonAtualizaConsultaRetorno.setEnabled(false);
-             jFormattedTextFieldIdRetorno.setText("");
-         
+            jButtonAtualizaConsultaRetorno.setEnabled(false);
+            jFormattedTextFieldIdRetorno.setText("");
+
         }
     }//GEN-LAST:event_jComboBoxRetornoActionPerformed
-    
-       public  void IdConsultaRetorno(String idConsultaRetorno)  {
+
+    public void IdConsultaRetorno(String idConsultaRetorno) {
         cRetorno = idConsultaRetorno;
 //          if(!cRetorno.isEmpty()){
 //           
@@ -582,39 +567,42 @@ public class FormAgendamento extends javax.swing.JFrame {
 //             System.out.println("idConsultaRetorno 1: "+idConsultaRetorno);
 //             
 //          }            
-        }
-          
+    }
+
     private void jComboBoxEspecMedicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxEspecMedicaActionPerformed
         // TODO add your handling code here:
-        resposta = (String) jComboBoxEspecMedica.getSelectedItem();
-        if (resposta != "Selecione") {
+        if (flag == 0) {
+            resposta = (String) jComboBoxEspecMedica.getSelectedItem();
+            if (resposta != "Selecione") {
 
-            jComboBoxMedico.removeAllItems();
-            jComboBoxMedico.addItem("Selecione");
-            preencherMedico();
-        } else if (resposta == "Selecione") {
-            jComboBoxMedico.removeAllItems();
-            jComboBoxMedico.addItem("Selecione");
+                jComboBoxMedico.removeAllItems();
+                jComboBoxMedico.addItem("Selecione");
+                preencherMedico();
+            } else if (resposta == "Selecione") {
+                jComboBoxMedico.removeAllItems();
+                jComboBoxMedico.addItem("Selecione");
+            }
         }
+
     }//GEN-LAST:event_jComboBoxEspecMedicaActionPerformed
 
     private void jComboBoxEspecMedicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBoxEspecMedicaMouseClicked
         // TODO add your handling code here:
-       
+
     }//GEN-LAST:event_jComboBoxEspecMedicaMouseClicked
 
     private void jButtonEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEmailActionPerformed
         // TODO add your handling code here:
         Email emaill = new Email();
         BeansDadosUsuario dadosUser;
- 
+
         String msg = jTextFieldPaciente.getText()
                 + ",\n\n     Informamos que a sua consulta foi agendada com o(a) Doutor(a) "
                 + jComboBoxMedico.getSelectedItem() + "(" + jComboBoxEspecMedica.getSelectedItem() + ") para o dia "
                 + dt.format(jDateChooserAgendamento.getDate()) + ", ás " + jComboBoxHorario.getSelectedItem() + ". Próximo ao dia \n"
                 + "da consulta será encaminhado um e-mail de confirmação, solicitamos que o mesmo seja respondido "
                 + "e caso haja desistência, gentileza nos informar em um prazo de 48h.\n\n"
-                + "Certo de sua compreensão. \n\n" 
+                + "Certo de sua compreensão. \n\n"
                 + "Att,\n\n"
                 + "Clínica Medica";
         //        System.out.println(dadosUser.getNome());
@@ -633,16 +621,16 @@ public class FormAgendamento extends javax.swing.JFrame {
         // TODO add your handling code here:
         String Nome = "" + jTableAgendamentoConsulta.getValueAt(jTableAgendamentoConsulta.getSelectedRow(), 1);
         conBd.conectarBd();
-        String sql = "SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,CENOME,CETELRESIDENCIAL,CETELCELULAR "
-                + "FROM PACIENTE WHERE NOMEPACIENTE = '" + Nome + "'";
+        // String sql = "SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,CENOME,CETELRESIDENCIAL,CETELCELULAR "
+        //        + "FROM PACIENTE WHERE NOMEPACIENTE = '" + Nome + "'";
+
+        String sql = "SELECT NOMEPACIENTE FROM PACIENTE (NOLOCK) WHERE NOMEPACIENTE = '" + Nome + "'";
 
         try {
             conBd.executaSql(sql);
             conBd.rs.first();
-            //LimparCampos();
-            // DesabilitarCampos();
+
             jTextFieldPaciente.setText(conBd.rs.getString("NOMEPACIENTE"));
-            //jTextFieldPPesquisar.set
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "erro ao selecionar os dados" + ex.getMessage());
@@ -653,34 +641,40 @@ public class FormAgendamento extends javax.swing.JFrame {
         HabilitarBtn();
     }//GEN-LAST:event_jTableAgendamentoConsultaMouseClicked
 
-
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         // TODO add your handling code here:
         LimparCampos();
-       jFormattedTextFieldIdRetorno.setText("");
+        jFormattedTextFieldIdRetorno.setText("");
         DesabilitarCampos();
         DesabilitarBtn();
-        
+
         preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,"
-                + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
+                + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE (NOLOCK) WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
+
     private void jButtonConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConcluirActionPerformed
-        // TODO add your handling code here:
-     
-        DaoAgendamento dao = new DaoAgendamento();
-       
-         
+
+        DaoAgendamento daoAgendamento = new DaoAgendamento();
+        Locale localZone = new Locale("br", "PT");
+        SimpleDateFormat dtq = new SimpleDateFormat("yyyy-MM-dd", localZone);
+        System.out.println("hora convertida :" + dtq.format(jDateChooserAgendamento.getDate()));
+        int hora = daoAgendamento.BuscarIDHora((String) jComboBoxHorario.getSelectedItem());
+        System.out.println("idhora " + hora);
+        //if (!daoagenda.verificaChoqueHorario(jTextFieldPaciente.getText(), dtq.format(jDateChooserAgendamento.getDate()),hora)) {
+
         agen.setNomePaciente(jTextFieldPaciente.getText());
         agen.setNomeMedico((String) jComboBoxMedico.getSelectedItem());
-        int soma = jComboBoxHorario.getSelectedIndex() + 1;
-        agen.setAgenIdHora(soma);
+        agen.setAgenIdHora(hora);
         agen.setMotivo(jTextAreaMotivo.getText());
         agen.setData(jDateChooserAgendamento.getDate());//dt.format(jDateChooserAgendamento.getDate()) String convertido em Date
-        agen.setAEspecialidade(dao.BuscarCodEspecEmNumero(String.valueOf(jComboBoxEspecMedica.getSelectedItem())));
+        System.out.println("Data: " + jDateChooserAgendamento.getDate());
+        System.out.println("Data: " + jDateChooserAgendamento.getDateFormatString());
+
+        agen.setAEspecialidade(daoAgendamento.BuscarCodEspecEmNumero(String.valueOf(jComboBoxEspecMedica.getSelectedItem())));
         agen.setStatus("Aberto"); //status aberto
         agen.setARetorno((String) jComboBoxRetorno.getSelectedItem());
-
+        //DEFINIR QUANTOS E QUAIS STATUS DEVEM EXISTIR TRANSFORMAR PARA NÚMERO
         if (agen.getARetorno().equalsIgnoreCase("Sim")) {
 
             agen.setARetorno("1");// retorno igual a sim
@@ -691,15 +685,22 @@ public class FormAgendamento extends javax.swing.JFrame {
             agen.setARetorno("0"); // retorno igial a não
             agen.setAgenIdConsultaRetorno(0);
         }
-        
-        dao.Salvar(agen);
+
+        if (flag == 0) {
+            daoAgendamento.Salvar(agen);
+        } else if (flag == 1) {
+            agen.setAgendaCod(idCodigoAgendamento);
+            daoAgendamento.Alterar(agen);
+        }
+
+        // }
         LimparCampos();
         DesabilitarCampos();
         DesabilitarBtn();
 
-         preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,"
-                + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
-        
+        preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,"
+                + "CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE (NOLOCK) WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
+
     }//GEN-LAST:event_jButtonConcluirActionPerformed
 
     private void jComboBoxMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxMedicoActionPerformed
@@ -707,61 +708,79 @@ public class FormAgendamento extends javax.swing.JFrame {
         if (jComboBoxMedico.getSelectedItem() != "Selecione") {
             idMedico = daoagenda.BuscarCodMedico((String) jComboBoxMedico.getSelectedItem());
         }
-        horario();
+
     }//GEN-LAST:event_jComboBoxMedicoActionPerformed
 
     private void jButtonBuscarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarPacienteActionPerformed
         // TODO add your handling code here:
-        preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,CETELRESIDENCIAL,CETELCELULAR FROM PACIENTE WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
+        preencherTabelaAgendamento("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL, TELCELULAR,CENOME,CETELRESIDENCIAL,CETELCELULAR "
+                + "FROM PACIENTE (NOLOCK) WHERE NOMEPACIENTE like '%" + jTextFieldPaciente.getText() + "%'");
     }//GEN-LAST:event_jButtonBuscarPacienteActionPerformed
-
-    private void jComboBoxHorarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBoxHorarioMouseClicked
-        // TODO add your handling code here:
-        if (jDateChooserAgendamento.getDate() != null || idMedico != null) {
-           preencherHorario();
-        }
-    }//GEN-LAST:event_jComboBoxHorarioMouseClicked
-
-    private void jComboBoxHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxHorarioActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_jComboBoxHorarioActionPerformed
-
-    private void jDateChooserAgendamentoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooserAgendamentoPropertyChange
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jDateChooserAgendamentoPropertyChange
 
     private void jButtonBuscarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarConsultaActionPerformed
         // TODO add your handling code here:
         DaoAgendamento daoAgendamento = new DaoAgendamento();
         daoAgendamento.buscarPaciente(jTextFieldPaciente.getText());
         daoAgendamento.BuscarCodMedico(String.valueOf(jComboBoxMedico.getSelectedItem()));
-        
-        FormConsultaRetorno formConsultaRetorno = new FormConsultaRetorno(daoAgendamento.codPaciente,daoAgendamento.codMedico);
+
+        FormConsultaRetorno formConsultaRetorno = new FormConsultaRetorno(daoAgendamento.codPaciente, daoAgendamento.codMedico);
         formConsultaRetorno.setVisible(true);
-        
+
     }//GEN-LAST:event_jButtonBuscarConsultaActionPerformed
 
     private void jButtonAtualizaConsultaRetornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizaConsultaRetornoActionPerformed
         // TODO add your handling code here:
-          jFormattedTextFieldIdRetorno.setText(cRetorno);
+        jFormattedTextFieldIdRetorno.setText(cRetorno);
     }//GEN-LAST:event_jButtonAtualizaConsultaRetornoActionPerformed
 
     private void jFormattedTextFieldIdRetornoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFormattedTextFieldIdRetornoMouseClicked
         // TODO add your handling code here:
-       if(jFormattedTextFieldIdRetorno.getText().isEmpty() == true){
+        if (jFormattedTextFieldIdRetorno.getText().isEmpty() == true) {
             String consultaRetorno = jFormattedTextFieldIdRetorno.getText().trim();
-           
-           FormConsulta formConsulta = new FormConsulta(consultaRetorno,1);
-           formConsulta.setVisible(true);
+
+            FormConsulta formConsulta = new FormConsulta(consultaRetorno, 1);
+            formConsulta.setVisible(true);
         }
     }//GEN-LAST:event_jFormattedTextFieldIdRetornoMouseClicked
 
-  public void verificarAgendamento(){
-          
-//        conBd.DesconectarBd();
-     }
-  
+    private void jFormattedTextFieldIdRetornoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jFormattedTextFieldIdRetornoPropertyChange
+        // TODO add your handling code here:
+        if (jFormattedTextFieldIdRetorno.getText().isEmpty() == true) {
+            String consultaRetorno = jFormattedTextFieldIdRetorno.getText().trim();
+
+            FormConsulta formConsulta = new FormConsulta(consultaRetorno, 1);
+            formConsulta.setVisible(true);
+        }
+    }//GEN-LAST:event_jFormattedTextFieldIdRetornoPropertyChange
+
+    private void jDateChooserAgendamentoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooserAgendamentoPropertyChange
+        try {
+            DaoCheckDate daoCheckDate = new DaoCheckDate();
+            DateAndCalendar dateAndCalendar = new DateAndCalendar();
+            Calendar calendar = dateAndCalendar.dateToCalendar(jDateChooserAgendamento.getDate());
+            DaoAgendamento dao = new DaoAgendamento();
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+            if (daoCheckDate.EhFimDeSemana(calendar)) {
+
+                JOptionPane.showMessageDialog(rootPane, "A data selecionada (" + format.format(jDateChooserAgendamento.getDate()) 
+                        + ") encontra-se em um fim de semana.\n "
+                        + "Gentileza realizar agendamentos apenas de segunda a sexta conforme disponibilidade de horário.");
+                jDateChooserAgendamento.setDate(null);
+                 jComboBoxHorario.removeAllItems();
+            jComboBoxHorario.setEnabled(false);
+            }
+        } catch (NullPointerException ex) {
+
+        }finally{
+             HabilitaComboHorario();
+        }
+    }//GEN-LAST:event_jDateChooserAgendamentoPropertyChange
+
+    private void jComboBoxMedicoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jComboBoxMedicoPropertyChange
+        HabilitaComboHorario();
+    }//GEN-LAST:event_jComboBoxMedicoPropertyChange
+
     public void preencherTabelaAgendamento(String sql) {
 
         ArrayList dados = new ArrayList();
@@ -813,6 +832,18 @@ public class FormAgendamento extends javax.swing.JFrame {
         //total do tamanho dos campos = 38 + 237 + 110 + 65 = 450
         conBd.DesconectarBd();
     }
+    
+     protected void HabilitaComboHorario() {
+        resposta = (String) jComboBoxEspecMedica.getSelectedItem();
+        if (resposta != "Selecione") {
+
+            if (jDateChooserAgendamento.getDate() != null) {
+                jComboBoxHorario.removeAllItems();
+                jComboBoxHorario.setEnabled(true);
+                preencherHorario();
+            }
+        }
+    }
 
     public void LimparCampos() {
         jTextAreaMotivo.setText(" ");
@@ -826,14 +857,13 @@ public class FormAgendamento extends javax.swing.JFrame {
         jComboBoxHorario.removeAllItems();
         jComboBoxHorario.setSelectedItem("Selecione");
         jFormattedTextFieldIdRetorno.setText(null);
-     
+
     }
 
     public void DesabilitarBtn() {
         jButtonConcluir.setEnabled(false);
         jButtonCancelar.setEnabled(false);
         jButtonEmail.setEnabled(false);
-        jButtonBuscarPaciente.setEnabled(false);
         jButtonBuscarConsulta.setEnabled(false);
         jButtonEmail.setEnabled(false);
     }
@@ -869,18 +899,6 @@ public class FormAgendamento extends javax.swing.JFrame {
         jFormattedTextFieldIdRetorno.setEnabled(false);
     }
 
-    public void horario() {
-        if (jComboBoxMedico.getSelectedItem() != "Selecione") {
-            if (jDateChooserAgendamento.getDate() != null) {
-                jComboBoxHorario.removeAllItems();
-                jComboBoxHorario.setEnabled(true);
-
-                preencherHorario();
-
-            }
-        }
-    }
-
     /**
      * @param args the command line arguments
      */
@@ -914,6 +932,54 @@ public class FormAgendamento extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(FormAgendamento.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

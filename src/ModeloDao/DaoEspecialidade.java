@@ -53,7 +53,7 @@ public class DaoEspecialidade {
 
         conex.conectarBd();
 
-        String sql1 = "SELECT ESPEC,ATIVO FROM ESPECIALIDADE WHERE ESPEC like '%" + beansEspec.getPesquisa() + "%'";
+        String sql1 = "SELECT ESPEC,ATIVO FROM ESPECIALIDADE (NOLOCK) WHERE ESPEC like '%" + beansEspec.getPesquisa() + "%'";
 
         conex.executaSql(sql1);
 
@@ -63,12 +63,33 @@ public class DaoEspecialidade {
             beansEspec.setAtivo(conex.rs.getBoolean("ATIVO"));
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao carregar os dados do medico!\nErro: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao carregar os dados da especialidade "+beansEspec.getPesquisa()+"!\nErro: " + ex.getMessage());
         }
         conex.DesconectarBd();
         return beansEspec;
     }
 
+    public int buscaEspecialidadePorNome(String nomeEspecialidade) {
+        
+        conex.conectarBd();
+        
+        int idespec = -1;    
+        String sql5 = "SELECT IDESPECIALIDADE FROM ESPECIALIDADE (NOLOCK) WHERE ATIVO = 1 AND ESPEC like '%" + nomeEspecialidade + "%'";
+
+        conex.executaSql(sql5);
+
+        try {
+            conex.rs.first();
+             idespec = conex.rs.getInt("IDESPECIALIDADE");
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao carregar os dados da especialidade "+nomeEspecialidade+"!\nErro: " + ex.getMessage());
+        }
+        conex.DesconectarBd();
+        return idespec;
+    }
+    
+    
     public void Editar(BeansEspecialidade beansEspec) {
         conex.conectarBd();
 

@@ -1,14 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ModeloBeans;
 
-/**
- *
- * @author Daniel Lucas
- */
 public enum BeansEnumStatus {
-    
+
+    Aberto(0), EmAtendimento(1), Finalizado(2), Cancelado(3);
+
+    private int status;
+
+    private BeansEnumStatus(int status) {
+        this.status = status;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
 }

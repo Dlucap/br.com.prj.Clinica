@@ -18,12 +18,13 @@ public class BeansMedico {
     private String Mcep;
     private String Mcompl;
     private String MSespecialidade;
-   private Integer Mespecialidade;
+    private Integer Mespecialidade;
     private String MSUf;
     private String MSCidade;
     private String Mcrm;
     private String MPesquisa;
     private String MEmail;
+    private boolean MAtivo;
 
     public int getMcod() {
         return Mcod;
@@ -272,6 +273,20 @@ public class BeansMedico {
      */
     public void setMEmail(String MEmail) {
         this.MEmail = MEmail;
+    }
+
+    /**
+     * @return the MAtivo
+     */
+    public boolean getMAtivo() {
+        return MAtivo;
+    }
+
+        /**
+     * @param MAtivo the MAtivo to set
+     */
+    public void setMAtivo(boolean MAtivo) {
+        this.MAtivo = MAtivo;
     }
 
 }

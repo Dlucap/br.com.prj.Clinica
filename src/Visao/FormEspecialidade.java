@@ -5,12 +5,14 @@
  */
 package Visao;
 
+import ModeloBeans.BeansDadosUsuario;
 import ModeloBeans.BeansEspecialidade;
 import ModeloBeans.ModeloTabela;
 import ModeloConection.ConexaoBd;
 import ModeloDao.DaoEspecialidade;
 import java.sql.SQLException;
 import java.util.ArrayList;
+//import javafx.scene.control.Alert;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
@@ -24,14 +26,18 @@ public class FormEspecialidade extends javax.swing.JFrame {
     BeansEspecialidade beansEspec = new BeansEspecialidade();
     DaoEspecialidade daoEspec = new DaoEspecialidade();
 
-    int flag = 0;
+    int flag = 0;//Usada para definir se vai salvar ou editar um registro (insert/update)
 
     /**
      * Creates new form FormEspecialidade
      */
     public FormEspecialidade() {
+
+    }
+
+    public FormEspecialidade(BeansDadosUsuario beansDadosUsuario) {
         initComponents();
-        preencherEspecialidade("SELECT * FROM ESPECIALIDADE ORDER BY ESPEC");
+        preencherEspecialidade("SELECT * FROM ESPECIALIDADE (NOLOCK) ORDER BY ESPEC");
     }
 
     public void preencherEspecialidade(String sql) {
@@ -97,7 +103,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
         jButtonEditar = new javax.swing.JButton();
         jButtonSalvar = new javax.swing.JButton();
         jTextFieldIdEspec = new javax.swing.JTextField();
-        jTextFieldEspecialidade = new javax.swing.JTextField();
+        jTextFieNomeEspecialidade = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -179,7 +185,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
 
         jTextFieldIdEspec.setEnabled(false);
 
-        jTextFieldEspecialidade.setEnabled(false);
+        jTextFieNomeEspecialidade.setEnabled(false);
 
         jLabel2.setText("ID Especialidade:");
 
@@ -199,31 +205,24 @@ public class FormEspecialidade extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieNomeEspecialidade)
+                    .addComponent(jTextFieldPesquisaEspecialidade)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldEspecialidade)
-                            .addComponent(jTextFieldPesquisaEspecialidade)
-                            .addComponent(jButtonPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jButtonIncluir)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButtonEditar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButtonSalvar))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jButtonCancelar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton1)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(24, 24, 24))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButtonIncluir)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonEditar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonSalvar))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButtonCancelar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -232,14 +231,16 @@ public class FormEspecialidade extends javax.swing.JFrame {
                                 .addComponent(jCheckBoxAtivo))
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 5, Short.MAX_VALUE))
+                    .addComponent(jButtonPesquisar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(14, 14, 14))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButtonIncluir)
                             .addComponent(jButtonEditar)
@@ -248,25 +249,23 @@ public class FormEspecialidade extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButtonCancelar)
                             .addComponent(jButton1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(jTextFieldIdEspec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jCheckBoxAtivo))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldEspecialidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieNomeEspecialidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel4)
                         .addGap(3, 3, 3)
                         .addComponent(jTextFieldPesquisaEspecialidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonPesquisar)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addGap(0, 7, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -280,7 +279,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -307,13 +306,13 @@ public class FormEspecialidade extends javax.swing.JFrame {
             jButtonEditar.setEnabled(true);
 
             beansEspec.setPesquisa(jTextFieldPesquisaEspecialidade.getText());
-            preencherEspecialidade("SELECT * FROM ESPECIALIDADE WHERE ESPEC like '%" + beansEspec.getPesquisa() + "%'");
+            preencherEspecialidade("SELECT * FROM ESPECIALIDADE (NOLOCK) WHERE ESPEC like '%" + beansEspec.getPesquisa() + "%'");
         } else {
             jButtonIncluir.setEnabled(true);
             jButtonSalvar.setEnabled(false);
             jButtonCancelar.setEnabled(false);
             jButtonEditar.setEnabled(false);
-           
+
         }
     }//GEN-LAST:event_jButtonPesquisarActionPerformed
 
@@ -325,6 +324,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
         // TODO add your handling code here:
         desabilitarCampos();
         String nomeEspecialidade = "" + jTableEspecialidade.getValueAt(jTableEspecialidade.getSelectedRow(), 1);
+        String idEspecialidade = "" + jTableEspecialidade.getValueAt(jTableEspecialidade.getSelectedRow(), 0);
         jCheckBoxAtivo.setEnabled(false);
         jButtonCancelar.setEnabled(true);
         jButtonIncluir.setEnabled(false);
@@ -332,22 +332,21 @@ public class FormEspecialidade extends javax.swing.JFrame {
         jButtonEditar.setEnabled(true);
         jButtonPesquisar.setEnabled(true);
         jTextFieldPesquisaEspecialidade.setEnabled(true);
-        
-        
-        String sql = "SELECT * FROM ESPECIALIDADE WHERE ESPEC = '" + nomeEspecialidade + "'";
+
+        String sql = "SELECT * FROM ESPECIALIDADE (NOLOCK) WHERE IDESPECIALIDADE = " + idEspecialidade;
         conBd.conectarBd();
-      
+
         try {
             conBd.executaSql(sql);
             conBd.rs.first();
 
             jTextFieldIdEspec.setText(String.valueOf(conBd.rs.getString("IDESPECIALIDADE")));
-            jTextFieldEspecialidade.setText(conBd.rs.getString("ESPEC"));
+            jTextFieNomeEspecialidade.setText(conBd.rs.getString("ESPEC"));
             jCheckBoxAtivo.setSelected(conBd.rs.getBoolean("ATIVO"));
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao selecionar a especialidade! Especialidade: "+nomeEspecialidade
-                    +"\n" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao selecionar a especialidade! Especialidade: " + nomeEspecialidade
+                    + "\n" + ex.getMessage());
         }
         conBd.DesconectarBd();
 
@@ -363,7 +362,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
         jButtonPesquisar.setEnabled(false);
 
         jTextFieldIdEspec.setEnabled(false);
-        jTextFieldEspecialidade.setEnabled(true);
+        jTextFieNomeEspecialidade.setEnabled(true);
         jCheckBoxAtivo.setEnabled(true);
         jTextFieldPesquisaEspecialidade.setEnabled(false);
     }//GEN-LAST:event_jButtonEditarActionPerformed
@@ -375,40 +374,73 @@ public class FormEspecialidade extends javax.swing.JFrame {
         jButtonIncluir.setEnabled(true);
         jButtonEditar.setEnabled(false);
 
-        jTextFieldEspecialidade.setEnabled(false);
+        jTextFieNomeEspecialidade.setEnabled(false);
 
         jTextFieldIdEspec.setEnabled(false);
         jCheckBoxAtivo.setEnabled(true);
 
-        if (jTextFieldEspecialidade.getText().isEmpty()) {
+        if (jTextFieNomeEspecialidade.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Preencha a especialidade para continuar.");
-            jTextFieldEspecialidade.requestFocus();
+            jTextFieNomeEspecialidade.requestFocus();
         }
 
         if (flag == 1) {
             //Ler campos da tela de cadastro do medico
-            beansEspec.setEspecialidade(jTextFieldEspecialidade.getText());
+            beansEspec.setEspecialidade(jTextFieNomeEspecialidade.getText());
             beansEspec.setAtivo(jCheckBoxAtivo.isSelected());
 
             daoEspec.salvar(beansEspec);
 
-            preencherEspecialidade("SELECT * FROM ESPECIALIDADE ORDER BY ESPEC");
             //Limpar os campos
             limparCampos();
             desabilitarCampos();
 
         } else if (flag == 2) {
 
-            beansEspec.setIdEspecialidade(Integer.parseInt(jTextFieldIdEspec.getText()));
-            beansEspec.setEspecialidade(jTextFieldEspecialidade.getText());
-            beansEspec.setAtivo(jCheckBoxAtivo.isSelected());
-            daoEspec.Editar(beansEspec);
+            /**
+             * não permitir desativar uma especialidade quando existir um medico
+             * cadastrado com a especialidade em questão se o resultado da
+             * consulta SELECT ativo FROM MEDICO where idespecialidade = 10 and
+             * ativo =1 for maior que zero, informar ao cliente que a
+             * especialidade não pode ser desativada pois existe um ou mais
+             * médicos com a especialidade em questão que estão ativos.
+             */
+            int temMedico = verificaCadastroMedicoAtivo();
+            switch (temMedico) {
+                case 1:
+                    /**
+                     * Futuramente não limpar os campos, apenas permanecer com a
+                     * flag marcada JOptionPane.PLAIN_MESSAGE
+                     * JOptionPane.ERROR_MESSAGE JOptionPane.INFORMATION_MESSAGE
+                     * JOptionPane.WARNING_MESSAGE JOptionPane.QUESTION_MESSAGE
+                     * JOptionPane.PLAIN_MESSAGE (sem icone)
+                     */
+                    JOptionPane.showMessageDialog(null, " A especilidade " + jTextFieNomeEspecialidade.getText()
+                            + ", não pode ser desativada, pois possui medico(s) que se encontra(m) ativo(s).\n"
+                            + " Para ser possível desativa-lá, será necessario desativar o(s) médico(s)"
+                            + "que se encontram ativos nessa especialidade.",
+                            "Atenção !", JOptionPane.WARNING_MESSAGE);
+                    jCheckBoxAtivo.setSelected(true);
+                    desabilitarCampos();
+                    break;
+                case 0:
+                    beansEspec.setIdEspecialidade(Integer.parseInt(jTextFieldIdEspec.getText()));
+                    beansEspec.setEspecialidade(jTextFieNomeEspecialidade.getText());
+                    beansEspec.setAtivo(jCheckBoxAtivo.isSelected());
+                    daoEspec.Editar(beansEspec);
+                    //Limpar os campos
+                    //limparCampos();
+                    desabilitarCampos();
+                    break;
+                case -1:
+                    JOptionPane.showMessageDialog(null, "Erro inexperado, entre em contato com o suporte");
+                    break;
+            }
 
-            preencherEspecialidade("SELECT * FROM ESPECIALIDADE ORDER BY ESPEC");
-            //Limpar os campos
-            //limparCampos();
-            desabilitarCampos();
         }
+        jTextFieldPesquisaEspecialidade.setEnabled(true);
+        jButtonPesquisar.setEnabled(true);
+        preencherEspecialidade("SELECT * FROM ESPECIALIDADE (NOLOCK) ORDER BY ESPEC");
 
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
@@ -438,11 +470,11 @@ public class FormEspecialidade extends javax.swing.JFrame {
         jButtonIncluir.setEnabled(true);
         jButtonEditar.setEnabled(false);
         jButtonPesquisar.setEnabled(true);
-        
+
         jTextFieldIdEspec.setEnabled(false);
         jTextFieldPesquisaEspecialidade.setEnabled(true);
 
-        preencherEspecialidade("SELECT * FROM ESPECIALIDADE ORDER BY ESPEC");
+        preencherEspecialidade("SELECT * FROM ESPECIALIDADE (NOLOCK) ORDER BY ESPEC");
         this.limparCampos();
         this.desabilitarCampos();
 
@@ -450,24 +482,42 @@ public class FormEspecialidade extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        preencherEspecialidade("SELECT * FROM ESPECIALIDADE ORDER BY ESPEC");
+        preencherEspecialidade("SELECT * FROM ESPECIALIDADE (NOLOCK) ORDER BY ESPEC");
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    public int verificaCadastroMedicoAtivo() {
+        try {
+            conBd.conectarBd();
+            String sql = "SELECT  ATIVO FROM MEDICO(NOLOCK) WHERE IDESPECIALIDADE =" + jTextFieldIdEspec.getText()
+                    + " and ATIVO =1";
+            conBd.executaSql(sql);
+            if (conBd.rs.first()) {
+                return 1;//tem registro
+            }
+            return 0;// não tem registro
+        } catch (SQLException sqlEx) {
+            System.err.println("erro: " + sqlEx.getMessage() + "\n\n" + sqlEx.getMessage());
+            System.err.println("Erro 2: " + sqlEx.fillInStackTrace() + sqlEx.getLocalizedMessage());
+            return -1;    //erro no registro    
+        }
+
+    }
 
     public void desabilitarCampos() {
 
-        jTextFieldEspecialidade.setEnabled(false);
+        jTextFieNomeEspecialidade.setEnabled(false);
         jCheckBoxAtivo.setEnabled(false);
     }
 
     public void habilitarCampos() {
-        jTextFieldEspecialidade.setEnabled(true);
+        jTextFieNomeEspecialidade.setEnabled(true);
         jCheckBoxAtivo.setEnabled(true);
     }
 
     public void limparCampos() {
 
         jTextFieldIdEspec.setText("");
-        jTextFieldEspecialidade.setText("");
+        jTextFieNomeEspecialidade.setText("");
         jCheckBoxAtivo.setSelected(false);
         jTextFieldPesquisaEspecialidade.setText("");
     }
@@ -475,7 +525,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
     public void preencherIdEspecialidadeInserir() {
         try {
             conBd.conectarBd();
-            String sql = "SELECT MAX(IDESPECIALIDADE+1) AS PROXID FROM ESPECIALIDADE";
+            String sql = "SELECT MAX(IDESPECIALIDADE+1) AS PROXID FROM ESPECIALIDADE (NOLOCK)";
             conBd.executaSql(sql);
 
             conBd.rs.first();
@@ -538,7 +588,7 @@ public class FormEspecialidade extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableEspecialidade;
-    private javax.swing.JTextField jTextFieldEspecialidade;
+    private javax.swing.JTextField jTextFieNomeEspecialidade;
     private javax.swing.JTextField jTextFieldIdEspec;
     private javax.swing.JTextField jTextFieldPesquisaEspecialidade;
     // End of variables declaration//GEN-END:variables

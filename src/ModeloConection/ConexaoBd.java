@@ -1,8 +1,9 @@
 package ModeloConection;
+
 /**
- * Hibernate 
- * http://www.devmedia.com.br/crud-completo-com-hibernate-e-jpa/32711
+ * Hibernate http://www.devmedia.com.br/crud-completo-com-hibernate-e-jpa/32711
  */
+import ModeloDao.DaoLog;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -20,16 +21,17 @@ public class ConexaoBd {
 
     public Statement stm;
     public ResultSet rs;
-    private String driver = "com.mysql.jdbc";
+    private String driver = "com.mysql.jdbc"; //private String driver = "com.mysql.jdbc";
     private String caminho = "jdbc:sqlserver://localhost:1433;databaseName=ClinicaMedica";
     //private String caminho = "jdbc:sqlserver://localhost:1433;databaseName=ClinicaMedicaMSSQL";
-  
     // private String caminho = url;
     /**
-    * Usuário utilizado para acesso no banco, o mesmo deve estar ativo e com permissões de acesso.
-    */
+     * Usuário utilizado para acesso no banco, o mesmo deve estar ativo e com
+     * permissões de acesso.
+     */
     private String usuario = "Admin";
     private String senha = "123456";
+    private boolean  HabilitaProfiler = true;
     public Connection con;
 
     /**
@@ -41,32 +43,30 @@ public class ConexaoBd {
         try {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver()); //Essa linha foi a diferença
             System.setProperty("jdbc.Drivers", driver);
-           
+
             con = DriverManager.getConnection(caminho, usuario, senha);
             // con = DriverManager.getConnection(url, usuario, senha);
         } catch (SQLException ex) {
-             JOptionPane.showMessageDialog(null, "Erro ao se conectar ao banco de dados:\n" + ex.getMessage());
+            JOptionPane.showMessageDialog(null,"Erro !!!\n\n" ,"Erro ao se conectar ao banco de dados:\n" + ex.getMessage(),JOptionPane.ERROR);
         }
     }
 
-      public void conectarBd(String url, Integer tipo) {
+    private void conectarBd(String url, Integer tipo) {
 
         try {
-            DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver()); //Essa linha foi a diferença
+            DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
             System.setProperty("jdbc.Drivers", driver);
-           
+
             con = DriverManager.getConnection(url, usuario, senha);
-            if(tipo==1){
-             JOptionPane.showMessageDialog(null, "Conectado com sucesso!","Teste de conexão.",JOptionPane.INFORMATION_MESSAGE);
+            if (tipo == 1) {
+                JOptionPane.showMessageDialog(null, "Conectado com sucesso!", "Teste de conexão.", JOptionPane.INFORMATION_MESSAGE);
             }
             // con = DriverManager.getConnection(url, usuario, senha);
         } catch (SQLException ex) {
-             JOptionPane.showMessageDialog(null, "Erro ao se conectar ao banco de dados:\n" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao se conectar ao banco de dados:\n" + ex.getMessage());
         }
-        finally{
-          DesconectarBd();
-      }
     }
+
     /**
      * Método utilizado para desconectar.
      */
@@ -87,13 +87,25 @@ public class ConexaoBd {
      * @param sql
      */
     public void executaSql(String sql) {
+        if(HabilitaProfiler){
+             // futuramente adicionar qual meodo realizou a sentença
+            DaoLog log = new DaoLog();
+            log.CriaAlias();
+            log.salvar(sql);
+            System.out.println("\nSentença Sql\n"+sql);
+        }
+        conectarBd();
         try {
             stm = con.createStatement(rs.TYPE_SCROLL_INSENSITIVE, rs.CONCUR_READ_ONLY);
-            rs = stm.executeQuery(sql);
+            rs = stm.executeQuery(sql);                
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao executar a sentença em sql\n" + ex.getMessage());
-        }
+            JOptionPane.showMessageDialog(null, "Erro ao executar a sentença em sql\n Sentença: " + sql + "\n Mensagem de erro.:" + ex.getMessage());
         
+        } catch (NullPointerException ex) {
+        JOptionPane.showMessageDialog(null, "Erro ao exeucutar a sentença: " + sql +
+                "\n\n Mensagem de erro.:" + ex.getMessage());
+        }
+
     }
-    
+     
 }

@@ -4,7 +4,7 @@
  *http://respostas.guj.com.br/6592-api-java-para-buscar-cep-correios
  *https://viacep.com.br/
  */
-package Visao;
+package PacoteTeste.visao;
 
 import ModeloConection.ConexaoBd;
 import ModeloConection.WebServiceCep;
@@ -22,7 +22,7 @@ import ModeloBeans.ModeloTabela;
  *
  * @author Daniel Lucas
  */
-public class FormMedicoMelhoria extends javax.swing.JFrame {
+public class FormMedicoMelhoriaNaoAtualizado extends javax.swing.JFrame {
 
     ConexaoBd conBd = new ConexaoBd();
     BeansMedico mod = new BeansMedico();
@@ -35,7 +35,7 @@ public class FormMedicoMelhoria extends javax.swing.JFrame {
     /**
      * Creates new form FormMedico
      */
-    public FormMedicoMelhoria() {
+    public FormMedicoMelhoriaNaoAtualizado() {
         initComponents();
         preencherTabelaMedico("SELECT IDMEDICO,NOMEMEDICO,ESPEC, CRM FROM MEDICO "
                 + "INNER JOIN ESPECIALIDADE ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
@@ -1472,7 +1472,7 @@ public class FormMedicoMelhoria extends javax.swing.JFrame {
         String Nome = "" + jTableMedicos.getValueAt(jTableMedicos.getSelectedRow(), 1);
         conBd.conectarBd();
         try {
-            String sql = "select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE where nomemedico = '" + Nome + "'";
+            String sql = "select * from medico inner join ESPECIALIDADE on MEDICO.IDESPECIALIDADE = especialidade.idESPECIALIDADE where medico.nomemedico = '" + Nome + "'";
             conBd.executaSql(sql);
             conBd.rs.first();
             LimparCampos();
@@ -1730,21 +1730,23 @@ public class FormMedicoMelhoria extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormMedicoMelhoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormMedicoMelhoriaNaoAtualizado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormMedicoMelhoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormMedicoMelhoriaNaoAtualizado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormMedicoMelhoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormMedicoMelhoriaNaoAtualizado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormMedicoMelhoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormMedicoMelhoriaNaoAtualizado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FormMedicoMelhoria().setVisible(true);
+                new FormMedicoMelhoriaNaoAtualizado().setVisible(true);
             }
         });
     }

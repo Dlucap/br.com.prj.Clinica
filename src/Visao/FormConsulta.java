@@ -94,14 +94,8 @@ public class FormConsulta extends javax.swing.JFrame {
             }
         } else if (tipo == 1) {
             //consultando uma consulta ja finalizado
-            
-            jButtonSairConsulta.setVisible(true);
-            
-           /*
-            *
-            *
-            *
-            */
+            jButtonSairConsulta.setVisible(true);           
+         
         }
 
     }
@@ -256,6 +250,11 @@ public class FormConsulta extends javax.swing.JFrame {
         jTabbedPaneConsulta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTabbedPaneConsultaMouseClicked(evt);
+            }
+        });
+        jTabbedPaneConsulta.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jTabbedPaneConsultaPropertyChange(evt);
             }
         });
 
@@ -746,11 +745,11 @@ public class FormConsulta extends javax.swing.JFrame {
             
              daoConsulta.Salvar(beansConsulta);
              
-             jFormattedTextFieldAlturaPaciente.enable(false);
-             jFormattedTextFieldPesoPaciente.enable(false);
-             jTextFieldPaPacienteConsulta.enable(false);
-             jTextAreaReceitaConsulta.enable(false);
-             jTextAreaDiagnosticoConsulta.enable(false);
+             jFormattedTextFieldAlturaPaciente. setEnabled(false);
+             jFormattedTextFieldPesoPaciente. setEnabled(false);
+             jTextFieldPaPacienteConsulta. setEnabled(false);
+             jTextAreaReceitaConsulta. setEnabled(false);
+             jTextAreaDiagnosticoConsulta. setEnabled(false);
              jButtonSairConsulta.setVisible(true);
              jButtonCalcularIMC.setEnabled(false);
     }//GEN-LAST:event_jButtonFimConsultaActionPerformed
@@ -794,6 +793,11 @@ public class FormConsulta extends javax.swing.JFrame {
 *   Obesidade Grau III      maior que 40 kg/m2      Refluxo, dificuldade para se mover, escaras, diabetes, infarto, AVC
          */
     }//GEN-LAST:event_jButtonCalcularIMCActionPerformed
+
+    private void jTabbedPaneConsultaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTabbedPaneConsultaPropertyChange
+        // TODO add your handling code here:
+        System.err.println("ddddddddddddd");
+    }//GEN-LAST:event_jTabbedPaneConsultaPropertyChange
 
     public final void preencherTabelaAgenda(String sql) {
 

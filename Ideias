@@ -3,3 +3,23 @@ menus principais em cima tela principal
 identificação - dados da consulta -  receita - atestado - histórico do paciente -...
 aumentar a fonte 
 http://www.devmedia.com.br/crud-completo-com-hibernate-e-jpa/32711 
+
+//https://www.youtube.com/watch?v=OfsCClnnY6U&list=PLyQ9CRKOzOWqVZ5nDspGFVgybs3zRGPUL video 13
+/**
+*    ANDAMENTO DO PROJETO
+*https://cachina.wordpress.com/2008/03/17/muito-material-sobre-java-mega-post/
+* ferramentas / tela de bemvindos ok
+* tela Cadastro medio ok
+* Acesso ao banco de dados ok
+* Cadastro enfermeira
+* cadastro paciente
+* Pesquisa
+* Relatório
+* links para baixar icones
+*https://www.iconfinder.com/search/?q=medico
+* http://www.iconspedia.com/pack/medico-icons-3755/30.html
+* https://www.youtube.com/playlist?list=PLDXIzdVtlj9OWro7dFDE6HE9VZ7sukYUl
+* https://viacep.com.br/ CEP mais completo
+* http://findicons.com/icon/193102/stock_mail_send icones 0800
+*
+*/

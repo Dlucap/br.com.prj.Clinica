@@ -10,6 +10,7 @@ import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
@@ -24,61 +25,64 @@ public class FormAgenda extends javax.swing.JFrame {
     DaoAgendamento daoagenda = new DaoAgendamento();
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 
-    String dtHoje, dthoje, status,Agenda;
+    String dtHoje, dthoje, status, Agenda;
+
+    public FormAgenda() {
+
+        initComponents();
+        DataHoje();
+
+    }
 
     public void DataHoje() {
         Calendar data = Calendar.getInstance();
         Date d = data.getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        
-        
+
         dtHoje = dateFormat.format(d);
         status = "Aberto";
-    
     }
 
-    
-    public FormAgenda() {
-       
-        initComponents();
-        DataHoje();
-        
-    }
-                /**
-                * Status de atendimento
-                * Aberto = 0
-                * Em Atendimento = 1
-                * Finalizado = 2
-                * Cancelado = 3 
-                * @param sql
-                **/
-     public final void preencherTabelaAgenda(String sql) {
+    /**
+     * Status de atendimento Aberto = 0 Em Atendimento = 1 Finalizado = 2
+     * Cancelado = 3
+     *
+     * @param sql
+     *
+     */
+    public final void preencherTabelaAgenda(String sql) {
 
         ArrayList dados = new ArrayList();
-        String[] colunas = new String[]{"ID", "STATUS", "NOME PACIENTE", "HORA", "DATA", "NOME MEDICO", "ESPECIALIDADE","RETORNO"};
+        String[] colunas = new String[]{"ID", "STATUS", "NOME PACIENTE", "HORA", "DATA", "NOME MEDICO", "ESPECIALIDADE", "RETORNO"};
+        Locale localZone = new Locale("br", "PT");
+        SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy", localZone);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        //  Date dt = null;
         String retorno;
-        
-        conBd.conectarBd();
-
-        conBd.executaSql(sql);
 
         try {
-           conBd.rs.first();
+            conBd.conectarBd();
+            conBd.executaSql(sql);
+            conBd.rs.first();
 
             do {
-                if(conBd.rs.getBoolean("RETORNO") == true){
+                if (conBd.rs.getBoolean("RETORNO") == true) {
                     retorno = "       Sim";
-                }else {
+                } else {
                     retorno = "       Não";
                 }
                 dados.add(new Object[]{conBd.rs.getInt("IDAGENDAMENTO"), conBd.rs.getString("STATUSCONSULTA"), conBd.rs.getString("NOMEPACIENTE"),
-                    conBd.rs.getString("HORA"), conBd.rs.getString("DTAGENDAMENTO"), conBd.rs.getString("NOMEMEDICO"), conBd.rs.getString("ESPEC"),//});
-                retorno});
+                    //sdf.format(conBd.rs.getString("HORA")), dt.format(conBd.rs.getDate("DTAGENDAMENTO")), conBd.rs.getString("NOMEMEDICO"), conBd.rs.getString("ESPEC"),
+                    sdf.format(conBd.rs.getTime("HORA")), dt.format(conBd.rs.getDate("DTAGENDAMENTO")), conBd.rs.getString("NOMEMEDICO"), conBd.rs.getString("ESPEC"),
+                    retorno});
 
             } while (conBd.rs.next());
-
+            jButtonIniciarConusulta.setVisible(true);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Nenhuma consulta localizada para hoje.");
+            jButtonIniciarConusulta.setEnabled(false);
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(null, "erro: \n" + ex.getMessage());
         }
 
         ModeloTabela modelo = new ModeloTabela(dados, colunas);
@@ -104,10 +108,10 @@ public class FormAgenda extends javax.swing.JFrame {
 
         jTableAgenda.getColumnModel().getColumn(6).setPreferredWidth(124);
         jTableAgenda.getColumnModel().getColumn(6).setResizable(false);
-     
+
         jTableAgenda.getColumnModel().getColumn(7).setPreferredWidth(80);
         jTableAgenda.getColumnModel().getColumn(7).setResizable(false);
-        
+
         jTableAgenda.getTableHeader().setReorderingAllowed(false);//reorganizar o cabeçalho
         jTableAgenda.setAutoResizeMode(jTableAgenda.AUTO_RESIZE_OFF); //NÃO VAI PODER REDIMENCIONAR A TABELA
         jTableAgenda.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//selecionar um por vez 
@@ -183,6 +187,7 @@ public class FormAgenda extends javax.swing.JFrame {
             }
         });
 
+        jDateChooserAgenda.setDateFormatString("dd/MM/yyyy");
         jDateChooserAgenda.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jDateChooserAgendaMouseClicked(evt);
@@ -290,89 +295,12 @@ public class FormAgenda extends javax.swing.JFrame {
     private void jTableAgendaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAgendaMouseClicked
         // TODO add your handling code here:
         Agenda = "" + jTableAgenda.getValueAt(jTableAgenda.getSelectedRow(), 0); //pega o primeira coluna da tabela
-        conBd.conectarBd();
-        
-        String sql = "select STATUSCONSULTA,IDPACIENTE, IDMEDICO, IDESPECIALIDADE, "
-                + "IDHORA,DTAGENDAMENTO,IDAGENDAMENTO from agendamento where IDAGENDAMENTO = '" + Agenda + "'";
-        conBd.executaSql(sql);
 
-        try {
-            conBd.rs.first();
-            agen.setStatus("Em Atendimento"); // "Em atendimento"
-            agen.setAIdPaciente(conBd.rs.getInt("IDPACIENTE"));
-            agen.setAIdMedico(conBd.rs.getInt("IDMEDICO"));
-            agen.setAEspecialidade(conBd.rs.getInt("IDESPECIALIDADE"));
-            agen.setAgenIdHora(conBd.rs.getInt("IDHORA"));
-            agen.setData(conBd.rs.getDate("DTAGENDAMENTO"));
-            agen.setAgendaCod(conBd.rs.getInt("IDAGENDAMENTO"));
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao selecionar os dados" + ex.getMessage());
-        } finally {
-           conBd.DesconectarBd();
-           
-        }
-    
     }//GEN-LAST:event_jTableAgendaMouseClicked
 
     private void jButtonIniciarConusultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniciarConusultaActionPerformed
-        // TODO add your handling code here:
+
         daoagenda.Alterar(agen);
-       preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
-                + " HORARIO.HORA, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC, AGENDAMENTO.RETORNO"
-                + " FROM AGENDAMENTO"
-                + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
-                + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
-                + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
-                + " INNER JOIN HORARIO ON AGENDAMENTO.IDHORA = HORARIO.IDHORA"
-                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status +"' ORDER BY HORARIO.HORA");
-      
-        
-    }//GEN-LAST:event_jButtonIniciarConusultaActionPerformed
-
-    private void jButtonBuscarAgendamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarAgendamentoActionPerformed
-        // TODO add your handling code here:
-        Calendar data = Calendar.getInstance();
-        Date d = data.getTime();
-        
-        if(jDateChooserAgenda.getDate() == null){
-            
-            JOptionPane.showMessageDialog(null, "Informe uma data!", "Atenção!!", HEIGHT);
-            
-        }else{  
-            
-                if (date.format(jDateChooserAgenda.getDate()).equals(dtHoje)) {
-                    
-                    jButtonIniciarConusulta.setVisible(true);
-
-                }else if(jDateChooserAgenda.getDate().after(d)){
-                    jButtonCancelarConsulta.setVisible(true);
-                    jButtonIniciarConusulta.setVisible(false);
-                    jButtonAlterarConsulta.setVisible(true);
-
-                }else if(jDateChooserAgenda.getDate().before(d)){
-
-                    jButtonCancelarConsulta.setVisible(false);
-                    jButtonIniciarConusulta.setVisible(false);
-                    jButtonAlterarConsulta.setVisible(false);
-                }
-                else {
-                    jButtonIniciarConusulta.setVisible(false);
-                    jDateChooserAgenda.setDate(null);
-                }
-                preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
-                        + " HORARIO.HORA, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC, AGENDAMENTO.RETORNO"
-                        + " FROM AGENDAMENTO"
-                        + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
-                        + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
-                        + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
-                        + " INNER JOIN HORARIO ON AGENDAMENTO.IDHORA = HORARIO.IDHORA"
-                        + " WHERE DTAGENDAMENTO ='" + date.format(jDateChooserAgenda.getDate()) + "' ORDER BY HORARIO.HORA");
-        }
-    }//GEN-LAST:event_jButtonBuscarAgendamentoActionPerformed
-
-    private void jButtonHojeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHojeActionPerformed
-        // TODO add your handling code here:
         preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
                 + " HORARIO.HORA, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC, AGENDAMENTO.RETORNO"
                 + " FROM AGENDAMENTO"
@@ -381,7 +309,69 @@ public class FormAgenda extends javax.swing.JFrame {
                 + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
                 + " INNER JOIN HORARIO ON AGENDAMENTO.IDHORA = HORARIO.IDHORA"
                 + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY HORARIO.HORA");
-        jButtonIniciarConusulta.setVisible(true);
+
+    }//GEN-LAST:event_jButtonIniciarConusultaActionPerformed
+
+    private void jButtonBuscarAgendamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarAgendamentoActionPerformed
+
+        if (jDateChooserAgenda.getDate() == null) {
+
+            JOptionPane.showMessageDialog(null, "Informe uma data!", "Atenção!!", HEIGHT);
+
+        }
+        verificaDiaConsulta(jDateChooserAgenda.getDate());
+        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
+                + " HORARIO.HORA, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC, AGENDAMENTO.RETORNO"
+                + " FROM AGENDAMENTO (NOLOCK)"
+                + " INNER JOIN PACIENTE (NOLOCK) ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
+                + " INNER JOIN MEDICO (NOLOCK) ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
+                + " INNER JOIN ESPECIALIDADE (NOLOCK) ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
+                + " INNER JOIN HORARIO (NOLOCK) ON AGENDAMENTO.IDHORA = HORARIO.IDHORA"
+                + " WHERE DTAGENDAMENTO ='" + date.format(jDateChooserAgenda.getDate()) + "' ORDER BY HORARIO.HORA");
+    }//GEN-LAST:event_jButtonBuscarAgendamentoActionPerformed
+
+    public void verificaDiaConsulta(Date dataDiaconsulta) {
+        Calendar data = Calendar.getInstance();
+        Date d = data.getTime();
+        SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DataHoje();
+        
+        System.out.println("dateFormate :" + dFormat.format(dataDiaconsulta));
+        System.out.println("dFormate :" + dFormat.format(d));
+        /*       
+        Date d = data.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        pensar em uma logica melhor
+         */
+        if (dataDiaconsulta.equals(d)) {
+
+            jButtonIniciarConusulta.setVisible(true);
+            jButtonIniciarConusulta.setEnabled(true);
+
+        } else if (dataDiaconsulta.after(d)) {
+            jButtonCancelarConsulta.setEnabled(true);
+            jButtonIniciarConusulta.setEnabled(false);
+            jButtonAlterarConsulta.setEnabled(true);
+
+        } else if (dataDiaconsulta.before(d)) {
+
+            jButtonCancelarConsulta.setEnabled(false);
+            jButtonIniciarConusulta.setEnabled(false);
+            jButtonAlterarConsulta.setEnabled(false);
+        }
+
+    }
+    private void jButtonHojeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHojeActionPerformed
+        
+        preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
+                + " HORARIO.HORA, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC, AGENDAMENTO.RETORNO"
+                + " FROM AGENDAMENTO (NOLOCK)"
+                + " INNER JOIN PACIENTE (NOLOCK) ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
+                + " INNER JOIN MEDICO (NOLOCK) ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
+                + " INNER JOIN ESPECIALIDADE (NOLOCK) ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
+                + " INNER JOIN HORARIO (NOLOCK) ON AGENDAMENTO.IDHORA = HORARIO.IDHORA"
+                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY HORARIO.HORA");
+
         jDateChooserAgenda.setDate(null);
 
     }//GEN-LAST:event_jButtonHojeActionPerformed
@@ -389,34 +379,55 @@ public class FormAgenda extends javax.swing.JFrame {
     private void jDateChooserAgendaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jDateChooserAgendaMouseClicked
         // TODO add your handling code here:
 
-       jDateChooserAgenda.setDate(null);
-        System.out.println("Mouse Click");
+        jDateChooserAgenda.setDate(null);
+
     }//GEN-LAST:event_jDateChooserAgendaMouseClicked
 
     private void jButtonCancelarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarConsultaActionPerformed
-        // TODO add your handling code here:
-       
-                
-                //"Deseja realmente cancelar a consulta?");
-//         daoagenda.Alterar(agen);
-//         status = "Cancelado";
-//         preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
-//                + " AGENDAMENTO.TURNO, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC,AGENDAMENTO.RETORNO"
-//                + " FROM AGENDAMENTO"
-//                + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
-//                + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
-//                + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
-//                + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY TURNO");
+
+        if (daoagenda.VerificaStatusConsulta(Agenda) == 0) {
+            int respostaCancelamento = JOptionPane.showConfirmDialog(
+                    rootPane, "Deseja realmente cancelar a consulta?\n\n"
+                    + "Após cancelar não será possível reveter o processo.", "Atenção", JOptionPane.YES_NO_OPTION);
+
+            if (respostaCancelamento == JOptionPane.YES_OPTION) {
+                daoagenda.alteraStatusConsuta("Cancelado", Agenda);
+                JOptionPane.showMessageDialog(rootPane, "A consulta foi cancelada com sucesso.");
+                preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
+                        + " HORARIO.HORA, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC, AGENDAMENTO.RETORNO"
+                        + " FROM AGENDAMENTO (NOLOCK)"
+                        + " INNER JOIN PACIENTE (NOLOCK) ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
+                        + " INNER JOIN MEDICO (NOLOCK) ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
+                        + " INNER JOIN ESPECIALIDADE(NOLOCK)  ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
+                        + " INNER JOIN HORARIO (NOLOCK) ON AGENDAMENTO.IDHORA = HORARIO.IDHORA"
+                        + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY HORARIO.HORA");
+            } else if (respostaCancelamento == JOptionPane.NO_OPTION) {
+                JOptionPane.showMessageDialog(rootPane, "O cancelamento da consulta não foi executado.");
+            }
+        } else if (daoagenda.VerificaStatusConsulta(Agenda) != 0) {
+            JOptionPane.showMessageDialog(rootPane, "A consulta selecionada esta com o status diferente de aberto.", "Cancelamento", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_jButtonCancelarConsultaActionPerformed
 
     private void jButtonAlterarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlterarConsultaActionPerformed
         // TODO add your handling code here:
-         
-          Agenda = "" + jTableAgenda.getValueAt(jTableAgenda.getSelectedRow(), 0); //pega o primeira coluna da tabela
-      
-           FormAgendamento agendamento = new FormAgendamento(Agenda);
+        /**
+         * passar a validar o status da consulta, ao clicar para alterar uma
+         * cosulta que esta cancelado por exemplo.
+         */
+        Agenda = "" + jTableAgenda.getValueAt(jTableAgenda.getSelectedRow(), 0); //pega o primeira coluna da tabela
+        String statusConsulta = "" + jTableAgenda.getValueAt(jTableAgenda.getSelectedRow(), 1);
+        /**
+         * FormAgendamento(Agenda,1); 1 indica que será uma alteração no
+         * agemdameno da consulta.
+         */
+        if ("Cancelado".equals(statusConsulta)) {
+            JOptionPane.showMessageDialog(rootPane, "A consulta não pode ser alterada, pois ja está finalizada/cancelada/Em atendimento");
+        } else {
+            FormAgendamento agendamento = new FormAgendamento(Agenda, 1);
             agendamento.setVisible(true);
-           
+        }
+
 
     }//GEN-LAST:event_jButtonAlterarConsultaActionPerformed
 

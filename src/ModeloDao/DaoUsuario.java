@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import ModeloBeans.BeansUsuario;
-import Visao.FormUsuario;
 
 public class DaoUsuario {
 
@@ -72,7 +71,8 @@ public class DaoUsuario {
 
         conex.conectarBd();
 
-        String sql3 = "select * from usuario where nome like '%" + mod.getUPesquisa() + "%'";
+        String sql3 = "SELECT IDUSUARIO,NOME,EMAIL,SENHA,TIPO FROM USUARIO (NOLOCK) "
+                + "WHERE NOME LIKE '%" + mod.getUPesquisa() + "%'";
 
         conex.executaSql(sql3);
 
@@ -165,16 +165,18 @@ public class DaoUsuario {
 
     public void Listar() {
         conex.conectarBd();
-        String sql17 = "SELECT * FROM USARIO";
-        try{
+        String sql17 = "SELECT IDUSUARIO,NOME,SENHA ,EMAIL,TIPO,DATAINCLUSAO,"
+                + "UENVIAEMAIL,USERSAISMTP,USENHAEMAIL,UPORTASMTP,ATIVO "
+                + "FROM USUARIO (NOLOCK)";
+        try {
             pstU = conex.con.prepareStatement(sql17);
             pstU.execute();
-        }catch(SQLException ex){
-             JOptionPane.showMessageDialog(null, "Erro ao listar os usuário.\n Erro: "+ex);
-    }finally{
-             conex.DesconectarBd();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar os usuário.\n Erro: " + ex);
+        } finally {
+            conex.DesconectarBd();
         }
-              
+
     }
 
 }

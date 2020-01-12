@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Visao;
 
-import Visao.FormAgendamento;
+import ModeloBeans.BeansDadosUsuario;
 import ModeloConection.ConexaoBd;
-import com.toedter.calendar.JCalendar;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
@@ -17,30 +11,16 @@ import javax.swing.JOptionPane;
  */
 public class FormTelaPrincipal extends javax.swing.JFrame {
 
-    ConexaoBd conecta = new ConexaoBd();
-    FormMedico med = new FormMedico();
-    FormUsuario user = new FormUsuario();
-    FormEnfermeiro enf = new FormEnfermeiro();
-    FormPaciente telapac = new FormPaciente();
-    FormAgendamento telaAgenda = new FormAgendamento();
-    FormAgenda telaagen = new FormAgenda();
-    FormAgendaMedico telaAgenMedico = new FormAgendaMedico();
-    FormTelaLogin telaLogin = new FormTelaLogin();
-    FormEspecialidade espec = new FormEspecialidade();
-
-    /**
-     * Creates new form TelaPrincipal
-     *
-     * @param usuario usuário de login do sistema
-     */
-    public FormTelaPrincipal(String usuario) {
-        initComponents();
-        jLabelUsuario.setText(usuario);
-        conecta.conectarBd();
-    }
+    public BeansDadosUsuario beansDadosUsuarioFTP;
 
     private FormTelaPrincipal() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    }
+
+    public FormTelaPrincipal(BeansDadosUsuario beansDadosUsuario) {
+        initComponents();
+        jLabelUsuario.setText(beansDadosUsuario.getNome());
+        beansDadosUsuarioFTP = beansDadosUsuario;
     }
 
     /**
@@ -99,6 +79,7 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
         getContentPane().add(jLabelVesao);
         jLabelVesao.setBounds(1160, 650, 70, 16);
 
+        TelaBemVindo.setClosable(true);
         TelaBemVindo.setResizable(true);
         TelaBemVindo.setTitle("Seja Bem-Vindo");
         TelaBemVindo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -347,19 +328,17 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuCadUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadUsuarioActionPerformed
-        // TODO add your handling code here:
+        FormUsuario user = new FormUsuario();
         try {
-            conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
+           ConexaoBd conecta = new ConexaoBd();
+            conecta.executaSql("SELECT TIPO FROM USUARIO (NOLOCK) WHERE NOME ='" + jLabelUsuario.getText() + "'");
             conecta.rs.first();
             if (conecta.rs.getString("TIPO").equalsIgnoreCase("ADMINISTRADOR")) {
-                if (user == null) {
+               
                     user = new FormUsuario();
                     user.setVisible(true);
                     user.setResizable(false);
-                } else {
-                    user.setVisible(true);
-                    user.setResizable(false);
-                }
+               
             } else {
                 JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
                         + "Gentileza entre em contato com o administrador do sistema.");
@@ -367,6 +346,9 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
                     + "Gentileza entre em contato com o administrador do sistema." + ex);
+        }catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, " Mensagem de erro.:" + ex.getMessage());
+
         }
     }//GEN-LAST:event_jMenuCadUsuarioActionPerformed
 
@@ -381,49 +363,27 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuTelaBemVindoActionPerformed
 
     private void jMenuISairbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuISairbActionPerformed
-        conecta.DesconectarBd();
+
         System.exit(0);
     }//GEN-LAST:event_jMenuISairbActionPerformed
 
     private void jMenuCadMedicosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadMedicosActionPerformed
-        try {
-            conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
-            conecta.rs.first();
-            if (conecta.rs.getString("TIPO").equalsIgnoreCase("Administrador")) {
-                if (med == null) {
-                    med = new FormMedico();
-                    med.setVisible(true);
-                    med.setResizable(false);
-                } else {
-                    med.setVisible(true);
-                    med.setResizable(false);
-                }
-                // FormMedico med = new FormMedico();
-                //  med.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
-                        + "Gentileza entre em contato com o administrador do sistema.");
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
-                    + "Gentileza entre em contato com o administrador do sistema." + ex);
-        }
+        Medico();
     }//GEN-LAST:event_jMenuCadMedicosActionPerformed
 
-    private void BtnCadMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCadMedicoActionPerformed
+    private void Medico() {
+
         try {
-            conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
+            FormMedico med = new FormMedico();
+            ConexaoBd conecta = new ConexaoBd();
+            conecta.executaSql("SELECT TIPO FROM USUARIO (NOLOCK) WHERE NOME ='" + jLabelUsuario.getText() + "'");
             conecta.rs.first();
             if (conecta.rs.getString("TIPO").equalsIgnoreCase("Administrador")) {
-                if (med == null) {
-                    med = new FormMedico();
+                
+                    med = new FormMedico(this.beansDadosUsuarioFTP);
                     med.setVisible(true);
                     med.setResizable(false);
-                } else {
-                    med.setVisible(true);
-                    med.setResizable(false);
-                }
-
+               
             } else {
                 JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
                         + "Gentileza entre em contato com o administrador do sistema.");
@@ -431,7 +391,14 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
                     + "Gentileza entre em contato com o administrador do sistema." + ex);
+        }catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, " Mensagem de erro.:" + ex.getMessage());
+
         }
+    }
+
+    private void BtnCadMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCadMedicoActionPerformed
+        Medico();
     }//GEN-LAST:event_BtnCadMedicoActionPerformed
 
     private void jMenuSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSairMouseClicked
@@ -440,19 +407,17 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuSairMouseClicked
 
     private void BtnEnfermeiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEnfermeiraActionPerformed
-        // TODO add your handling code here:
+        FormEnfermeiro formEnfermeiro = new FormEnfermeiro();
         try {
-            conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
+           ConexaoBd conecta = new ConexaoBd();
+            conecta.executaSql("SELECT TIPO FROM USUARIO (NOLOCK) WHERE NOME ='" + jLabelUsuario.getText() + "'");
             conecta.rs.first();
             if (conecta.rs.getString("TIPO").equalsIgnoreCase("ADMINISTRADOR")) {
-                if (user == null) {
-                    user = new FormUsuario();
-                    enf.setVisible(true);
-                    enf.setResizable(false);
-                } else {
-                    enf.setVisible(true);
-                    enf.setResizable(false);
-                }
+                formEnfermeiro = new FormEnfermeiro(this.beansDadosUsuarioFTP);
+                   
+                    formEnfermeiro.setVisible(true);
+                    formEnfermeiro.setResizable(false);
+               
             } else {
                 JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
                         + "Gentileza entre em contato com o administrador do sistema.");
@@ -460,54 +425,55 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
                     + "Gentileza entre em contato com o administrador do sistema." + ex);
+        }catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, " Mensagem de erro.:" + ex.getMessage());
+
         }
 
     }//GEN-LAST:event_BtnEnfermeiraActionPerformed
 
     private void jMenuCadEnfermeiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadEnfermeiroActionPerformed
         // TODO add your handling code here:
-        FormEnfermeiro enf = new FormEnfermeiro();
-        enf.setVisible(true);
+        FormEnfermeiro formEnfermeiro = new FormEnfermeiro(this.beansDadosUsuarioFTP);
+        formEnfermeiro.setVisible(true);
     }//GEN-LAST:event_jMenuCadEnfermeiroActionPerformed
 
     private void BtnPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPacienteActionPerformed
-        // TODO add your handling code here:
+        FormPaciente telapac = new FormPaciente();
         try {
-            conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
+            ConexaoBd conecta = new ConexaoBd();
+            conecta.executaSql("SELECT TIPO FROM USUARIO (NOLOCK) WHERE NOME ='" + jLabelUsuario.getText() + "'");
             conecta.rs.first();
             if (conecta.rs.getString("TIPO").equalsIgnoreCase("ADMINISTRADOR")) {
-                if (telapac == null) {
-                    telapac = new FormPaciente();
-                    telapac.setVisible(true);
-                    telapac.setResizable(false);
-                } else {
-                    telapac.setVisible(true);
-                    telapac.setResizable(false);
-                }
+
+                telapac = new FormPaciente(this.beansDadosUsuarioFTP);
+                telapac.setVisible(true);
+                telapac.setResizable(false);
+
             } else {
                 JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
                         + "Gentileza entre em contato com o administrador do sistema.");
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
-                    + "Gentileza entre em contato com o administrador do sistema." + ex);
+            JOptionPane.showMessageDialog(rootPane, "Erro não identificado: " + ex);
+        }catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, " Mensagem de erro.:" + ex.getMessage());
+
         }
     }//GEN-LAST:event_BtnPacienteActionPerformed
 
     private void jMenuCadPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadPacienteActionPerformed
-        // TODO add your handling code here:
+        FormPaciente telapac = new FormPaciente();
         try {
-            conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
+            ConexaoBd conecta = new ConexaoBd();
+            conecta.executaSql("SELECT TIPO FROM USUARIO (NOLOCK) WHERE NOME ='" + jLabelUsuario.getText() + "'");
             conecta.rs.first();
             if (conecta.rs.getString("TIPO").equalsIgnoreCase("ADMINISTRADOR")) {
-                if (telapac == null) {
-                    telapac = new FormPaciente();
-                    telapac.setVisible(true);
-                    telapac.setResizable(false);
-                } else {
-                    telapac.setVisible(true);
-                    telapac.setResizable(false);
-                }
+
+                telapac = new FormPaciente(this.beansDadosUsuarioFTP);
+                telapac.setVisible(true);
+                telapac.setResizable(false);
+
             } else {
                 JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
                         + "Gentileza entre em contato com o administrador do sistema.");
@@ -515,12 +481,15 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
                     + "Gentileza entre em contato com o administrador do sistema." + ex);
+        }catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, " Mensagem de erro.:" + ex.getMessage());
+
         }
     }//GEN-LAST:event_jMenuCadPacienteActionPerformed
 
     private void jMenuItemConfEnvioEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConfEnvioEmailActionPerformed
         // TODO add your handling code here:
-        FormEnvioEmail email = new FormEnvioEmail();
+        FormEnvioEmail email = new FormEnvioEmail(this.beansDadosUsuarioFTP);
         email.setVisible(true);
     }//GEN-LAST:event_jMenuItemConfEnvioEmailActionPerformed
 
@@ -536,37 +505,36 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void BtnAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgendaActionPerformed
-        // TODO add your handling code here:
+        FormAgendamento telaAgenda = new FormAgendamento();
         try {
-            conecta.executaSql("SELECT * FROM USUARIO WHERE NOME ='" + jLabelUsuario.getText() + "'");
+            ConexaoBd conecta = new ConexaoBd();
+            conecta.executaSql("SELECT TIPO FROM USUARIO (NOLOCK) WHERE NOME ='" + jLabelUsuario.getText() + "'");
             conecta.rs.first();
             if (conecta.rs.getString("TIPO").equalsIgnoreCase("ADMINISTRADOR")) {
-                if (telaAgenda == null) {
-                    telaAgenda = new FormAgendamento();
-                    telaAgenda.setVisible(true);
-                    telaAgenda.setResizable(false);
-                } else {
-                    telaAgenda.setVisible(true);
-                    telaAgenda.setResizable(false);
-                }
+                telaAgenda = new FormAgendamento(this.beansDadosUsuarioFTP);
+                telaAgenda.setVisible(true);
+                telaAgenda.setResizable(false);
             } else {
                 JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
                         + "Gentileza entre em contato com o administrador do sistema.");
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "O seu usuário não tem permissão para acessar está funcionalidade do sistema.\n"
-                    + "Gentileza entre em contato com o administrador do sistema." + ex);
+            JOptionPane.showMessageDialog(rootPane, "Erro não dentificado: " + ex);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, " Mensagem de erro.:" + ex.getMessage());
+
         }
     }//GEN-LAST:event_BtnAgendaActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
+        FormAgenda telaagen = new FormAgenda();
         telaagen.setVisible(true);
 
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:
+        FormAgendaMedico telaAgenMedico = new FormAgendaMedico(this.beansDadosUsuarioFTP);
         telaAgenMedico.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
@@ -581,23 +549,25 @@ public class FormTelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2MouseClicked
 
     private void jMenuCadUsuario1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadUsuario1ActionPerformed
-        // TODO add your handling code here:
+        FormEspecialidade espec = new FormEspecialidade(this.beansDadosUsuarioFTP);
         espec.setVisible(true);
     }//GEN-LAST:event_jMenuCadUsuario1ActionPerformed
 
     private void jCalendarTelaPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCalendarTelaPrincipalMouseClicked
         // TODO add your handling code here:
-        System.out.println("button"+ evt.getButton());
-         System.out.println("id"+ evt.getID());
-         System.out.println("String param"+ evt.paramString());
-         System.out.println("is consumed"+ evt.isConsumed());
-         
-        
+       
+//        System.out.println("button" + evt.getButton());
+//        System.out.println("id" + evt.getID());
+//        System.out.println("String param" + evt.paramString());
+//        System.out.println("is consumed" + evt.isConsumed());
+
+
     }//GEN-LAST:event_jCalendarTelaPrincipalMouseClicked
-    
+
     private void jCalendarTelaPrincipalPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCalendarTelaPrincipalPropertyChange
         // TODO add your handling code here:
-    System.out.println(evt.getPropertyName()+ ": " + evt.getNewValue()); //getNewValue()
+        
+        //System.out.println(evt.getPropertyName() + ": " + evt.getNewValue()); //getNewValue()
     }//GEN-LAST:event_jCalendarTelaPrincipalPropertyChange
 
     /**
