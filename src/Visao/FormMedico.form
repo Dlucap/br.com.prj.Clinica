@@ -64,6 +64,64 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jLabelMComplemento" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTextFieldCompl" pref="407" max="32767" attributes="0"/>
+                              <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jComboBoxEspecializacao" min="-2" pref="194" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="jLabelMCrm" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jFormattedTextFieldCrm" min="-2" pref="104" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="jLabelMEspecialidade" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTextFieldEmail" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jScrollPane1" min="-2" pref="552" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="jTextFieldPesquisa" min="-2" pref="230" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jButtonPesquisa" min="-2" pref="98" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="jRadioButtonFiltroMedicoTodosAtivo" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jRadioButtonFiltroMedicoAtivo" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jRadioButtonFiltroMedicoNaoAtivo" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jTextFieldIDMedico" min="-2" pref="52" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+              <Group type="102" attributes="0">
+                  <Component id="jButtonIncluir" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jButtonEditar" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                  <Component id="jButtonSalvar" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jButtonExcluir" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                  <Component id="jButtonCancelar" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="jCheckBoxMedicoAtivo" min="-2" pref="59" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
@@ -103,7 +161,7 @@
                                   <Component id="jFormattedTextFieldCEP" min="-2" pref="79" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jButtonBuscarCep" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="376" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -137,59 +195,6 @@
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="465" max="-2" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jLabelMComplemento" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextFieldCompl" pref="407" max="32767" attributes="0"/>
-                              <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jComboBoxEspecializacao" min="-2" pref="194" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jLabelMCrm" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jFormattedTextFieldCrm" min="-2" pref="104" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="jLabelMEspecialidade" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextFieldEmail" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPane1" alignment="1" min="-2" pref="552" max="-2" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jTextFieldPesquisa" min="-2" pref="230" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jButtonPesquisa" min="-2" pref="98" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jRadioButtonFiltroMedicoAtivo" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jTextFieldIDMedico" min="-2" pref="52" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-              </Group>
-              <Group type="102" attributes="0">
-                  <Component id="jButtonIncluir" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jButtonEditar" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                  <Component id="jButtonSalvar" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jButtonExcluir" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                  <Component id="jButtonCancelar" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="jCheckBoxMedicoAtivo" min="-2" pref="59" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -246,15 +251,17 @@
                       <Component id="jFormattedTextFieldCEP" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jButtonBuscarCep" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="JlabelMCep" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jTextFieldPesquisa" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonPesquisa" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="jLabelMComplemento" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextFieldPesquisa" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButtonPesquisa" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                          <Component id="jRadioButtonFiltroMedicoNaoAtivo" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jRadioButtonFiltroMedicoAtivo" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jRadioButtonFiltroMedicoTodosAtivo" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <Component id="jLabelMComplemento" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -275,7 +282,7 @@
                       </Group>
                       <Component id="jScrollPane1" min="-2" pref="216" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="12" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -593,8 +600,30 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="jRadioButtonFiltroMedicoAtivo">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Filtrar por m&#xe9;dicos  ativos"/>
+            <Property name="text" type="java.lang.String" value="M&#xe9;dicos Ativos"/>
           </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jRadioButtonFiltroMedicoAtivoStateChanged"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jRadioButtonFiltroMedicoAtivoMouseClicked"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="jRadioButtonFiltroMedicoNaoAtivo">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="M&#xe9;dicos N&#xe3;o Ativos"/>
+          </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jRadioButtonFiltroMedicoNaoAtivoStateChanged"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jRadioButtonFiltroMedicoNaoAtivoMouseClicked"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="jRadioButtonFiltroMedicoTodosAtivo">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="M&#xe9;dicos Todos"/>
+          </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jRadioButtonFiltroMedicoTodosAtivoStateChanged"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jRadioButtonFiltroMedicoTodosAtivoMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

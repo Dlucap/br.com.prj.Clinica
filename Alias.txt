@@ -1,4 +1,11 @@
-ClinicaMedica;127.0.0.1;ClinicaMedica;1433
-Homo;localhost;ClinicaMedicaHomo;1433
-ClinicaMedicaHomologacao;127.0.0.2;ClinicaMedica1;1433
-Homologa;localhost;ClinicaMedicaHomologa;1433
+Clinica;localhost;clinicamedica;1430
+homologacao;127.0.0.1;clinicamedica;1431
+2;192.168.15.13;clinicamedica;1432
+3;DanielLucas;clinicamedica;1433
+teste;localhost;127.0.0.1;1434
+Clinicaa;localhost;clinicamedica;1430
+homologaacao;127.0.0.1;clinicamedica;1431
+222;192.168.15.13;clinicamedica;1432
+333;DanielLucas;clinicamedica;1433
+tesssste;localhost;127.0.0.1;1434Clinica;localhost;clinicamedica;1433
+Clinica;localhost;clinicamedica;1433

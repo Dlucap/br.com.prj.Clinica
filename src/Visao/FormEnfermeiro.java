@@ -531,7 +531,7 @@ public class FormEnfermeiro extends javax.swing.JFrame {
         jButtonSalvar.setEnabled(false);
         jButtonCancelar.setEnabled(true);
         jButtonEditar.setEnabled(true);
-        jButtonExcluir.setEnabled(true);
+        jButtonExcluir.setEnabled(false);
 
         preencherTabelaEnfermeiro("SELECT IDENFERMEIRO,NOMEENFERMEIRO, COREN FROM ENFERMEIRO WHERE NOMEENFERMEIRO like '%" + enf.getEPesquisa() + "%'");
     }//GEN-LAST:event_jButtonPesquisaActionPerformed

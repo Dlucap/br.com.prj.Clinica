@@ -547,6 +547,15 @@ public class FormAgendamento extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (jComboBoxRetorno.getSelectedItem().equals("Sim")) {
 
+            DaoAgendamento daoAgendamento = new DaoAgendamento();
+            daoAgendamento.buscarPaciente(jTextFieldPaciente.getText());
+            daoAgendamento.BuscarCodMedico(String.valueOf(jComboBoxMedico.getSelectedItem()));
+
+            FormConsultaRetorno formConsultaRetorno = new FormConsultaRetorno();
+            if (!formConsultaRetorno.verificaConsultaAnterior(daoAgendamento.codPaciente, daoAgendamento.codMedico)) {
+                System.out.println(formConsultaRetorno.verificaConsultaAnterior(daoAgendamento.codPaciente, daoAgendamento.codMedico));
+                return;
+            }
             jButtonBuscarConsulta.setEnabled(true);
             jButtonAtualizaConsultaRetorno.setEnabled(true);
 
@@ -723,7 +732,11 @@ public class FormAgendamento extends javax.swing.JFrame {
         daoAgendamento.buscarPaciente(jTextFieldPaciente.getText());
         daoAgendamento.BuscarCodMedico(String.valueOf(jComboBoxMedico.getSelectedItem()));
 
-        FormConsultaRetorno formConsultaRetorno = new FormConsultaRetorno(daoAgendamento.codPaciente, daoAgendamento.codMedico);
+        FormConsultaRetorno formConsultaRetorno = new FormConsultaRetorno();
+        if (!formConsultaRetorno.verificaConsultaAnterior(daoAgendamento.codPaciente, daoAgendamento.codMedico)) {
+            System.out.println(formConsultaRetorno.verificaConsultaAnterior(daoAgendamento.codPaciente, daoAgendamento.codMedico));
+            return;
+        }
         formConsultaRetorno.setVisible(true);
 
     }//GEN-LAST:event_jButtonBuscarConsultaActionPerformed
@@ -763,17 +776,17 @@ public class FormAgendamento extends javax.swing.JFrame {
 
             if (daoCheckDate.EhFimDeSemana(calendar)) {
 
-                JOptionPane.showMessageDialog(rootPane, "A data selecionada (" + format.format(jDateChooserAgendamento.getDate()) 
+                JOptionPane.showMessageDialog(rootPane, "A data selecionada (" + format.format(jDateChooserAgendamento.getDate())
                         + ") encontra-se em um fim de semana.\n "
                         + "Gentileza realizar agendamentos apenas de segunda a sexta conforme disponibilidade de horário.");
                 jDateChooserAgendamento.setDate(null);
-                 jComboBoxHorario.removeAllItems();
-            jComboBoxHorario.setEnabled(false);
+                jComboBoxHorario.removeAllItems();
+                jComboBoxHorario.setEnabled(false);
             }
         } catch (NullPointerException ex) {
 
-        }finally{
-             HabilitaComboHorario();
+        } finally {
+            HabilitaComboHorario();
         }
     }//GEN-LAST:event_jDateChooserAgendamentoPropertyChange
 
@@ -832,8 +845,8 @@ public class FormAgendamento extends javax.swing.JFrame {
         //total do tamanho dos campos = 38 + 237 + 110 + 65 = 450
         conBd.DesconectarBd();
     }
-    
-     protected void HabilitaComboHorario() {
+
+    protected void HabilitaComboHorario() {
         resposta = (String) jComboBoxEspecMedica.getSelectedItem();
         if (resposta != "Selecione") {
 

@@ -2,7 +2,8 @@ package ModeloBeans;
 
 public enum BeansEnumStatus {
 
-    Aberto(0), EmAtendimento(1), Finalizado(2), Cancelado(3);
+    Aberto(0), AbertoReaagendado(1),ConsultaLiberada(2),EmAtendimento(3), 
+    Finalizado(4), Cancelado(5);
 
     private int status;
 

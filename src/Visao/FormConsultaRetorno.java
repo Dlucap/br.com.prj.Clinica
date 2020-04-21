@@ -48,13 +48,13 @@ public final class FormConsultaRetorno extends javax.swing.JFrame {
      */
     public FormConsultaRetorno(Integer idPaciente, Integer idMedico) {
         initComponents();
-
+        
         preencherTabelaAgendamento(
                 "SELECT AGENDAMENTO.IDAGENDAMENTO,PACIENTE.NOMEPACIENTE,MEDICO.NOMEMEDICO,ESPECIALIDADE.ESPEC,AGENDAMENTO.DTAGENDAMENTO "
-                + "FROM AGENDAMENTO "
-                + "INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE "
-                + "INNER JOIN MEDICO ON MEDICO.IDMEDICO = AGENDAMENTO.IDMEDICO "
-                + "INNER JOIN PACIENTE ON PACIENTE.IDPACIENTE =  AGENDAMENTO.IDPACIENTE "
+                + "FROM AGENDAMENTO (NOLOCK)"
+                + "INNER JOIN ESPECIALIDADE (NOLOCK) ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE "
+                + "INNER JOIN MEDICO (NOLOCK) ON MEDICO.IDMEDICO = AGENDAMENTO.IDMEDICO "
+                + "INNER JOIN PACIENTE (NOLOCK) ON PACIENTE.IDPACIENTE =  AGENDAMENTO.IDPACIENTE "
                 + "WHERE DTAGENDAMENTO BETWEEN DATEADD(DAY, -30 , GETDATE()) "
                 + "AND GETDATE() AND PACIENTE.IDPACIENTE = " + idPaciente + " AND AGENDAMENTO.IDMEDICO = " + idMedico);
     }
@@ -253,8 +253,8 @@ public final class FormConsultaRetorno extends javax.swing.JFrame {
         try {
             conBd.rs.first();
             if (!conBd.rs.next()) {
-              
                 JOptionPane.showMessageDialog(rootPane, "O paciente não possui consulta anteriior.");
+                FormConsultaRetorno.super.dispose();
                 dispose();
             } else {
                 do {
@@ -297,6 +297,29 @@ public final class FormConsultaRetorno extends javax.swing.JFrame {
         conBd.DesconectarBd();
     }
 
+     public boolean verificaConsultaAnterior(Integer idPaciente, Integer idMedico) {
+       
+        String sql = "SELECT AGENDAMENTO.IDAGENDAMENTO "
+                + "FROM AGENDAMENTO (NOLOCK)"
+                + "INNER JOIN MEDICO (NOLOCK) ON MEDICO.IDMEDICO = AGENDAMENTO.IDMEDICO "
+                + "INNER JOIN PACIENTE (NOLOCK) ON PACIENTE.IDPACIENTE =  AGENDAMENTO.IDPACIENTE "
+                + "WHERE DTAGENDAMENTO BETWEEN DATEADD(DAY, -30 , GETDATE()) "
+                + "AND GETDATE() AND PACIENTE.IDPACIENTE = " + idPaciente + " AND AGENDAMENTO.IDMEDICO = " + idMedico;
+        
+        conBd.conectarBd();
+
+        conBd.executaSql(sql);
+        try {
+            conBd.rs.first();
+            if (!conBd.rs.next()) {
+                return false;               
+            }
+        }catch(Exception ex){
+           JOptionPane.showMessageDialog(rootPane, ex);
+        } 
+        return true;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -347,4 +370,6 @@ public final class FormConsultaRetorno extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     // End of variables declaration//GEN-END:variables
+
+   
 }

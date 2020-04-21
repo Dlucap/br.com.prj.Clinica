@@ -36,12 +36,13 @@ public class FormPaciente extends javax.swing.JFrame {
     /**
      * Creates new form FormPaciente
      */
-      public FormPaciente() {
-          // initComponents();
-      }
+    public FormPaciente() {
+        // initComponents();
+    }
+
     public FormPaciente(BeansDadosUsuario beansDadosUsuario) {
         initComponents();
-      preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE (NOLOCK) ORDER BY NOMEPACIENTE");
+        preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE (NOLOCK) ORDER BY NOMEPACIENTE");
     }
 
     /**
@@ -586,28 +587,35 @@ public class FormPaciente extends javax.swing.JFrame {
         jButtonIncluir.setEnabled(true);
         jButtonEditar.setEnabled(false);
         jButtonExcluir.setEnabled(false);
-preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,EMAIL,TELCELULAR FROM PACIENTE (NOLOCK) ORDER BY NOMEPACIENTE");
+        preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,EMAIL,TELCELULAR FROM PACIENTE (NOLOCK) ORDER BY NOMEPACIENTE");
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
         // TODO add your handling code here:
         int resposta = 0;
-        resposta = JOptionPane.showConfirmDialog(rootPane, "Deseja realmente excluir? ");
 
-        if (resposta == JOptionPane.YES_OPTION) {
+        try {
             pac.setPCod(Integer.parseInt(jTextFieldPIdPaciente.getText()));
-            controlP.Excluir(pac);
-            preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE(NOLOCK) ORDER BY NOMEPACIENTE ");
+            resposta = JOptionPane.showConfirmDialog(rootPane, "Deseja realmente excluir? ");
 
-            jButtonSalvar.setEnabled(false);
-            jButtonBuscarCep.setEnabled(!true);
-            jButtonCancelar.setEnabled(!false);
-            jButtonIncluir.setEnabled(true);
-            jButtonExcluir.setEnabled(false);
-            jButtonEditar.setEnabled(false);
+            if (resposta == JOptionPane.YES_OPTION) {
 
-            LimparCampos();
+                controlP.Excluir(pac);
+                preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE(NOLOCK) ORDER BY NOMEPACIENTE ");
+
+                jButtonSalvar.setEnabled(false);
+                jButtonBuscarCep.setEnabled(!true);
+                jButtonCancelar.setEnabled(!false);
+                jButtonIncluir.setEnabled(true);
+                jButtonExcluir.setEnabled(false);
+                jButtonEditar.setEnabled(false);
+
+                LimparCampos();
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Selecione um regisro a ser excluido.");
         }
+
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
@@ -647,8 +655,8 @@ preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,EMAIL,TEL
             //Limpar os campos
             LimparCampos();
 
-        } else if(flag == 2){
-            
+        } else if (flag == 2) {
+
             pac.setPNome(jTextFieldPNome.getText());
             pac.setPRg(jFormattedTextFieldPRg.getText());
             pac.setPCpf(jFormattedTextFieldPCpf.getText());
@@ -767,7 +775,7 @@ preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,EMAIL,TEL
         jButtonSalvar.setEnabled(false);
         jButtonCancelar.setEnabled(true);
         jButtonEditar.setEnabled(true);
-        jButtonExcluir.setEnabled(true);
+        jButtonExcluir.setEnabled(false);
 
         preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,TELCELULAR,EMAIL FROM PACIENTE (NOLOCK) WHERE NOMEPACIENTE LIKE '%" + pac.getPesquisa() + "%'");
 
@@ -819,7 +827,7 @@ preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,EMAIL,TEL
             jTextFieldPEmerNome.setText(conBd.rs.getString("CENOME"));
             jFormattedTextFieldPEmerTelCel.setText(conBd.rs.getString("CETELCELULAR"));
             jFormattedTextFieldPEmerTelRes1.setText(conBd.rs.getString("CETELRESIDENCIAL"));
-
+            jButtonExcluir.setEnabled(true);
             jTextFieldPPesquisar.setText("");
 
         } catch (SQLException ex) {
@@ -962,23 +970,35 @@ preencherTabelaPaciente("SELECT IDPACIENTE,NOMEPACIENTE,TELRESIDENCIAL,EMAIL,TEL
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
 
-                }
+                
+
+}
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(FormPaciente.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormPaciente.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormPaciente.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        
 
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+} catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(FormPaciente.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+        
+
+} catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(FormPaciente.class
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+        
+
+} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(FormPaciente.class
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 

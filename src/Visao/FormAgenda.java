@@ -128,6 +128,7 @@ public class FormAgenda extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableAgenda = new javax.swing.JTable();
@@ -138,6 +139,7 @@ public class FormAgenda extends javax.swing.JFrame {
         jDateChooserAgenda = new com.toedter.calendar.JDateChooser();
         jButtonCancelarConsulta = new javax.swing.JButton();
         jButtonAlterarConsulta = new javax.swing.JButton();
+        jButtonVerConsulta = new javax.swing.JToggleButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -167,6 +169,7 @@ public class FormAgenda extends javax.swing.JFrame {
         jLabelAgenHj.setText("Agendamento do dia :");
 
         jButtonIniciarConusulta.setText("Iniciar Consulta");
+        jButtonIniciarConusulta.setEnabled(false);
         jButtonIniciarConusulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonIniciarConusultaActionPerformed(evt);
@@ -187,7 +190,6 @@ public class FormAgenda extends javax.swing.JFrame {
             }
         });
 
-        jDateChooserAgenda.setDateFormatString("dd/MM/yyyy");
         jDateChooserAgenda.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jDateChooserAgendaMouseClicked(evt);
@@ -213,6 +215,14 @@ public class FormAgenda extends javax.swing.JFrame {
             }
         });
 
+        jButtonVerConsulta.setText("Ver Consulta");
+        jButtonVerConsulta.setEnabled(false);
+        jButtonVerConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVerConsultaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -233,14 +243,16 @@ public class FormAgenda extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addComponent(jButtonAlterarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(jButtonCancelarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(jButtonIniciarConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonVerConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43)
+                .addComponent(jButtonAlterarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48)
+                .addComponent(jButtonCancelarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58)
+                .addComponent(jButtonIniciarConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -255,11 +267,12 @@ public class FormAgenda extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jButtonAlterarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonVerConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonCancelarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonIniciarConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonAlterarConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                    .addComponent(jButtonIniciarConusulta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19))
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -303,11 +316,11 @@ public class FormAgenda extends javax.swing.JFrame {
         daoagenda.Alterar(agen);
         preencherTabelaAgenda("SELECT AGENDAMENTO.IDAGENDAMENTO, AGENDAMENTO.STATUSCONSULTA, PACIENTE.NOMEPACIENTE,"
                 + " HORARIO.HORA, AGENDAMENTO.DTAGENDAMENTO, MEDICO.NOMEMEDICO, ESPECIALIDADE.ESPEC, AGENDAMENTO.RETORNO"
-                + " FROM AGENDAMENTO"
-                + " INNER JOIN PACIENTE ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
-                + " INNER JOIN MEDICO ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
-                + " INNER JOIN ESPECIALIDADE ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
-                + " INNER JOIN HORARIO ON AGENDAMENTO.IDHORA = HORARIO.IDHORA"
+                + " FROM AGENDAMENTO (NOLOCK)"
+                + " INNER JOIN PACIENTE  (NOLOCK)ON AGENDAMENTO.IDPACIENTE = PACIENTE.IDPACIENTE"
+                + " INNER JOIN MEDICO (NOLOCK) ON AGENDAMENTO.IDMEDICO = MEDICO.IDMEDICO"
+                + " INNER JOIN ESPECIALIDADE  (NOLOCK) ON AGENDAMENTO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE"
+                + " INNER JOIN HORARIO  (NOLOCK) ON AGENDAMENTO.IDHORA = HORARIO.IDHORA"
                 + " WHERE DTAGENDAMENTO ='" + dtHoje + "' AND STATUSCONSULTA = '" + status + "' ORDER BY HORARIO.HORA");
 
     }//GEN-LAST:event_jButtonIniciarConusultaActionPerformed
@@ -347,17 +360,20 @@ public class FormAgenda extends javax.swing.JFrame {
 
             jButtonIniciarConusulta.setVisible(true);
             jButtonIniciarConusulta.setEnabled(true);
+            jButtonVerConsulta.setEnabled(false);
 
         } else if (dataDiaconsulta.after(d)) {
             jButtonCancelarConsulta.setEnabled(true);
             jButtonIniciarConusulta.setEnabled(false);
             jButtonAlterarConsulta.setEnabled(true);
+            jButtonVerConsulta.setEnabled(false);
 
         } else if (dataDiaconsulta.before(d)) {
 
             jButtonCancelarConsulta.setEnabled(false);
             jButtonIniciarConusulta.setEnabled(false);
             jButtonAlterarConsulta.setEnabled(false);
+            jButtonVerConsulta.setEnabled(true);
         }
 
     }
@@ -435,6 +451,13 @@ public class FormAgenda extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jDateChooserAgendaPropertyChange
 
+    private void jButtonVerConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerConsultaActionPerformed
+        
+        
+        Object ob = new Object();
+     
+    }//GEN-LAST:event_jButtonVerConsultaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -471,11 +494,13 @@ public class FormAgenda extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonAlterarConsulta;
     private javax.swing.JButton jButtonBuscarAgendamento;
     private javax.swing.JButton jButtonCancelarConsulta;
     private javax.swing.JButton jButtonHoje;
     private javax.swing.JButton jButtonIniciarConusulta;
+    private javax.swing.JToggleButton jButtonVerConsulta;
     private com.toedter.calendar.JDateChooser jDateChooserAgenda;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelAgenHj;

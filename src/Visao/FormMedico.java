@@ -102,6 +102,8 @@ public class FormMedico extends javax.swing.JFrame {
         jFormattedTextFieldCEP = new javax.swing.JFormattedTextField();
         jCheckBoxMedicoAtivo = new javax.swing.JCheckBox();
         jRadioButtonFiltroMedicoAtivo = new javax.swing.JRadioButton();
+        jRadioButtonFiltroMedicoNaoAtivo = new javax.swing.JRadioButton();
+        jRadioButtonFiltroMedicoTodosAtivo = new javax.swing.JRadioButton();
         jLabelCadMedicos = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -332,12 +334,94 @@ public class FormMedico extends javax.swing.JFrame {
         jCheckBoxMedicoAtivo.setText("Ativo");
         jCheckBoxMedicoAtivo.setEnabled(false);
 
-        jRadioButtonFiltroMedicoAtivo.setText("Filtrar por médicos  ativos");
+        jRadioButtonFiltroMedicoAtivo.setText("Médicos Ativos");
+        jRadioButtonFiltroMedicoAtivo.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRadioButtonFiltroMedicoAtivoStateChanged(evt);
+            }
+        });
+        jRadioButtonFiltroMedicoAtivo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRadioButtonFiltroMedicoAtivoMouseClicked(evt);
+            }
+        });
+
+        jRadioButtonFiltroMedicoNaoAtivo.setText("Médicos Não Ativos");
+        jRadioButtonFiltroMedicoNaoAtivo.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRadioButtonFiltroMedicoNaoAtivoStateChanged(evt);
+            }
+        });
+        jRadioButtonFiltroMedicoNaoAtivo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRadioButtonFiltroMedicoNaoAtivoMouseClicked(evt);
+            }
+        });
+
+        jRadioButtonFiltroMedicoTodosAtivo.setText("Médicos Todos");
+        jRadioButtonFiltroMedicoTodosAtivo.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRadioButtonFiltroMedicoTodosAtivoStateChanged(evt);
+            }
+        });
+        jRadioButtonFiltroMedicoTodosAtivo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRadioButtonFiltroMedicoTodosAtivoMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabelMComplemento)
+                            .addComponent(jTextFieldCompl, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+                            .addComponent(jLabel3)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jComboBoxEspecializacao, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabelMCrm)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jFormattedTextFieldCrm, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabelMEspecialidade)
+                            .addComponent(jTextFieldEmail))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 552, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jTextFieldPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jRadioButtonFiltroMedicoTodosAtivo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jRadioButtonFiltroMedicoAtivo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jRadioButtonFiltroMedicoNaoAtivo)))
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldIDMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jButtonIncluir)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonEditar)
+                .addGap(12, 12, 12)
+                .addComponent(jButtonSalvar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonExcluir)
+                .addGap(12, 12, 12)
+                .addComponent(jButtonCancelar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jCheckBoxMedicoAtivo, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -372,7 +456,7 @@ public class FormMedico extends javax.swing.JFrame {
                                 .addComponent(jFormattedTextFieldCEP, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonBuscarCep)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 376, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(65, 65, 65)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -396,50 +480,6 @@ public class FormMedico extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jFormattedTextFieldTelCel)))))
                 .addGap(465, 465, 465))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabelMComplemento)
-                            .addComponent(jTextFieldCompl, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
-                            .addComponent(jLabel3)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jComboBoxEspecializacao, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabelMCrm)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedTextFieldCrm, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabelMEspecialidade)
-                            .addComponent(jTextFieldEmail))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 552, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextFieldPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButtonPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButtonFiltroMedicoAtivo)))
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldIDMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jButtonIncluir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButtonEditar)
-                .addGap(12, 12, 12)
-                .addComponent(jButtonSalvar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButtonExcluir)
-                .addGap(12, 12, 12)
-                .addComponent(jButtonCancelar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jCheckBoxMedicoAtivo, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -487,14 +527,16 @@ public class FormMedico extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jFormattedTextFieldCEP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonBuscarCep)
-                    .addComponent(JlabelMCep))
+                    .addComponent(JlabelMCep)
+                    .addComponent(jTextFieldPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonPesquisa))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabelMComplemento)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextFieldPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButtonPesquisa)
-                        .addComponent(jRadioButtonFiltroMedicoAtivo)))
+                        .addComponent(jRadioButtonFiltroMedicoNaoAtivo)
+                        .addComponent(jRadioButtonFiltroMedicoAtivo)
+                        .addComponent(jRadioButtonFiltroMedicoTodosAtivo))
+                    .addComponent(jLabelMComplemento))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -511,7 +553,7 @@ public class FormMedico extends javax.swing.JFrame {
                             .addComponent(jFormattedTextFieldCrm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabelMCrm)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jLabelCadMedicos.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -544,6 +586,31 @@ public class FormMedico extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jRadioButtonFiltroMedicoNaoAtivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButtonFiltroMedicoNaoAtivoMouseClicked
+        // TODO add your handling code here: if(jRadioButtonFiltroMedicoNaoAtivo.isSelected()){
+//        if (jRadioButtonFiltroMedicoAtivo.isSelected()) {
+//            jRadioButtonFiltroMedicoAtivo.setSelected(false);
+//        }
+//        if (jRadioButtonFiltroMedicoTodosAtivo.isSelected()) {
+//            jRadioButtonFiltroMedicoTodosAtivo.setSelected(false);
+//        }
+    }//GEN-LAST:event_jRadioButtonFiltroMedicoNaoAtivoMouseClicked
+
+    private void jRadioButtonFiltroMedicoAtivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButtonFiltroMedicoAtivoMouseClicked
+        // TODO add your handling code here:
+//        if(jRadioButtonFiltroMedicoNaoAtivo.isSelected()){
+//            jRadioButtonFiltroMedicoNaoAtivo.setSelected(false);
+//            jRadioButtonFiltroMedicoTodosAtivo.setSelected(false);
+//        } 
+//        if(jRadioButtonFiltroMedicoTodosAtivo.isSelected()){
+//                jRadioButtonFiltroMedicoTodosAtivo.setSelected(false);
+//        }
+    }//GEN-LAST:event_jRadioButtonFiltroMedicoAtivoMouseClicked
+
+    private void jTextFieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldEmailActionPerformed
+
     private void jTextFieldBairroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldBairroActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldBairroActionPerformed
@@ -553,11 +620,13 @@ public class FormMedico extends javax.swing.JFrame {
         if (jFormattedTextFieldCEP.getText().replace("-", "").replace(" ", "").isEmpty()) {
             JOptionPane.showMessageDialog(null, "Campo CEP, encontra-se vazio, gentileza preencher com um valor válido");
             jFormattedTextFieldCEP.requestFocus();
+            return;
         }
         WebServiceCep wsc = WebServiceCep.searchCep(jFormattedTextFieldCEP.getText());
         if (wsc.wasSuccessful() == false) {
             JOptionPane.showMessageDialog(null, "\r\t O Cep informado não existe na base de dados, sendo necessário "
-                    + "infrmar os seguintes campos manualmente na tela de cadastro: \n Endereço - Bairro - UF - Cidade - CEP");
+                    + "informar os seguintes campos manualmente na tela de cadastro: \n Endereço - Bairro - UF - Cidade - CEP");
+            return;
         }
 
         jTextFieldEndereco.setText(wsc.getLogradouro());
@@ -572,7 +641,6 @@ public class FormMedico extends javax.swing.JFrame {
 
     private void jButtonPesquisaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButtonPesquisaKeyPressed
         // TODO add your handling code here:
-
     }//GEN-LAST:event_jButtonPesquisaKeyPressed
 
     private void jButtonPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPesquisaActionPerformed
@@ -584,18 +652,20 @@ public class FormMedico extends javax.swing.JFrame {
                 + "INNER JOIN ESPECIALIDADE (NOLOCK) "
                 + "ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE "
                 + "WHERE MEDICO.NOMEMEDICO LIKE '%" + mod.getMPesquisa() + "%'";
-        
-        if(jRadioButtonFiltroMedicoAtivo.isSelected()){
+
+        if (jRadioButtonFiltroMedicoAtivo.isSelected()) {
             sql += " AND MEDICO.ATIVO = 1";
+        }
+        if (jRadioButtonFiltroMedicoNaoAtivo.isSelected()) {
+            sql += " AND MEDICO.ATIVO = 0";
         }
         jButtonIncluir.setEnabled(false);
         jButtonSalvar.setEnabled(false);
         jButtonCancelar.setEnabled(true);
         jButtonEditar.setEnabled(true);
-        jButtonExcluir.setEnabled(true);
-  
-        preencherTabelaMedico(sql);
+        jButtonExcluir.setEnabled(false);
 
+        preencherTabelaMedico(sql);
     }//GEN-LAST:event_jButtonPesquisaActionPerformed
 
     private void jTableMedicosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMedicosMouseClicked
@@ -675,7 +745,7 @@ public class FormMedico extends javax.swing.JFrame {
             mod.setMcod(Integer.parseInt(jTextFieldIDMedico.getText()));
             controlM.Excluir(mod);
             preencherTabelaMedico("SELECT IDMEDICO,NOMEMEDICO,ESPEC,CRM,MEDICO.ATIVO FROM MEDICO (NOLOCK) "
-                + "INNER JOIN ESPECIALIDADE (NOLOCK) ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
+                    + "INNER JOIN ESPECIALIDADE (NOLOCK) ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
 
             jButtonSalvar.setEnabled(false);
             jButtonBuscarCep.setEnabled(true);
@@ -720,7 +790,7 @@ public class FormMedico extends javax.swing.JFrame {
             controlM.salvar(mod);
 
             preencherTabelaMedico("SELECT IDMEDICO,NOMEMEDICO,ESPEC,CRM,MEDICO.ATIVO FROM MEDICO (NOLOCK) "
-                + "INNER JOIN ESPECIALIDADE (NOLOCK) ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
+                    + "INNER JOIN ESPECIALIDADE (NOLOCK) ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
             //Limpar os campos
             //LimparCampos();
             DesabilitarCampos();
@@ -748,7 +818,7 @@ public class FormMedico extends javax.swing.JFrame {
             controlM.Editar(mod);
 
             preencherTabelaMedico("SELECT IDMEDICO,NOMEMEDICO,ESPEC,CRM,MEDICO.ATIVO FROM MEDICO (NOLOCK) "
-                + "INNER JOIN ESPECIALIDADE (NOLOCK) ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
+                    + "INNER JOIN ESPECIALIDADE (NOLOCK) ON MEDICO.IDESPECIALIDADE = ESPECIALIDADE.IDESPECIALIDADE ORDER BY NOMEMEDICO");
 
             //Desaabilitar Campos tela cadastro Medico
             DesabilitarCampos();
@@ -756,21 +826,7 @@ public class FormMedico extends javax.swing.JFrame {
             //flag = 0;
         }
     }//GEN-LAST:event_jButtonSalvarActionPerformed
-    public void preencherIdMedicoIncluir() {
-        try {
-            conBd.conectarBd();
-            String sql = "SELECT MAX(IDMEDICO+1) AS PROXID FROM MEDICO (NOLOCK)";
-            conBd.executaSql(sql);
 
-            conBd.rs.first();
-
-            jTextFieldIDMedico.setText(String.valueOf(conBd.rs.getInt("PROXID")));
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID do médico! " + ex.getMessage());
-        }
-        conBd.DesconectarBd();
-    }
     private void jButtonIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIncluirActionPerformed
 
         flag = 1;
@@ -785,7 +841,6 @@ public class FormMedico extends javax.swing.JFrame {
         jTextFieldPesquisa.setEditable(true);
         jButtonCancelar.setEnabled(true);
         jButtonSalvar.setEnabled(true);
-
     }//GEN-LAST:event_jButtonIncluirActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
@@ -800,12 +855,15 @@ public class FormMedico extends javax.swing.JFrame {
         jButtonIncluir.setEnabled(false);
         jButtonExcluir.setEnabled(false);
         jButtonEditar.setEnabled(false);
-
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jComboBoxEspecializacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxEspecializacaoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBoxEspecializacaoActionPerformed
+
+    private void jComboBoxEspecializacaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBoxEspecializacaoMouseClicked
+        preencherEspecialidade();
+    }//GEN-LAST:event_jComboBoxEspecializacaoMouseClicked
 
     private void jTextFieldNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNumeroActionPerformed
         // TODO add your handling code here:
@@ -827,13 +885,58 @@ public class FormMedico extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jFormattedTextFieldRgActionPerformed
 
-    private void jTextFieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEmailActionPerformed
+    private void jRadioButtonFiltroMedicoTodosAtivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButtonFiltroMedicoTodosAtivoMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldEmailActionPerformed
+//        if(jRadioButtonFiltroMedicoTodosAtivo.isSelected()){
+//            jRadioButtonFiltroMedicoAtivo.setSelected(false);
+//            jRadioButtonFiltroMedicoNaoAtivo.setSelected(false);
+//        }
 
-    private void jComboBoxEspecializacaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBoxEspecializacaoMouseClicked
-        preencherEspecialidade();
-    }//GEN-LAST:event_jComboBoxEspecializacaoMouseClicked
+    }//GEN-LAST:event_jRadioButtonFiltroMedicoTodosAtivoMouseClicked
+
+    private void jRadioButtonFiltroMedicoTodosAtivoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButtonFiltroMedicoTodosAtivoStateChanged
+        // TODO add your handling code here:
+
+        if (jRadioButtonFiltroMedicoTodosAtivo.isSelected()) {
+            jRadioButtonFiltroMedicoAtivo.setSelected(false);
+            jRadioButtonFiltroMedicoNaoAtivo.setSelected(false);
+        }
+    }//GEN-LAST:event_jRadioButtonFiltroMedicoTodosAtivoStateChanged
+
+    private void jRadioButtonFiltroMedicoAtivoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButtonFiltroMedicoAtivoStateChanged
+        if (jRadioButtonFiltroMedicoNaoAtivo.isSelected()) {
+            jRadioButtonFiltroMedicoNaoAtivo.setSelected(false);
+            jRadioButtonFiltroMedicoTodosAtivo.setSelected(false);
+        }
+        if (jRadioButtonFiltroMedicoTodosAtivo.isSelected()) {
+            jRadioButtonFiltroMedicoTodosAtivo.setSelected(false);
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButtonFiltroMedicoAtivoStateChanged
+
+    private void jRadioButtonFiltroMedicoNaoAtivoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButtonFiltroMedicoNaoAtivoStateChanged
+        // TODO add your handling code here:
+        if (jRadioButtonFiltroMedicoAtivo.isSelected()) {
+            jRadioButtonFiltroMedicoAtivo.setSelected(false);
+        }
+        if (jRadioButtonFiltroMedicoTodosAtivo.isSelected()) {
+            jRadioButtonFiltroMedicoTodosAtivo.setSelected(false);
+        }
+    }//GEN-LAST:event_jRadioButtonFiltroMedicoNaoAtivoStateChanged
+    public void preencherIdMedicoIncluir() {
+        try {
+            conBd.conectarBd();
+            String sql = "SELECT MAX(IDMEDICO+1) AS PROXID FROM MEDICO (NOLOCK)";
+            conBd.executaSql(sql);
+
+            conBd.rs.first();
+
+            jTextFieldIDMedico.setText(String.valueOf(conBd.rs.getInt("PROXID")));
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao gerar o proximo ID do médico! " + ex.getMessage());
+        }
+        conBd.DesconectarBd();
+    }
 
     public void preencherEspecialidade() {
         conBd.conectarBd();
@@ -928,7 +1031,7 @@ public class FormMedico extends javax.swing.JFrame {
     public final void preencherTabelaMedico(String sql) {
 
         ArrayList dados = new ArrayList();
-        String[] colunas = new String[]{"ID", "NOME", "ESPECIALIDADE", "CRM","ATIVO"};
+        String[] colunas = new String[]{"ID", "NOME", "ESPECIALIDADE", "CRM", "ATIVO"};
         String ativo;
         conBd.conectarBd();
 
@@ -948,7 +1051,7 @@ public class FormMedico extends javax.swing.JFrame {
             } while (conBd.rs.next());
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao preencher os dados da tabela."+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao preencher os dados da tabela." + ex.getMessage());
         }
         ModeloTabela modelo = new ModeloTabela(dados, colunas);
         jTableMedicos.setModel(modelo);
@@ -968,7 +1071,7 @@ public class FormMedico extends javax.swing.JFrame {
 
         jTableMedicos.getColumnModel().getColumn(4).setPreferredWidth(45);
         jTableMedicos.getColumnModel().getColumn(4).setResizable(false);
-   
+
         jTableMedicos.getTableHeader().setReorderingAllowed(false);//reorganizar o cabeçalho
         jTableMedicos.setAutoResizeMode(jTableMedicos.AUTO_RESIZE_OFF); //NÃO VAI PODER REDIMENCIONAR A TABELA
         jTableMedicos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//selecionar um por vez 
@@ -1051,6 +1154,8 @@ public class FormMedico extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelMUf;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButtonFiltroMedicoAtivo;
+    private javax.swing.JRadioButton jRadioButtonFiltroMedicoNaoAtivo;
+    private javax.swing.JRadioButton jRadioButtonFiltroMedicoTodosAtivo;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableMedicos;
     private javax.swing.JTextField jTextFieldBairro;

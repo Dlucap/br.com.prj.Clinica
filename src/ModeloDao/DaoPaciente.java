@@ -101,7 +101,7 @@ public class DaoPaciente {
 
         conex.conectarBd();
 
-        String sql1 = "SELECT IDPACIENTE,NOMEPACIENTE,LOGRADOURO,NUMERO,BAIRRO,CPF,RG"
+        String sql1 = "SELECT IDPACIENTE,NOMEPACIENTE,LOGRADOURO,NUMERO,BAIRRO,CPF,RG,"
                 + "TELRESIDENCIAL,TELCELULAR,CEP,COMPL,CIDADE,ESTADO,EMAIL "
                 + "FROM PACIENTE (NOLOCK) WHERE NOMEPACIENTE LIKE '%" + pac.getPesquisa() + "%'";
  

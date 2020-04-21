@@ -547,7 +547,7 @@ public class FormUsuario extends javax.swing.JFrame {
         jButtonSalvar.setEnabled(false);
         jButtonCancelar.setEnabled(true);
         jButtonEditar.setEnabled(true);
-        jButtonExcluir.setEnabled(true);
+        jButtonExcluir.setEnabled(false);
         //daoTabelas.preencherTabelaUsuario("select * from usuario order by nome");
         preencherTabelaUsuario("select IDUSUARIO, NOME,EMAIL, TIPO, ATIVO from usuario (NOLOCK) WHERE nome like '%" + mod.getUPesquisa() + "%'");
     }//GEN-LAST:event_jButtonPesquisarActionPerformed

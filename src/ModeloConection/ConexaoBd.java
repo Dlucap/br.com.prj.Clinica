@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Calendar;
 import javax.swing.JOptionPane;
 
 /**
@@ -51,13 +52,14 @@ public class ConexaoBd {
         }
     }
 
-    private void conectarBd(String url, Integer tipo) {
-
+    private void conectarBd(String baseDados,String server, Integer tipo) {
+ 
+        String caminho2 = "jdbc:sqlserver://"+server+":1433;databaseName="+baseDados;
         try {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
             System.setProperty("jdbc.Drivers", driver);
 
-            con = DriverManager.getConnection(url, usuario, senha);
+            con = DriverManager.getConnection(caminho2, usuario, senha);
             if (tipo == 1) {
                 JOptionPane.showMessageDialog(null, "Conectado com sucesso!", "Teste de conexão.", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -90,9 +92,11 @@ public class ConexaoBd {
         if(HabilitaProfiler){
              // futuramente adicionar qual meodo realizou a sentença
             DaoLog log = new DaoLog();
+            Calendar hoje = Calendar.getInstance();
+           String msg = "\t\nSentença Sql:\n\n"+hoje.getTime()+": \n"+sql;
             log.CriaAlias();
-            log.salvar(sql);
-            System.out.println("\nSentença Sql\n"+sql);
+            log.salvar(msg);
+            System.out.println(msg);
         }
         conectarBd();
         try {
@@ -105,7 +109,5 @@ public class ConexaoBd {
         JOptionPane.showMessageDialog(null, "Erro ao exeucutar a sentença: " + sql +
                 "\n\n Mensagem de erro.:" + ex.getMessage());
         }
-
-    }
-     
+    } 
 }

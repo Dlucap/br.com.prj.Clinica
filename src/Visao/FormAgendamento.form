@@ -343,7 +343,6 @@
         </Component>
         <Component class="com.toedter.calendar.JDateChooser" name="jDateChooserAgendamento">
           <Properties>
-            <Property name="dateFormatString" type="java.lang.String" value="dd/MM/yyyy"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>

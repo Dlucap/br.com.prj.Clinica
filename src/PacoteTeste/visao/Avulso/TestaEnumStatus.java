@@ -5,6 +5,9 @@
  */
 package PacoteTeste.visao.Avulso;
 
+import ModeloBeans.BeansEnumStatus;
+import java.util.Arrays;
+
 /**
  *
  * @author Daniel Lucas
@@ -15,7 +18,10 @@ public class TestaEnumStatus {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+    System.out.println("Satus "+BeansEnumStatus.Aberto);
+     
+
     }
     
 }
